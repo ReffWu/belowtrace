@@ -37,8 +37,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 BelowTrace <span className="font-medium text-ink-3">Detroit</span>
               </span>
             </Link>
-            <nav className="flex items-center gap-1 text-[0.95rem]">
-              <Link href="/sources" className="whitespace-nowrap rounded-md px-3 py-2 text-ink-2 hover:bg-sunk hover:text-ink">
+            <nav className="flex items-center gap-0.5 text-[0.95rem]" aria-label="Main">
+              <Link href="/map" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
+                Map
+              </Link>
+              <Link href="/about" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
+                About
+              </Link>
+              <Link href="/sources" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
                 <span className="sm:hidden">Sources</span>
                 <span className="hidden sm:inline">Data &amp; method</span>
               </Link>

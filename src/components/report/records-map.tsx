@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { LngLat, Report311, SewerMain, SewerProject } from "@/lib/types";
+import { BASEMAP_STYLE, loadMaplibre } from "@/lib/maplibre";
 
 type Props = {
   center: LngLat;
@@ -12,7 +13,6 @@ type Props = {
   points: Report311[];
 };
 
-const STYLE = "https://tiles.openfreemap.org/styles/positron";
 const PHASE_COLOR = ["match", ["get", "phase"], "Construction", "#7c3aed", "Procurement", "#db2777", "#8a949c"];
 const REPORT_COLOR = ["match", ["get", "type"], "w", "#0d5c6b", "s", "#a52a21", "#e0892b"];
 
@@ -35,12 +35,11 @@ export function RecordsMap({ center, parcel, mains, projects, points }: Props) {
 
     (async () => {
       try {
-        const maplibregl = await import("maplibre-gl");
+        const maplibregl = await loadMaplibre();
         if (cancelled || !ref.current) return;
-        maplibregl.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
         map = new maplibregl.Map({
           container: ref.current,
-          style: STYLE,
+          style: BASEMAP_STYLE,
           center,
           zoom: 16.4,
           cooperativeGestures: true,

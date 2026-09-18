@@ -13,6 +13,7 @@ import { PsrpScreener } from "@/components/report/psrp-screener";
 import { ActionPlan } from "@/components/report/action-plan";
 import { RecordsMap } from "@/components/report/records-map";
 import { PrintButton } from "@/components/report/print-button";
+import { ShareButton } from "@/components/report/share-button";
 import { PHONES, SOURCES } from "@/lib/facts";
 
 export async function generateMetadata(props: PageProps<"/report">): Promise<Metadata> {
@@ -28,19 +29,57 @@ export default async function ReportPage(props: PageProps<"/report">) {
 
   if (!address) return <ErrorState message="Enter an address to get started." />;
   const report = await getReport(address, situation, key);
-  if ("error" in report) return <ErrorState message={report.message} address={address} situation={situation} />;
+  if ("error" in report) return <ErrorState message={report.message} address={address} situation={situation} outside={report.error === "outside-detroit"} />;
   return <ReportView r={report} situation={situation} />;
 }
 
-function ErrorState({ message, address, situation }: { message: string; address?: string; situation?: Situation }) {
+const EXAMPLES = [
+  { address: "16776 Prevost St", note: "City sewer out back laid in 1928; 43 basement-water reports nearby" },
+  { address: "16821 Fenmore St", note: "DWSD alley sewer work under construction next door" },
+  { address: "14600 Archdale St", note: "Outside the $40,000 repair program's area" },
+];
+
+function ErrorState({ message, address, situation, outside }: { message: string; address?: string; situation?: Situation; outside?: boolean }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-      <h1 className="text-3xl font-extrabold tracking-tight">Let&apos;s try that again</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">{outside ? "That address is outside Detroit" : "Let's try that again"}</h1>
       <p className="mt-3 text-lg text-ink-2" role="alert">
         {message}
       </p>
+      {outside && (
+        <div className="mt-6 space-y-3 rounded-2xl border border-line bg-surface p-5 text-ink-2">
+          <p>
+            <strong className="text-ink">Why only Detroit?</strong> Repair programs, deadlines and sewer records are run city by city. BelowTrace
+            currently knows Detroit&apos;s — the City of Detroit&apos;s PSRP, DWSD&apos;s alley program, and Detroit&apos;s public records.
+          </p>
+          <p>
+            <strong className="text-ink">What usually still holds:</strong> in most cities the sewer line from your house to the public main is the
+            owner&apos;s responsibility. Call your city&apos;s water or public works department before paying for a repair, and ask whether
+            they have a lateral repair or backwater-valve program.
+          </p>
+        </div>
+      )}
       <div className="mt-8 rounded-2xl border border-line bg-surface p-5">
-        <AddressSearch defaultAddress={address} defaultSituation={situation} />
+        <AddressSearch defaultAddress={outside ? "" : address} defaultSituation={situation} />
+      </div>
+      <div className="mt-8">
+        <h2 className="font-bold">See what a Detroit report looks like</h2>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-3">
+          {EXAMPLES.map((e) => (
+            <li key={e.address}>
+              <Link
+                href={`/report?${new URLSearchParams({ address: e.address, situation: situation ?? "backup" })}`}
+                className="block h-full rounded-xl border-2 border-line bg-surface p-4 hover:border-brand"
+              >
+                <span className="block font-semibold text-brand">{e.address}</span>
+                <span className="mt-1 block text-sm text-ink-2">{e.note}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-sm">
+          Or explore <Link href="/map" className="font-semibold text-brand underline">where Detroit&apos;s basements flood</Link>.
+        </p>
       </div>
     </div>
   );
@@ -88,7 +127,10 @@ function ReportView({ r, situation }: { r: Report; situation: Situation }) {
           <Link href="/" className="inline-flex items-center gap-1.5 rounded-md font-semibold text-brand hover:underline">
             <span aria-hidden="true">←</span> Check another address
           </Link>
-          <PrintButton />
+          <div className="flex flex-wrap gap-2">
+            <ShareButton />
+            <PrintButton />
+          </div>
         </div>
         <p className="text-sm font-bold uppercase tracking-[0.12em] text-ink-3">Sewer help report</p>
         <h1 className="mt-1 text-[2rem] font-extrabold leading-tight tracking-tight sm:text-[2.6rem]">{r.address.replace(/, MI \d{5}$/, "")}</h1>

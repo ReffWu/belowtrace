@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { claimDeadline, type Step } from "@/lib/plan";
+import { deadlineIcs, downloadIcs } from "@/lib/ics";
 
 const todayInDetroit = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Detroit" });
 
@@ -70,6 +71,20 @@ export function ActionPlan({ steps, askFoundDate }: { steps: Step[]; askFoundDat
                   >
                     {s.dueLabel ?? "Due"} {fmt(due)}
                     {left !== null && <span className="font-bold">· {left < 0 ? "passed" : left === 0 ? "today" : `${left} day${left === 1 ? "" : "s"} left`}</span>}
+                  </p>
+                )}
+                {due && left !== null && left >= 0 && (
+                  <p className="no-print mt-2">
+                    <button
+                      type="button"
+                      onClick={() => downloadIcs(`${s.id}-deadline.ics`, deadlineIcs({ title: s.title, detail: s.detail, due, url: window.location.href }))}
+                      className="inline-flex min-h-10 items-center gap-2 rounded-lg px-1 text-sm font-semibold text-brand underline decoration-brand/30 hover:decoration-brand"
+                    >
+                      <svg viewBox="0 0 20 20" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+                        <path d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" />
+                      </svg>
+                      Add to my calendar (reminds me 3 days and 1 day before)
+                    </button>
                   </p>
                 )}
                 {s.link && (

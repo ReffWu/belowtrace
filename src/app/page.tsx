@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AddressSearch } from "@/components/address-search";
+import stats from "@/data/citywide-stats.json";
 
 const STATS = [
   { value: "14,115", label: "“water in basement” investigations requested through Detroit 311 since 2023" },
@@ -95,6 +96,28 @@ export default function Home() {
             .
           </p>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 pt-12 sm:px-6">
+        <Link
+          href="/map"
+          className="group grid gap-4 overflow-hidden rounded-2xl border border-line bg-ink p-6 text-white sm:grid-cols-[1.4fr_1fr] sm:items-center sm:p-8"
+        >
+          <span>
+            <span className="text-sm font-bold uppercase tracking-[0.12em] text-[#f3a64a]">Citywide map</span>
+            <span className="mt-2 block text-2xl font-extrabold leading-snug sm:text-[1.75rem]">
+              {Math.round((stats.outsidePsrp / stats.total) * 100)}% of basement-water reports come from neighborhoods the $40,000 repair
+              program doesn&apos;t cover.
+            </span>
+            <span className="mt-3 inline-flex items-center gap-1.5 font-semibold text-[#f3a64a] group-hover:underline">
+              See where Detroit&apos;s basements flood <span aria-hidden="true">→</span>
+            </span>
+          </span>
+          <span className="text-right">
+            <span className="block text-5xl font-extrabold tabular-nums sm:text-6xl">{stats.outsidePsrp.toLocaleString("en-US")}</span>
+            <span className="text-white/70">of {stats.total.toLocaleString("en-US")} reports since 2023</span>
+          </span>
+        </Link>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6">

@@ -197,7 +197,7 @@ export async function floodZone(p: LngLat) {
     outFields: "FLD_ZONE,SFHA_TF",
     returnGeometry: "false",
     f: "json",
-  });
+  }, 5000);
   const hits = data.features.map((f) => f.attributes);
   if (!hits.length) return { zone: null, isSFHA: false };
   const sfha = hits.find((h) => h.SFHA_TF === "T");
@@ -213,7 +213,7 @@ export async function lowModIncome(p: LngLat) {
     outFields: "GEOID,Lowmod_pct,geoname",
     returnGeometry: "false",
     f: "json",
-  });
+  }, 5000);
   const a = data.features[0]?.attributes;
   if (!a) return null;
   return { blockGroup: a.geoname, lowModPct: Number(a.Lowmod_pct) };

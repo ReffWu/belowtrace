@@ -3,6 +3,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
+import { polygon as turfPolygon } from "@turf/helpers";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const raw = (name) => JSON.parse(readFileSync(join(root, "data/raw", `${name}.geojson`), "utf8")).features;
@@ -87,3 +89,74 @@ write(
     .filter(([, p]) => p.latitude && p.longitude && p.created_at >= since)
     .map(([type, p]) => [r5(p.longitude), r5(p.latitude), type, day(p.created_at)]),
 );
+
+// ---- Citywide map (served statically from public/data) ----
+const pub = join(root, "public/data");
+mkdirSync(pub, { recursive: true });
+const writePublic = (name, value) => {
+  const json = JSON.stringify(value);
+  writeFileSync(join(pub, `${name}.json`), json);
+  console.log(`public/data/${name}.json  ${(json.length / 1024).toFixed(0)} KB`);
+};
+
+const psrpShapes = raw("psrp_neighborhoods").map((f) => ({
+  name: f.properties.nhood_name,
+  shapes: polyRings(f.geometry).map((rings) => turfPolygon(rings)),
+}));
+const inPsrp = (p) => psrpShapes.some((n) => n.shapes.some((s) => booleanPointInPolygon(p, s)));
+
+// Water-in-basement reports since 2023: [lng, lat, inPsrp 0/1]
+const wib = raw("311_water_in_basement")
+  .map((f) => f.properties)
+  .filter((p) => p.latitude && p.longitude && p.created_at >= since)
+  .map((p) => {
+    const pt = [r5(p.longitude), r5(p.latitude)];
+    return { pt, inside: inPsrp(pt), hood: p.neighborhood ?? "Unknown", year: new Date(p.created_at).getUTCFullYear() };
+  });
+writePublic("wib-points", wib.map((w) => [...w.pt, w.inside ? 1 : 0]));
+
+writePublic("psrp-areas", {
+  type: "FeatureCollection",
+  features: raw("psrp_neighborhoods").map((f) => ({
+    type: "Feature",
+    properties: { name: f.properties.nhood_name },
+    geometry: { type: "MultiPolygon", coordinates: polyRings(f.geometry) },
+  })),
+});
+
+writePublic("active-projects", {
+  type: "FeatureCollection",
+  features: raw("sewer_capital_projects")
+    .filter((f) => f.properties.ProjectPHA !== "Closed")
+    .map((f) => ({
+      type: "Feature",
+      properties: {
+        name: f.properties.ProjNamLOC ?? f.properties.StreetCRRD ?? "DWSD sewer project",
+        phase: f.properties.ProjectPHA,
+        years: [f.properties.EstCstBDAT, f.properties.EstCstNDAT].filter(Boolean).join("–"),
+      },
+      geometry: { type: "MultiLineString", coordinates: lineParts(f.geometry) },
+    })),
+});
+
+const byHood = new Map();
+for (const w of wib) {
+  const h = byHood.get(w.hood) ?? { name: w.hood, reports: 0, insidePsrp: 0 };
+  h.reports++;
+  h.insidePsrp += w.inside ? 1 : 0;
+  byHood.set(w.hood, h);
+}
+const hoods = [...byHood.values()].map((h) => ({ ...h, psrp: h.insidePsrp / h.reports >= 0.5 })).sort((a, b) => b.reports - a.reports);
+const byYear = {};
+for (const w of wib) byYear[w.year] = (byYear[w.year] ?? 0) + 1;
+const outside = wib.filter((w) => !w.inside).length;
+write("citywide-stats", {
+  since: "2023-01-01",
+  snapshot: new Date().toISOString().slice(0, 10),
+  total: wib.length,
+  outsidePsrp: outside,
+  byYear,
+  topOutside: hoods.filter((h) => !h.psrp).slice(0, 8),
+  topInside: hoods.filter((h) => h.psrp).slice(0, 8),
+  activeProjects: raw("sewer_capital_projects").filter((f) => f.properties.ProjectPHA !== "Closed").length,
+});
