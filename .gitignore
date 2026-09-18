@@ -46,3 +46,6 @@ next-env.d.ts
 # raw downloads: re-create with `npm run data`
 /data/raw/*.geojson
 /data/raw/docs/Basement_Backup_Handbook_2023.pdf
+
+# internal research, strategy and pitch notes (kept local)
+/docs/
