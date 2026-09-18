@@ -32,6 +32,9 @@ write(
   })),
 );
 
+// City limits: outer ring plus the Hamtramck / Highland Park hole.
+write("city-boundary", raw("city_boundary").flatMap((f) => polyRings(f.geometry)));
+
 write(
   "sewer-mains",
   raw("sewer_gravity_mains_dev").map((f) => {

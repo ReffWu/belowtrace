@@ -32,7 +32,8 @@ export async function suggestAddresses(text: string): Promise<Suggestion[]> {
     { text, location: DETROIT_CENTER, searchExtent: DETROIT_EXTENT, category: "Address", countryCode: "USA", maxSuggestions: "6", f: "json" },
     4000,
   );
-  return data.suggestions.filter((s) => /detroit/i.test(s.text)).map(({ text, magicKey }) => ({ text, magicKey }));
+  // Only full street addresses: a bare street name ("Kelly Rd, Detroit") can't identify a property.
+  return data.suggestions.filter((s) => /^\d/.test(s.text)).map(({ text, magicKey }) => ({ text, magicKey }));
 }
 
 export type Geocoded = {
@@ -52,30 +53,39 @@ type ArcgisCandidate = {
   attributes: Record<string, string>;
 };
 
+async function findCandidate(singleLine: string, magicKey?: string): Promise<Geocoded | null> {
+  const data = await getJson<{ candidates: ArcgisCandidate[] }>(`${ARCGIS_GEOCODER}/findAddressCandidates`, {
+    SingleLine: singleLine,
+    ...(magicKey ? { magicKey } : {}),
+    // No search extent: an address just outside the city should say "outside Detroit", not "not found".
+    location: DETROIT_CENTER,
+    maxLocations: "1",
+    outFields: "Match_addr,Addr_type,AddNum,StPreDir,StName,City,Postal",
+    f: "json",
+  });
+  const c = data.candidates.find((c) => c.score >= 85 && /PointAddress|StreetAddress|StreetAddressExt|Subaddress/.test(c.attributes.Addr_type));
+  if (!c) return null;
+  const a = c.attributes;
+  return {
+    label: a.Match_addr.replace(/, Michigan, /, ", MI "),
+    lngLat: [c.location.x, c.location.y],
+    number: a.AddNum,
+    preDir: a.StPreDir,
+    street: a.StName,
+    city: a.City,
+    zip: a.Postal,
+    source: "arcgis",
+  };
+}
+
 export async function geocode(address: string, magicKey?: string): Promise<Geocoded | null> {
+  const namesPlace = /,|\bMI\b|michigan|\b\d{5}\b/i.test(address);
   try {
-    const data = await getJson<{ candidates: ArcgisCandidate[] }>(`${ARCGIS_GEOCODER}/findAddressCandidates`, {
-      SingleLine: /detroit/i.test(address) ? address : `${address}, Detroit, MI`,
-      ...(magicKey ? { magicKey } : {}),
-      // No search extent: an address just outside the city should say "outside Detroit", not "not found".
-      location: DETROIT_CENTER,
-      maxLocations: "1",
-      outFields: "Match_addr,Addr_type,AddNum,StPreDir,StName,City,Postal",
-      f: "json",
-    });
-    const c = data.candidates.find((c) => c.score >= 85 && /PointAddress|StreetAddress|Subaddress/.test(c.attributes.Addr_type));
-    if (!c) return null;
-    const a = c.attributes;
-    return {
-      label: a.Match_addr.replace(/, Michigan, /, ", MI "),
-      lngLat: [c.location.x, c.location.y],
-      number: a.AddNum,
-      preDir: a.StPreDir,
-      street: a.StName,
-      city: a.City,
-      zip: a.Postal,
-      source: "arcgis",
-    };
+    return (
+      (await findCandidate(namesPlace ? address : `${address}, Detroit, MI`, magicKey)) ??
+      // Not a Detroit address? Find where it is so we can say so instead of "not found".
+      (namesPlace ? null : await findCandidate(`${address}, MI`))
+    );
   } catch {
     return geocodeCensus(address);
   }
@@ -172,7 +182,10 @@ export async function findParcel(g: Geocoded): Promise<Parcel | null> {
     .map((f) => ({ f, c: centroid(f.geometry) }))
     .filter((x): x is { f: ParcelFeature; c: LngLat } => x.c !== null)
     .sort((a, b) => distanceM(a.c, g.lngLat) - distanceM(b.c, g.lngLat))[0];
-  return best ? toParcel(best.f, "nearest") : null;
+  if (!best) return null;
+  // Same house number on the closest parcel (street spelled differently, e.g. "Edsel" vs "Edsel Ford"): it's this property.
+  const sameNumber = number !== "" && String(best.f.properties.address ?? "").startsWith(`${number} `);
+  return toParcel(best.f, sameNumber ? "exact" : "nearest");
 }
 
 export async function floodZone(p: LngLat) {

@@ -1,4 +1,4 @@
-import { DATA_SNAPSHOT, findPsrpNeighborhood, mainsNear, projectsNear, reportsNear } from "./geo";
+import { DATA_SNAPSHOT, findPsrpNeighborhood, inDetroit, mainsNear, projectsNear, reportsNear } from "./geo";
 import { SOURCES } from "./facts";
 import { buildPrograms } from "./programs";
 import { centroid, findParcel, floodZone, geocode, lowModIncome } from "./sources";
@@ -36,16 +36,29 @@ async function settle<T>(p: Promise<T>): Promise<{ ok: true; value: T } | { ok: 
 }
 
 async function buildCore(query: string, magicKey?: string): Promise<Core | ReportError> {
+  if (!/^\s*\d+/.test(query)) {
+    return { error: "not-found", message: "Please include your house number, like “16776 Prevost St”. We need it to find your property." };
+  }
   const geo = await settle(geocode(query, magicKey));
   if (!geo.ok) return { error: "upstream", message: "The address service didn't respond. Please try again in a moment." };
-  if (!geo.value) return { error: "not-found", message: "We couldn't find that address. Try the house number and street, like “16776 Prevost St”." };
+  if (!geo.value) return { error: "not-found", message: "We couldn't find that address. Check the house number and street name, like “16776 Prevost St”." };
   const g = geo.value;
-  if (!/^detroit$/i.test(g.city)) {
-    return { error: "outside-detroit", message: `That address is in ${g.city || "another city"}. BelowTrace covers the City of Detroit's programs only.` };
-  }
 
-  const [parcel, flood, lmi] = await Promise.all([settle(findParcel(g)), settle(floodZone(g.lngLat)), settle(lowModIncome(g.lngLat))]);
+  // Inside the city limits, or an exact match in Detroit's own parcel records, counts as Detroit.
+  const parcelLookup = settle(findParcel(g));
+  const [parcel, flood, lmi] = await Promise.all([parcelLookup, settle(floodZone(g.lngLat)), settle(lowModIncome(g.lngLat))]);
+  const exactParcel = parcel.ok && parcel.value?.match === "exact";
+  if (!inDetroit(g.lngLat) && !exactParcel) {
+    return {
+      error: "outside-detroit",
+      message: `That address is in ${g.city || "another city"}, outside Detroit's city limits. BelowTrace covers the City of Detroit's programs only.`,
+    };
+  }
   const warnings: string[] = [];
+  const mailingCity = g.city && !/^detroit$/i.test(g.city) ? g.city : null;
+  if (mailingCity) {
+    warnings.push(`This address has a ${mailingCity} mailing address, but the property is inside Detroit city limits, so Detroit's programs apply.`);
+  }
   // The geocoder snaps to the street; the parcel's center is closer to the actual house and alley.
   const at = (parcel.ok && parcel.value?.match === "exact" && centroid(parcel.value.geometry ?? null)) || g.lngLat;
 
@@ -82,7 +95,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
 
   return {
     query,
-    address: g.label,
+    address: mailingCity ? g.label.replace(mailingCity, "Detroit") : g.label,
     lngLat: at,
     generatedAt: new Date().toISOString(),
     parcel: parcel.ok ? parcel.value : null,

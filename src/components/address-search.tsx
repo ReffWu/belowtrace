@@ -58,6 +58,10 @@ export function AddressSearch({
       setError("Enter a street address, like 16776 Prevost St.");
       return;
     }
+    if (!/^\d/.test(text)) {
+      setError("Please start with your house number, like 16776 Prevost St.");
+      return;
+    }
     setError("");
     setOpen(false);
     const params = new URLSearchParams({ address: text.replace(/, USA$/, ""), situation });

@@ -3,6 +3,7 @@ import Flatbush from "flatbush";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { polygon as turfPolygon } from "@turf/helpers";
 import neighborhoodsData from "@/data/psrp-neighborhoods.json";
+import cityBoundaryData from "@/data/city-boundary.json";
 import mainsData from "@/data/sewer-mains.json";
 import projectsData from "@/data/sewer-projects.json";
 import reportsData from "@/data/reports-311.json";
@@ -36,6 +37,7 @@ const neighborhoods = (neighborhoodsData as RawNeighborhood[]).map((n) => ({
   ...n,
   shapes: n.polygons.map((rings) => turfPolygon(rings)),
 }));
+const cityLimits = (cityBoundaryData as number[][][][]).map((rings) => turfPolygon(rings));
 const mains = mainsData as RawMain[];
 const projects = projectsData as RawProject[];
 const reports = reportsData as RawReport[];
@@ -103,6 +105,12 @@ function around([lng, lat]: LngLat, radiusM: number) {
 }
 
 const round = (parts: number[][][]) => parts as LngLat[][];
+
+// Official City of Detroit boundary. Postal city names don't follow it: parts of Detroit
+// have Hamtramck, Highland Park or Harper Woods mailing addresses.
+export function inDetroit(p: LngLat) {
+  return cityLimits.some((s) => booleanPointInPolygon(p, s));
+}
 
 export function findPsrpNeighborhood(p: LngLat) {
   const hit = neighborhoods.find((n) => n.shapes.some((s) => booleanPointInPolygon(p, s)));

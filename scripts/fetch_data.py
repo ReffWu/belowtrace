@@ -19,6 +19,7 @@ LAYERS = {
     "sewer_capital_projects": (f"{CIP}/5", "1=1"),
     "sewer_condition_assessment": (f"{CIP}/7", "1=1"),
     "psrp_neighborhoods": (f"{COD}/Neighborhoods_CDBG_DR_Private_Sewer_Repair_Program/FeatureServer/0", "1=1"),
+    "city_boundary": (f"{COD}/City_of_Detroit_Boundary/FeatureServer/0", "1=1"),
     "311_water_in_basement": (
         f"{COD}/improve_detroit/FeatureServer/0",
         "request_type IN ('Water In Basement Investigation','Investigate Water in Basement')",
