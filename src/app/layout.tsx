@@ -7,6 +7,7 @@ import { Logo } from "@/components/logo";
 const publicSans = Public_Sans({ variable: "--font-public-sans", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://belowtrace.vercel.app"),
   title: { default: "BelowTrace Detroit — Sewage in your basement? Start here.", template: "%s · BelowTrace Detroit" },
   description:
     "Enter a Detroit address to see who's responsible for your sewer line, which City programs might pay for the repair, your deadlines, and what public records actually show.",
@@ -32,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <header className="no-print border-b border-line bg-paper/90 backdrop-blur supports-[backdrop-filter]:bg-paper/75">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <Link href="/" className="flex items-center gap-2.5 rounded-md text-ink no-underline" aria-label="BelowTrace Detroit home">
-              <Logo className="h-8 w-8" />
+              <Logo />
               <span className="whitespace-nowrap text-base font-bold tracking-tight sm:text-lg">
                 BelowTrace <span className="font-medium text-ink-3">Detroit</span>
               </span>

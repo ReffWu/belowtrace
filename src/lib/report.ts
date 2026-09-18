@@ -1,4 +1,4 @@
-import { DATA_SNAPSHOT, findPsrpNeighborhood, inDetroit, mainsNear, projectsNear, reportsNear } from "./geo";
+import { DATA_SNAPSHOT, findPsrpNeighborhood, inDetroit, mainsNear, projectsNear, reportsNear, sideOfLot } from "./geo";
 import { SOURCES } from "./facts";
 import { buildPrograms } from "./programs";
 import { centroid, findParcel, floodZone, geocode, lowModIncome } from "./sources";
@@ -65,6 +65,8 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
   const hood = findPsrpNeighborhood(at);
   const mainsNearby = mainsNear(at, MAP_MAIN_RADIUS_M);
   const nearestMain = mainsNearby.find((m) => m.distanceM <= MAIN_RADIUS_M) ?? null;
+  // Only meaningful when we know both the lot's center and the street it faces.
+  const mainSide = nearestMain && exactParcel && g.streetLngLat ? sideOfLot(at, g.streetLngLat, nearestMain.nearestPoint) : null;
   const projects = projectsNear(at, PROJECT_RADIUS_M);
   const points = reportsNear(at, REPORT_RADIUS_M);
 
@@ -116,6 +118,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
         }
       : null,
     nearestMain,
+    mainSide,
     mainsNearby,
     mainEvidence: snapshot(SOURCES.dwsdMains, "Covers only mains with recent DWSD cleaning work orders"),
     projects,

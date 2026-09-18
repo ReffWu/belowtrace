@@ -23,6 +23,8 @@ export type Parcel = {
   yearBuilt?: number;
   style?: string;
   floorArea?: number;
+  frontageFt?: number;
+  depthFt?: number;
   match: "exact" | "nearest";
   geometry?: GeoJSON.Polygon | GeoJSON.MultiPolygon;
   evidence: Evidence;
@@ -41,6 +43,7 @@ export type SewerMain = {
   street: string | null;
   lastWork: string | null;
   lastWorkDate: string | null;
+  nearestPoint: LngLat;
   parts: LngLat[][];
 };
 
@@ -89,6 +92,8 @@ export type Report = {
   floodZone: { zone: string | null; isSFHA: boolean | null; evidence: Evidence };
   lmi: { blockGroup: string; lowModPct: number; meetsAsrpIncomeTest: boolean; evidence: Evidence } | null;
   nearestMain: SewerMain | null;
+  // Which side of the lot the nearest recorded main runs on, judged from the street-facing point.
+  mainSide?: "rear" | "front" | "side" | null;
   mainsNearby: SewerMain[];
   mainEvidence: Evidence;
   projects: SewerProject[];

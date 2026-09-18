@@ -47,7 +47,8 @@ const M_PER_DEG_LAT = 111_320;
 const M_PER_DEG_LNG = 111_320 * Math.cos((42.35 * Math.PI) / 180);
 const toXY = ([lng, lat]: number[]) => [lng * M_PER_DEG_LNG, lat * M_PER_DEG_LAT];
 
-function pointToSegmentM(p: number[], a: number[], b: number[]) {
+// Distance in metres from p to segment ab, and the closest point on it.
+function pointToSegment(p: number[], a: number[], b: number[]) {
   const [px, py] = toXY(p);
   const [ax, ay] = toXY(a);
   const [bx, by] = toXY(b);
@@ -55,16 +56,38 @@ function pointToSegmentM(p: number[], a: number[], b: number[]) {
   const dy = by - ay;
   const len2 = dx * dx + dy * dy;
   const t = len2 === 0 ? 0 : Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2));
-  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+  const at: LngLat = [a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])];
+  return { d: Math.hypot(px - (ax + t * dx), py - (ay + t * dy)), at };
 }
 
-function pointToPartsM(p: LngLat, parts: number[][][]) {
-  let best = Infinity;
+function nearestOnParts(p: LngLat, parts: number[][][]) {
+  let best = { d: Infinity, at: p as LngLat };
   for (const part of parts) {
-    for (let i = 1; i < part.length; i++) best = Math.min(best, pointToSegmentM(p, part[i - 1], part[i]));
-    if (part.length === 1) best = Math.min(best, pointToSegmentM(p, part[0], part[0]));
+    for (let i = 1; i < part.length; i++) {
+      const s = pointToSegment(p, part[i - 1], part[i]);
+      if (s.d < best.d) best = s;
+    }
+    if (part.length === 1) {
+      const s = pointToSegment(p, part[0], part[0]);
+      if (s.d < best.d) best = s;
+    }
   }
   return best;
+}
+
+const pointToPartsM = (p: LngLat, parts: number[][][]) => nearestOnParts(p, parts).d;
+
+// Where `target` sits relative to a lot that faces `street` from `center`: behind it, in front, or off to the side.
+export function sideOfLot(center: LngLat, street: LngLat, target: LngLat): "rear" | "front" | "side" {
+  const [cx, cy] = toXY(center);
+  const [sx, sy] = toXY(street);
+  const [tx, ty] = toXY(target);
+  const back = [cx - sx, cy - sy];
+  const len = Math.hypot(back[0], back[1]) || 1;
+  const along = ((tx - cx) * back[0] + (ty - cy) * back[1]) / len;
+  const across = Math.abs((tx - cx) * back[1] - (ty - cy) * back[0]) / len;
+  if (Math.abs(along) < across * 0.6) return "side";
+  return along > 0 ? "rear" : "front";
 }
 
 export function distanceM(a: number[], b: number[]) {
@@ -120,10 +143,10 @@ export function findPsrpNeighborhood(p: LngLat) {
 export function mainsNear(p: LngLat, radiusM: number): SewerMain[] {
   return mainIndex
     .search(...around(p, radiusM))
-    .map((i) => ({ m: mains[i], d: pointToPartsM(p, mains[i].parts) }))
+    .map((i) => ({ m: mains[i], ...nearestOnParts(p, mains[i].parts) }))
     .filter(({ d }) => d <= radiusM)
     .sort((a, b) => a.d - b.d)
-    .map(({ m, d }) => ({
+    .map(({ m, d, at }) => ({
       id: m.id,
       distanceM: Math.round(d),
       installYear: m.installYear,
@@ -136,6 +159,7 @@ export function mainsNear(p: LngLat, radiusM: number): SewerMain[] {
       street: m.street,
       lastWork: m.lastWork,
       lastWorkDate: m.lastWorkDate,
+      nearestPoint: at,
       parts: round(m.parts),
     }));
 }

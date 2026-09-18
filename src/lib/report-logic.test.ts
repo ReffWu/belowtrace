@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import golden from "@/data/golden.json";
-import { findPsrpNeighborhood, mainsNear, projectsNear, reportsNear } from "./geo";
+import { findPsrpNeighborhood, mainsNear, projectsNear, reportsNear, sideOfLot } from "./geo";
 import { atAGlance } from "./glance";
 import { buildPlan, claimDeadline } from "./plan";
 import { buildPrograms } from "./programs";
@@ -36,6 +36,24 @@ describe("geo lookups against the bundled open data", () => {
 
   it("returns nothing outside the PSRP neighborhoods", () => {
     expect(findPsrpNeighborhood(archdale.lngLat)).toBeNull();
+  });
+});
+
+describe("sideOfLot", () => {
+  // A lot facing a street to its west: the alley is to the east.
+  const center: [number, number] = [-83.203, 42.4139];
+  const street: [number, number] = [-83.2034, 42.4139];
+  it("puts a main east of the house (away from the street) at the rear", () => {
+    expect(sideOfLot(center, street, [-83.2027, 42.4139])).toBe("rear");
+  });
+  it("puts a main under the street in front", () => {
+    expect(sideOfLot(center, street, [-83.2035, 42.4139])).toBe("front");
+  });
+  it("calls a main off to one side a side street", () => {
+    expect(sideOfLot(center, street, [-83.203, 42.4144])).toBe("side");
+  });
+  it("finds the 1928 main behind 16776 Prevost", () => {
+    expect(prevost.mainSide).toBe("rear");
   });
 });
 

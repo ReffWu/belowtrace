@@ -204,7 +204,7 @@ function ReportView({ r, situation }: { r: Report; situation: Situation }) {
         intro="In Detroit, property owners are responsible for the private sewer line from where it leaves the house all the way to the connection at the city sewer — usually in the alley. The City owns and maintains the sewer under the alley and street."
       >
         <div className="rounded-2xl border border-line bg-surface p-4 sm:p-6">
-          <OwnershipDiagram main={r.nearestMain} />
+          <OwnershipDiagram parcel={p} main={r.nearestMain} side={r.mainSide} />
         </div>
         <div className="mt-4 rounded-xl border-l-4 border-brand bg-brand-tint/60 px-4 py-3 text-[0.95rem] text-ink-2">
           <strong className="text-ink">Told the sewer “isn&apos;t on the City&apos;s records”?</strong> It has happened: in April 2026 DWSD told

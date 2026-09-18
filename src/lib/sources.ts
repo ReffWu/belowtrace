@@ -39,6 +39,7 @@ export async function suggestAddresses(text: string): Promise<Suggestion[]> {
 export type Geocoded = {
   label: string;
   lngLat: LngLat;
+  streetLngLat?: LngLat;
   number: string;
   preDir: string;
   street: string;
@@ -59,16 +60,20 @@ async function findCandidate(singleLine: string, magicKey?: string): Promise<Geo
     ...(magicKey ? { magicKey } : {}),
     // No search extent: an address just outside the city should say "outside Detroit", not "not found".
     location: DETROIT_CENTER,
+    locationType: "street",
     maxLocations: "1",
-    outFields: "Match_addr,Addr_type,AddNum,StPreDir,StName,City,Postal",
+    outFields: "Match_addr,Addr_type,AddNum,StPreDir,StName,City,Postal,DisplayX,DisplayY",
     f: "json",
   });
   const c = data.candidates.find((c) => c.score >= 85 && /PointAddress|StreetAddress|StreetAddressExt|Subaddress/.test(c.attributes.Addr_type));
   if (!c) return null;
   const a = c.attributes;
+  const display = Number(a.DisplayX) && Number(a.DisplayY) ? ([Number(a.DisplayX), Number(a.DisplayY)] as LngLat) : null;
   return {
     label: a.Match_addr.replace(/, Michigan, /, ", MI "),
-    lngLat: [c.location.x, c.location.y],
+    // Rooftop point for lookups; the street-side point tells us which way the lot faces.
+    lngLat: display ?? [c.location.x, c.location.y],
+    streetLngLat: [c.location.x, c.location.y],
     number: a.AddNum,
     preDir: a.StPreDir,
     street: a.StName,
@@ -124,7 +129,7 @@ type ParcelFeature = {
 
 const PARCEL_FIELDS = [
   "parcel_number", "address", "zip_code", "property_class_desc", "use_code_desc",
-  "tax_status_description", "homestead_pre", "year_built", "style", "total_floor_area",
+  "tax_status_description", "homestead_pre", "year_built", "style", "total_floor_area", "frontage", "depth",
 ].join(",");
 
 function toParcel(f: ParcelFeature, match: Parcel["match"]): Parcel {
@@ -142,6 +147,8 @@ function toParcel(f: ParcelFeature, match: Parcel["match"]): Parcel {
     yearBuilt: num(p.year_built),
     style: str(p.style),
     floorArea: num(p.total_floor_area),
+    frontageFt: num(p.frontage),
+    depthFt: num(p.depth),
     match,
     geometry: f.geometry ?? undefined,
     evidence: { level: "recorded", source: SOURCES.parcels.label, url: SOURCES.parcels.url, asOf: new Date().toISOString().slice(0, 10) },
