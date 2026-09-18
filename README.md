@@ -7,7 +7,7 @@ Enter a Detroit address and get a one-page answer to four questions:
 1. **Whose pipe is it?** In Detroit the sewer line from your house to the alley sewer is yours; the City owns the sewer under the alley.
 2. **Will anyone help pay?** The City's $184M Alley Sewer Repair Program, the Private Sewer Repair Program (up to $40,000), Critical Home Repair, DWSD damage claims and HOPE — checked against your address, with deadlines.
 3. **What do I do first?** A step-by-step plan for your situation, with real dates (the 45-day claim window, program deadlines).
-4. **What do the records show?** The city sewer behind you (install year, size, material, depth), DWSD sewer work nearby, and neighbors' 311 reports — every fact labeled **Recorded**, **Estimated** or **Unknown**, with its source.
+4. **What do the records show?** The nearest recorded city sewer (install year, size, material, depth), DWSD sewer work nearby, and neighbors' 311 reports — every fact labeled **Recorded**, **Estimated** or **Unknown**, with its source.
 
 Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportation, Infrastructure & Sustainability.
 
