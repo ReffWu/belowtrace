@@ -1,6 +1,6 @@
 # BelowTrace Detroit
 
-**Sewage in your basement? Start here.**
+**Sewage in your basement? Start here.** → **[belowtrace.vercel.app](https://belowtrace.vercel.app)**
 
 Enter a Detroit address and get a one-page answer to four questions:
 
@@ -12,6 +12,8 @@ Enter a Detroit address and get a one-page answer to four questions:
 Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportation, Infrastructure & Sustainability.
 
 ## Why
+
+**[See the citywide map →](https://belowtrace.vercel.app/map)** 5,053 of 14,115 water-in-basement reports since 2023 (36%) came from outside every neighborhood the $40,000 Private Sewer Repair Program serves.
 
 - 14,115 "water in basement" investigations were requested through Detroit 311 between January 2023 and September 2026.
 - DWSD says about 1 in 3 private sewer connections is clogged, offset or disconnected; repairs "can easily exceed $10,000".
