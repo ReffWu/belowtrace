@@ -218,7 +218,7 @@ function ReportView({ r, situation }: { r: Report; situation: Situation }) {
         <p className="only-print text-sm text-ink-3">Interactive map available in the online version of this report.</p>
 
         <dl className="mt-6 divide-y divide-line rounded-2xl border border-line bg-surface">
-          <Fact label="City sewer behind you" badge={r.nearestMain ? r.mainEvidence : { level: "unknown", source: r.mainEvidence.source, url: r.mainEvidence.url }}>
+          <Fact label="Nearest city sewer on record" badge={r.nearestMain ? r.mainEvidence : { level: "unknown", source: r.mainEvidence.source, url: r.mainEvidence.url }}>
             {r.nearestMain ? (
               <>
                 Laid in <strong>{r.nearestMain.installYear ?? "an unknown year"}</strong>

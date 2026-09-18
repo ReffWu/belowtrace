@@ -64,7 +64,7 @@ export function atAGlance(r: Report, situation: Situation, now = new Date()): Gl
   if (r.nearestMain?.installYear) {
     items.push({
       tone: "info",
-      text: `The city sewer ${r.nearestMain.distanceM} m from your home was laid in ${r.nearestMain.installYear}.`,
+      text: `The nearest city sewer on record, ${r.nearestMain.distanceM} m from your home, was laid in ${r.nearestMain.installYear}.`,
       href: "#records",
     });
   }
