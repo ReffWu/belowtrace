@@ -13,7 +13,7 @@ export type PropertyModel = {
   buildings: ModelBuilding[];
   primary: ModelBuilding | null;
   roads: { name: string; parts: Point2[][] }[];
-  main: { parts: Point2[][]; point: Point2; depthM: number | null; radiusM: number | null } | null;
+  main: { parts: Point2[][]; point: Point2; depthM: number | null; radiusM: number | null; installYear: number | null } | null;
   bounds: { minX: number; maxX: number; minZ: number; maxZ: number };
   houseBounds: { minX: number; maxX: number; minZ: number; maxZ: number } | null;
   widthFt: number | null;
@@ -93,6 +93,7 @@ export function propertyModel(parcel: Parcel | null, site: PropertySite | undefi
       parts: main.parts.map(p => p.map(project)), point: projectedMainPoint!,
       depthM: main.depthFt && main.depthFt > 0 && Number.isFinite(main.depthFt) ? main.depthFt * 0.3048 : null,
       radiusM: main.sizeIn && main.sizeIn > 0 && Number.isFinite(main.sizeIn) ? main.sizeIn * 0.0254 / 2 : null,
+      installYear: main.installYear,
     } : null,
   };
 }

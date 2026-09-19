@@ -11,10 +11,17 @@ export function AddressSearch({
   defaultAddress = "",
   defaultSituation = "backup",
   compact = false,
+  target = "/report",
+  params,
+  cta = "Check my address",
 }: {
   defaultAddress?: string;
   defaultSituation?: Situation;
   compact?: boolean;
+  // Where the address goes, and any flow state to carry along (the step-by-step flow uses /plan).
+  target?: string;
+  params?: Record<string, string>;
+  cta?: string;
 }) {
   const router = useRouter();
   const [value, setValue] = useState(defaultAddress);
@@ -105,9 +112,9 @@ export function AddressSearch({
     }
     setError("");
     setOpen(false);
-    const params = new URLSearchParams({ address: text.replace(/, USA$/, ""), situation });
-    if (key) params.set("key", key);
-    startTransition(() => router.push(`/report?${params}`));
+    const query = new URLSearchParams({ address: text.replace(/, USA$/, ""), situation, ...params });
+    if (key) query.set("key", key);
+    startTransition(() => router.push(`${target}?${query}`));
   }
 
   function choose(s: Suggestion) {
@@ -179,7 +186,7 @@ export function AddressSearch({
                 Checking…
               </>
             ) : (
-              "Check my address"
+              cta
             )}
           </button>
         </div>
@@ -228,7 +235,7 @@ export function AddressSearch({
         )}
       </div>
 
-      {!compact && (
+      {!compact && !params && (
         <fieldset>
           <legend className="mb-2 text-base font-semibold text-ink">What&apos;s going on?</legend>
           <div className="grid gap-2 sm:grid-cols-3">

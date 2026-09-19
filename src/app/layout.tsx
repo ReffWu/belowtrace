@@ -45,9 +45,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Link href="/about" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
                 About
               </Link>
-              <Link href="/sources" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
-                <span className="sm:hidden">Sources</span>
-                <span className="hidden sm:inline">Data &amp; method</span>
+              {/* On phones the footer's "See every source" link covers this. */}
+              <Link href="/sources" className="hidden whitespace-nowrap rounded-md px-3 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:inline">
+                Data &amp; method
               </Link>
             </nav>
           </div>

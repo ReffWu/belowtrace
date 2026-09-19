@@ -32,7 +32,7 @@
 .keyTag { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #22322b; }
 .keyTag strong { font-weight: 700; }
 .keyDetail { font-size: 0.67rem; color: #55685f; padding-left: 28px; line-height: 1.4; }
-.privateKey { width: 20px; height: 0; border-top: 3.5px solid #d97706; flex-shrink: 0; }
+.privateKey { width: 20px; height: 0; border-top: 3.5px dashed #d97706; flex-shrink: 0; }
 .cityKey { width: 20px; height: 0; border-top: 3.5px solid #0284c7; flex-shrink: 0; }
 .lotKey { width: 20px; height: 0; border-top: 2.5px dashed #b39358; flex-shrink: 0; }
 .buildingKey { width: 12px; height: 12px; border: 1.5px solid #94a3b8; background: rgb(223 220 211 / 55%); border-radius: 2px; flex-shrink: 0; }
@@ -68,6 +68,23 @@
 .modelSources summary { cursor: pointer; color: var(--brand-ink); font-weight: 650; }
 .modelSources p { padding-top: 8px; }
 .modelSources a { text-decoration: underline; color: var(--brand-ink); }
+.dark { background: #10212a; border: 0; }
+.dark .viewSwitch { background: rgb(255 255 255 / 8%); }
+.dark .viewSwitch button, .dark .zoom button { color: rgb(255 255 255 / 70%); }
+.dark .viewSwitch button[aria-pressed="true"] { color: #10212a; background: #e8f6f7; }
+.dark .viewSwitch button:hover:not([aria-pressed="true"]), .dark .zoom button:hover { background: rgb(255 255 255 / 12%); }
+.dark .modelViewport { height: 480px; }
+.unavailable.dark { color: rgb(255 255 255 / 65%); }
+.unavailable.dark strong { color: #fff; }
+.dark .modelHint { color: rgb(255 255 255 / 45%); }
+.dark .modelLabel { background: rgb(16 33 42 / 88%); border-color: rgb(255 255 255 / 16%); color: #fff; }
+.dark .modelLabel span { color: rgb(255 255 255 / 65%); }
+.dark .modelLabel[data-tone="pipe"] { color: #7fe3ea; border-color: rgb(79 209 220 / 55%); }
+.dark .modelLabel[data-tone="house"] { color: #10212a; background: #f3a64a; border-color: #f3a64a; }
+.dark .modelLabel[data-tone="house"] span { color: rgb(16 33 42 / 75%); }
+.dark .modelWarning { background: #10212a; color: #f3c58a; }
+.dark .planFallback svg { opacity: 0.35; }
+.dark .planFallback p { color: rgb(255 255 255 / 60%); }
 @media (max-width: 639px) {
   .header { padding: 20px 18px 17px; }
   .header h3 { font-size: 1.16rem; }

@@ -1,12 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { boundsOf, clipSegment, insideLot, nearestOnLine, type Point2, type PropertyModel } from "@/lib/property-model";
+import { boundsOf, clipSegment, insideLot, type Point2, type PropertyModel } from "@/lib/property-model";
 
 export type ModelView = "model" | "plan";
+export type SceneTheme = "light" | "dark";
 export type SceneLabel = { text: string; detail?: string; point: [number, number, number]; tone?: "house" | "pipe" | "entry"; view?: ModelView };
 
-export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyModel, onLabels: (labels: { text: string; detail?: string; x: number; y: number; tone?: string }[]) => void, onSnapshot: (url: string) => void) {
+export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyModel, onLabels: (labels: { text: string; detail?: string; x: number; y: number; tone?: string }[]) => void, onSnapshot: (url: string) => void, theme: SceneTheme = "light") {
+  const dark = theme === "dark";
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
@@ -14,7 +16,7 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color("#e7e8e2");
+  scene.background = new THREE.Color(dark ? "#10212a" : "#e7e8e2");
   const generator = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
   const environment = generator.fromScene(room, 0.04);
@@ -48,7 +50,7 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
   light.shadow.normalBias = 0.06;
   light.shadow.bias = -0.0001;
   light.shadow.radius = 6;
-  const hemiLight = new THREE.HemisphereLight("#f8fafc", "#cbd5e1", 1.45);
+  const hemiLight = new THREE.HemisphereLight("#f8fafc", dark ? "#3b5560" : "#cbd5e1", dark ? 1.15 : 1.45);
   scene.add(light, light.target, hemiLight);
 
   const textures: THREE.Texture[] = [];
@@ -88,33 +90,27 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
   surroundingGround.transparent = true; surroundingGround.opacity = 0.36; surroundingGround.depthWrite = false;
   const asphalt = surface("#474e52", "asphalt");
   asphalt.transparent = true; asphalt.opacity = 0.55; asphalt.depthWrite = false;
-  const earth = surface("#8c7560", "stone");
-  earth.transparent = true; earth.opacity = 0.18; earth.depthWrite = false;
-  const lowerEarth = surface("#afa08b", "stone");
-  lowerEarth.transparent = true; lowerEarth.opacity = 0.12; lowerEarth.depthWrite = false;
+  // In the dark reveal the ground reads as tinted glass, so the recorded pipe glows through it.
+  const earth = surface(dark ? "#2c5561" : "#8c7560", "stone");
+  earth.transparent = true; earth.opacity = dark ? 0.3 : 0.18; earth.depthWrite = false;
+  const lowerEarth = surface(dark ? "#1d3f4a" : "#afa08b", "stone");
+  lowerEarth.transparent = true; lowerEarth.opacity = dark ? 0.26 : 0.12; lowerEarth.depthWrite = false;
   const plinth = material("#3e4747", 0.7);
   plinth.transparent = true; plinth.opacity = 0.25; plinth.depthWrite = false;
 
-  // High-saturation luminous pipe materials: constant vivid color from any angle and in both 3D & plan view
+  // High-saturation luminous pipe material: constant vivid color from any angle and in both 3D & plan view
   const publicPipe = new THREE.MeshStandardMaterial({
-    color: "#0284c7",
+    color: dark ? "#22d3ee" : "#0284c7",
     emissive: "#06b6d4",
-    emissiveIntensity: 0.65,
+    emissiveIntensity: dark ? 1.1 : 0.65,
     roughness: 0.15,
     metalness: 0.2,
     depthTest: false,
-  });
-  const privatePipe = new THREE.MeshStandardMaterial({
-    color: "#d97706",
-    emissive: "#f59e0b",
-    emissiveIntensity: 0.65,
-    roughness: 0.15,
-    metalness: 0.2,
-    depthTest: false,
+    toneMapped: !dark, // skip filmic tone mapping in the dark reveal so the recorded pipe stays vivid
   });
   const terrainMaterials = [grass, surroundingGround, concrete, asphalt, earth, lowerEarth];
   const buildingMaterials = [limestone, neighborMat, roofCapMat];
-  const allMaterials: THREE.Material[] = [...terrainMaterials, ...buildingMaterials, plinth, publicPipe, privatePipe];
+  const allMaterials: THREE.Material[] = [...terrainMaterials, ...buildingMaterials, plinth, publicPipe];
   const roofs = new THREE.Group();
   const pipes = new THREE.Group();
   pipes.renderOrder = 999;
@@ -180,7 +176,7 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
     if (length < 0.2) continue;
     const nx = (end[1] - a[1]) / length, nz = -(end[0] - a[0]) / length;
     for (const [halfWidth, elevation, thickness, mat] of [[4.6, 0.08, 0.2, concrete], [3.5, 0.28, 0.05, asphalt]] as const) {
-      let strip: Point2[] = [[a[0] + nx * halfWidth, a[1] + nz * halfWidth], [end[0] + nx * halfWidth, end[0] + nz * halfWidth], [end[0] - nx * halfWidth, end[1] - nz * halfWidth], [a[0] - nx * halfWidth, a[1] - nz * halfWidth]];
+      let strip: Point2[] = [[a[0] + nx * halfWidth, a[1] + nz * halfWidth], [end[0] + nx * halfWidth, end[1] + nz * halfWidth], [end[0] - nx * halfWidth, end[1] - nz * halfWidth], [a[0] - nx * halfWidth, a[1] - nz * halfWidth]];
       strip = clipPolygon(clipPolygon(clipPolygon(clipPolygon(strip, 0, b.minX, true), 0, b.maxX, false), 1, b.minZ, true), 1, b.maxZ, false);
       if (strip.length >= 3) extrude([strip], elevation, thickness, mat);
     }
@@ -214,11 +210,10 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
     labels.push({ text: `${model.depthFt!.toFixed(0)}′`, point: [x - 1.2, 0.6, (h.minZ + h.maxZ) / 2], view: "plan" });
   }
 
-  // Underground sewer pipes: public main + private lateral line
+  // Underground: only the recorded public main
   if (model.main) {
     const y = -(model.main.depthM ?? 3);
     const radius = Math.max(0.48, Math.min(model.main.radiusM ?? 0.48, 1.2)); // visually prominent pipe scale
-    let mainVisible = false;
     for (const part of model.main.parts) for (let i = 1; i < part.length; i++) {
       const segment = clipSegment(part[i - 1], part[i], b);
       if (segment) {
@@ -229,25 +224,26 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
         // Vertical depth drops at ends for spatial depth clarity
         line([new THREE.Vector3(a[0], y, a[1]), new THREE.Vector3(a[0], 0.22, a[1])], "#06b6d4", true, pipes);
         line([new THREE.Vector3(end[0], y, end[1]), new THREE.Vector3(end[0], 0.22, end[1])], "#06b6d4", true, pipes);
-        mainVisible = true;
       }
     }
 
-    if (mainVisible && model.houseBounds) {
-      const h = model.houseBounds;
-      const start2: Point2 = [(h.minX + h.maxX) / 2, (h.minZ + h.maxZ) / 2];
-      const target = nearestOnLine(start2, model.main.parts);
-      if (target && target[0] >= b.minX && target[0] <= b.maxX && target[1] >= b.minZ && target[1] <= b.maxZ) {
-        const start = new THREE.Vector3(start2[0], -0.8, start2[1]);
-        const end = new THREE.Vector3(target[0], y, target[1]);
-        // Solid continuous private lateral pipe: stays clearly visible through transparent foundation
-        cylinder(start, end, 0.28, privatePipe, pipes);
-        // House vertical outlet stub
-        cylinder(new THREE.Vector3(start2[0], 0.25, start2[1]), start, 0.24, privatePipe, pipes);
-        // Surface alignment guide
-        line([new THREE.Vector3(start2[0], 0.22, start2[1]), new THREE.Vector3(target[0], 0.22, target[1])], "#f59e0b", true, pipes);
-      }
+    // Name the recorded main where it enters the model.
+    const visible = model.main.parts.flatMap(part => part.slice(1).map((p, i) => clipSegment(part[i], p, b))).find(Boolean);
+    if (visible) {
+      const [a, end] = visible;
+      labels.push({
+        text: `City sewer${model.main.installYear ? ` · ${model.main.installYear}` : ""}`,
+        detail: model.main.depthM ? `About ${(model.main.depthM / 0.3048).toFixed(0)} ft down · DWSD record` : "DWSD record",
+        point: [a[0] + (end[0] - a[0]) * 0.88, y, a[1] + (end[1] - a[1]) * 0.88], // near one end, so the label doesn't hide the pipe
+        tone: "pipe",
+      });
     }
+  }
+
+  // The private line is deliberately not drawn: no public record locates it.
+  if (model.houseBounds) {
+    const h = model.houseBounds;
+    labels.push({ text: "Your home", detail: "Your line's route isn't on record", point: [(h.minX + h.maxX) / 2, 6.2, (h.minZ + h.maxZ) / 2], tone: "house" });
   }
 
   // Geographic north
@@ -308,10 +304,8 @@ export function createPropertyScene(canvas: HTMLCanvasElement, model: PropertyMo
       if (next === "plan") {
         // Plan view: maximum luminance emissive for crisp engineering schematic feel
         publicPipe.emissiveIntensity = 0.95;
-        privatePipe.emissiveIntensity = 0.95;
       } else {
-        publicPipe.emissiveIntensity = 0.65;
-        privatePipe.emissiveIntensity = 0.65;
+        publicPipe.emissiveIntensity = dark ? 1.1 : 0.65;
       }
       camera.position.copy(center).add(next === "plan" ? new THREE.Vector3(0, span * 1.6, 0.01) : overview());
       camera.zoom = 1; controls.update(); fit();

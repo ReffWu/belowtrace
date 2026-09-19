@@ -2,12 +2,13 @@
 
 **Sewage in your basement? Start here.** → **[belowtrace.vercel.app](https://belowtrace.vercel.app)**
 
-Enter a Detroit address and get a one-page answer to four questions:
+BelowTrace walks a Detroit resident through a sewer problem one step at a time, starting from what is happening, not from a form.
 
-1. **Whose pipe is it?** In Detroit the sewer line from your house to the alley sewer is yours; the City owns the sewer under the alley.
-2. **Will anyone help pay?** The City's $184M Alley Sewer Repair Program, the Private Sewer Repair Program (up to $40,000), Critical Home Repair, DWSD damage claims and HOPE — checked against your address, with deadlines.
-3. **What do I do first?** A step-by-step plan for your situation, with real dates (the 45-day claim window, program deadlines).
-4. **What do the records show?** The nearest recorded city sewer (install year, size, material, depth), DWSD sewer work nearby, and neighbors' 311 reports — every fact labeled **Recorded**, **Estimated** or **Unknown**, with its source.
+1. **Water or sewage is coming in.** Call DWSD first (free; they check the city sewer). Save the service request number and the date, and see the 45-day damage-claim deadline. Then enter the address.
+2. **A plumber quoted a big repair.** Don't sign yet: ask for the camera video and where the break is. At the alley connection, the free $184M Alley Sewer Repair Program may fix it; under the yard, the Private Sewer Repair Program may pay up to $40,000.
+3. **Buying, or just curious.** See what public records show under the home.
+
+Every path ends on one page for that address: what happens next, **only the programs that fit this home and this problem** (with the reason each other program doesn't), and a 3D view of the parcel, the building and the nearest recorded city sewer. The private line is not drawn, because no public record locates it.
 
 Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportation, Infrastructure & Sustainability.
 
@@ -28,16 +29,18 @@ Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportati
 
 | Address | What it shows |
 |---|---|
-| 16776 Prevost St | A 1928 combined sewer 24 m away; 43 water-in-basement reports nearby; inside the PSRP area |
-| 16821 Fenmore St | DWSD alley sewer work under construction 68 m away |
-| 14600 Archdale St | Outside the PSRP area — see how the options change |
+| [16776 Prevost St](https://belowtrace.vercel.app/plan?address=16776+Prevost+St&situation=backup) | A 1928 combined sewer 24 m away; 43 water-in-basement reports nearby; inside the PSRP area |
+| [16821 Fenmore St](https://belowtrace.vercel.app/plan?address=16821+Fenmore+St&situation=backup) | DWSD alley sewer work under construction 68 m away |
+| [14600 Archdale St](https://belowtrace.vercel.app/plan?address=14600+Archdale+St&situation=broken-line&break=alley) | Outside the PSRP area — see how the options change |
+
+The full record for any address is still at `/report?address=…`.
 
 ## Run locally
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm test           # 25 unit tests (eligibility rules, geo lookups, plans, deadlines)
+npm test           # unit tests (eligibility rules, program matching, geo lookups, plans, deadlines)
 npm run build
 ```
 
@@ -61,7 +64,8 @@ address ─► Esri geocoder (Census backup) ─► City parcel (exact match, el
 
 - `src/lib/facts.ts` — every phone number, deadline, income limit and source URL, with the date it was checked.
 - `src/lib/psrp.ts` — the PSRP screener rules, citing page numbers in the City's guide.
-- `src/lib/programs.ts`, `glance.ts`, `plan.ts` — program cards, the at-a-glance summary and the step plan.
+- `src/lib/guide.ts` — which programs fit this home and this problem, and why the others don't.
+- `src/lib/programs.ts`, `glance.ts`, `plan.ts` — program cards, the at-a-glance summary and the step plan for the full record page.
 - `src/lib/geo.ts` — spatial lookups (Flatbush index) over the bundled data.
 - `src/lib/sources.ts` — live geocoder, parcel, FEMA and HUD calls with timeouts; failures become "Unknown", never "No".
 - `GET /api/report?address=…&situation=backup|broken-line|checking` returns the full report as JSON.

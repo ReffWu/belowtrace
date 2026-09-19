@@ -21,6 +21,9 @@
   --stop: #a52a21;
   --stop-tint: #fae6e3;
   --focus: #1f6feb;
+  --deep: #0b1519;
+  --deep-2: #14252c;
+  --glow: #4fd1dc;
 }
 
 @theme inline {
@@ -43,6 +46,9 @@
   --color-warn-tint: var(--warn-tint);
   --color-stop: var(--stop);
   --color-stop-tint: var(--stop-tint);
+  --color-deep: var(--deep);
+  --color-deep-2: var(--deep-2);
+  --color-glow: var(--glow);
   --font-sans: var(--font-public-sans);
 }
 
@@ -73,6 +79,40 @@ body {
 
 a {
   text-underline-offset: 3px;
+}
+
+/* Quiet entrance: each step settles into place instead of popping in. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.rise {
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.rise-1 {
+  animation-delay: 0.08s;
+}
+.rise-2 {
+  animation-delay: 0.16s;
+}
+.rise-3 {
+  animation-delay: 0.24s;
+}
+
+/* The pipe in the home-page drawing traces itself, once. */
+@keyframes trace {
+  from {
+    stroke-dashoffset: var(--len);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.trace {
+  stroke-dasharray: var(--len);
+  animation: trace 2.4s 0.4s cubic-bezier(0.6, 0, 0.2, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

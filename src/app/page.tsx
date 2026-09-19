@@ -1,142 +1,96 @@
 import Link from "next/link";
-import { AddressSearch } from "@/components/address-search";
 import stats from "@/data/citywide-stats.json";
 
-const STATS = [
-  { value: "14,115", label: "“water in basement” investigations requested through Detroit 311 since 2023" },
-  { value: "1 in 3", label: "private sewer connections are clogged, offset, or cut off from the city sewer, DWSD says" },
-  { value: "$10,000+", label: "is what these repairs can easily cost — out of reach for many families" },
-];
-
-const EXAMPLES = [
-  { address: "16776 Prevost St", note: "The city sewer out back was laid in 1928" },
-  { address: "16821 Fenmore St", note: "DWSD alley sewer work is under way nearby" },
-  { address: "14600 Archdale St", note: "Outside the Private Sewer Repair area" },
+const CHOICES = [
+  { href: "/backup", title: "Water or sewage is coming in", note: "Right now, or it just happened" },
+  { href: "/quote", title: "A plumber quoted a big repair", note: "Before you sign anything" },
+  { href: "/address?situation=checking", title: "I'm buying, or just curious", note: "See what's under a Detroit home" },
 ];
 
 export default function Home() {
+  const outsidePct = Math.round((stats.outsidePsrp / stats.total) * 100);
   return (
     <>
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-5xl px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-16">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-sm font-medium text-ink-2">
-            <span className="h-2 w-2 rounded-full bg-own" aria-hidden="true" />
-            Free · No sign-up · City of Detroit addresses
-          </p>
-          <h1 className="max-w-3xl text-[2.35rem] font-extrabold leading-[1.08] tracking-tight text-ink sm:text-[3.4rem]">
-            Sewage in your basement? <span className="text-brand">Start here.</span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg text-ink-2 sm:text-xl">
-            Enter your address to see who&apos;s responsible for the sewer line, which City programs might pay for the repair, the
-            deadlines you can&apos;t miss, and what public records actually show about the pipes behind your home.
-          </p>
-          <div className="mt-8 max-w-4xl rounded-2xl border border-line bg-surface p-4 shadow-[0_1px_0_rgb(21_33_43/0.04),0_12px_32px_-16px_rgb(21_33_43/0.25)] sm:p-6">
-            <AddressSearch />
-          </div>
-          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.95rem] text-ink-2">
-            <span className="font-medium">Try an example:</span>
-            {EXAMPLES.map((e) => (
-              <Link
-                key={e.address}
-                href={`/report?${new URLSearchParams({ address: e.address, situation: "backup" })}`}
-                className="group rounded-md text-brand underline decoration-brand/30 hover:decoration-brand"
-                title={e.note}
-              >
-                {e.address}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section className="mx-auto max-w-3xl px-5 pb-14 pt-12 sm:pt-20">
+        <p className="rise text-sm font-bold uppercase tracking-[0.14em] text-own">Detroit · Free · No sign-up</p>
+        <h1 className="rise rise-1 mt-4 text-[2.7rem] font-extrabold leading-[1.02] tracking-[-0.04em] sm:text-[4.2rem]">
+          Sewage in the basement?
+          <span className="block text-ink-3">We&apos;ll take it one step at a time.</span>
+        </h1>
 
-      <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-        <h2 className="text-2xl font-bold tracking-tight">You&apos;ll get a one-page answer to four questions</h2>
-        <ol className="mt-6 grid gap-4 sm:grid-cols-2">
-          {[
-            ["Whose pipe is it?", "In Detroit the line from your house to the alley sewer is yours. We show where the City's part starts."],
-            ["Will anyone help pay?", "The City's new $184M alley repair program, up to $40,000 from PSRP, Critical Home Repair — checked against your address."],
-            ["What do I do first?", "A step-by-step plan with real dates: the 45-day claim window, the next program deadline, who to call."],
-            ["What do the records show?", "The city sewer behind you, sewer work nearby, and neighbors' 311 reports — with what's known, estimated, and unknown."],
-          ].map(([q, a], i) => (
-            <li key={q} className="flex gap-4 rounded-2xl border border-line bg-surface p-5">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-tint font-bold text-brand-ink">{i + 1}</span>
+        <nav aria-label="What's happening" className="rise rise-2 mt-10 grid gap-3">
+          <p className="text-lg font-semibold text-ink-2">What&apos;s happening at home?</p>
+          {CHOICES.map((c, i) => (
+            <Link
+              key={c.href}
+              href={c.href}
+              className={`group flex min-h-20 items-center justify-between gap-4 rounded-2xl border-2 px-5 py-4 transition active:scale-[0.995] sm:px-6 ${
+                i === 0 ? "border-ink bg-ink text-white hover:bg-brand-ink" : "border-line-2 bg-surface hover:border-ink"
+              }`}
+            >
               <span>
-                <span className="block text-lg font-semibold">{q}</span>
-                <span className="mt-1 block text-ink-2">{a}</span>
+                <span className="block text-[1.25rem] font-bold leading-snug">{c.title}</span>
+                <span className={`mt-0.5 block ${i === 0 ? "text-white/70" : "text-ink-3"}`}>{c.note}</span>
               </span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="border-y border-line bg-surface">
-        <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-          <h2 className="max-w-3xl text-2xl font-bold tracking-tight">
-            The money exists. Finding it shouldn&apos;t take twenty phone calls.
-          </h2>
-          <dl className="mt-8 grid gap-6 sm:grid-cols-3">
-            {STATS.map((s) => (
-              <div key={s.value} className="border-l-4 border-own pl-4">
-                <dt className="text-4xl font-extrabold tracking-tight text-ink">{s.value}</dt>
-                <dd className="mt-2 text-ink-2">{s.label}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="mt-8 max-w-3xl text-ink-2">
-            Detroit is spending <strong className="text-ink">$184 million</strong> to fix about 8,000 broken alley connections for free
-            starting October 2026 — with no application and no way to look up your address. The Private Sewer Repair Program offers up to{" "}
-            <strong className="text-ink">$40,000</strong>, but its own guide lists two different income limits. BelowTrace puts the rules,
-            the records and the deadlines for your address in one place.
-          </p>
-          <p className="mt-4 text-sm text-ink-3">
-            Sources: Improve Detroit 311 (as of Sep 17, 2026); DWSD; City of Detroit.{" "}
-            <Link href="/sources" className="underline">
-              Details
+              <span aria-hidden="true" className="text-2xl transition group-hover:translate-x-1">
+                →
+              </span>
             </Link>
-            .
-          </p>
-        </div>
+          ))}
+        </nav>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 pt-12 sm:px-6">
-        <Link
-          href="/map"
-          className="group grid gap-4 overflow-hidden rounded-2xl border border-line bg-ink p-6 text-white sm:grid-cols-[1.4fr_1fr] sm:items-center sm:p-8"
-        >
-          <span>
-            <span className="text-sm font-bold uppercase tracking-[0.12em] text-[#f3a64a]">Citywide map</span>
-            <span className="mt-2 block text-2xl font-extrabold leading-snug sm:text-[1.75rem]">
-              {Math.round((stats.outsidePsrp / stats.total) * 100)}% of basement-water reports come from neighborhoods the $40,000 repair
-              program doesn&apos;t cover.
-            </span>
-            <span className="mt-3 inline-flex items-center gap-1.5 font-semibold text-[#f3a64a] group-hover:underline">
-              See where Detroit&apos;s basements flood <span aria-hidden="true">→</span>
-            </span>
+      <section className="mx-auto max-w-3xl px-5 pb-16">
+        <figure className="rise rise-3">
+          <HouseLine />
+          <figcaption className="mt-4 max-w-xl text-lg text-ink-2">
+            In Detroit, <strong className="text-own">the line from your house to the city sewer is yours</strong>. The City owns the sewer
+            under the alley. Knowing which side is broken decides who pays.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section className="bg-deep text-white">
+        <Link href="/map" className="group mx-auto grid max-w-3xl gap-6 px-5 py-14 sm:grid-cols-[auto_1fr] sm:items-end sm:gap-10">
+          <span className="text-[4.5rem] font-extrabold leading-none tracking-[-0.05em] tabular-nums sm:text-[6rem]">
+            {stats.total.toLocaleString("en-US")}
           </span>
-          <span className="text-right">
-            <span className="block text-5xl font-extrabold tabular-nums sm:text-6xl">{stats.outsidePsrp.toLocaleString("en-US")}</span>
-            <span className="text-white/70">of {stats.total.toLocaleString("en-US")} reports since 2023</span>
+          <span className="pb-2">
+            <span className="block text-xl font-semibold leading-snug">times Detroiters reported water in the basement to the City since 2023.</span>
+            <span className="mt-2 block text-white/65">
+              {outsidePct}% of those reports came from neighborhoods the $40,000 repair program doesn&apos;t cover.{" "}
+              <span className="whitespace-nowrap font-semibold text-glow group-hover:underline">See the map →</span>
+            </span>
           </span>
         </Link>
       </section>
-
-      <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-        <div className="grid gap-6 sm:grid-cols-[1fr_1.4fr] sm:items-start">
-          <h2 className="text-2xl font-bold tracking-tight">Honest about what nobody knows</h2>
-          <div className="space-y-3 text-ink-2">
-            <p>
-              Every fact in a BelowTrace report is labeled{" "}
-              <span className="rounded-md bg-ink px-1.5 py-0.5 text-sm font-semibold text-white">Recorded</span>,{" "}
-              <span className="rounded-md border border-warn px-1.5 py-0.5 text-sm font-semibold text-warn">Estimated</span> or{" "}
-              <span className="rounded-md border border-dashed border-ink-3 px-1.5 py-0.5 text-sm font-semibold text-ink-3">Unknown</span>,
-              with a link to where it came from.
-            </p>
-            <p>
-              We never draw a guessed pipe. No public record shows where a private sewer line runs — only a camera inspection can.
-            </p>
-          </div>
-        </div>
-      </section>
     </>
+  );
+}
+
+// A schematic, not a record: it explains ownership, it doesn't locate anyone's pipe.
+function HouseLine() {
+  return (
+    <svg viewBox="0 0 720 230" className="w-full" role="img" aria-label="Diagram: your sewer line runs from the house down to the city sewer under the alley.">
+      <rect x="0" y="96" width="720" height="134" fill="var(--sunk)" />
+      <rect x="560" y="90" width="160" height="8" fill="var(--line-2)" />
+      <line x1="0" y1="96" x2="720" y2="96" stroke="var(--line-2)" strokeWidth="2" />
+      <path d="M92 96V52l62-34 62 34v44" fill="var(--surface)" stroke="var(--ink)" strokeWidth="2.5" strokeLinejoin="round" />
+      <rect x="140" y="66" width="28" height="30" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" />
+      <path
+        className="trace"
+        style={{ "--len": 520 } as React.CSSProperties}
+        d="M184 96V132C184 140 190 146 198 146H598C611 146 622 157 622 170"
+        fill="none"
+        stroke="var(--own)"
+        strokeWidth="7"
+        strokeLinecap="round"
+      />
+      <circle cx="640" cy="186" r="24" fill="var(--brand-tint)" stroke="var(--brand)" strokeWidth="4" />
+      <circle cx="640" cy="186" r="12" fill="var(--brand)" opacity="0.2" />
+      <text x="300" y="134" fill="var(--own)" fontSize="15" fontWeight="700">Your line</text>
+      <text x="560" y="82" fill="var(--ink-3)" fontSize="13" fontWeight="600">Alley</text>
+      <text x="520" y="222" fill="var(--brand-ink)" fontSize="15" fontWeight="700">City sewer</text>
+    </svg>
   );
 }

@@ -150,12 +150,29 @@ const hoods = [...byHood.values()].map((h) => ({ ...h, psrp: h.insidePsrp / h.re
 const byYear = {};
 for (const w of wib) byYear[w.year] = (byYear[w.year] ?? 0) + 1;
 const outside = wib.filter((w) => !w.inside).length;
+
+// How fast DWSD closes water-in-basement calls, over the latest 12 months of data.
+// "Closed" means DWSD finished the request, not necessarily that the home's problem is fixed.
+const wibAll = raw("311_water_in_basement").map((f) => f.properties);
+const latest = Math.max(...wibAll.map((p) => p.created_at));
+const hours = wibAll
+  .filter((p) => p.created_at >= latest - 365 * 86_400_000 && p.num_hours_to_close != null)
+  .map((p) => p.num_hours_to_close)
+  .sort((a, b) => a - b);
+const response = {
+  from: day(latest - 365 * 86_400_000),
+  to: day(latest),
+  calls: hours.length,
+  medianHours: hours[Math.floor(hours.length / 2)],
+  within48Pct: Math.round((hours.filter((h) => h <= 48).length / hours.length) * 100),
+};
 write("citywide-stats", {
   since: "2023-01-01",
   snapshot: new Date().toISOString().slice(0, 10),
   total: wib.length,
   outsidePsrp: outside,
   byYear,
+  response,
   topOutside: hoods.filter((h) => !h.psrp).slice(0, 8),
   topInside: hoods.filter((h) => h.psrp).slice(0, 8),
   activeProjects: raw("sewer_capital_projects").filter((f) => f.properties.ProjectPHA !== "Closed").length,
