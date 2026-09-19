@@ -13,7 +13,7 @@ const HUD_LMI = "https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/servic
 export const DETROIT_EXTENT = "-83.2877,42.2551,-82.9105,42.4502";
 const DETROIT_CENTER = "-83.1,42.37";
 
-async function getJson<T>(url: string, params: Record<string, string>, timeoutMs = 8000): Promise<T> {
+async function getJson<T>(url: string, params: Record<string, string>, timeoutMs = 12000): Promise<T> {
   const res = await fetch(`${url}?${new URLSearchParams(params)}`, {
     signal: AbortSignal.timeout(timeoutMs),
     headers: { "User-Agent": "BelowTrace/1.0 (civic tool; https://github.com/belowtrace)" },
@@ -54,19 +54,7 @@ type ArcgisCandidate = {
   attributes: Record<string, string>;
 };
 
-async function findCandidate(singleLine: string, magicKey?: string): Promise<Geocoded | null> {
-  const data = await getJson<{ candidates: ArcgisCandidate[] }>(`${ARCGIS_GEOCODER}/findAddressCandidates`, {
-    SingleLine: singleLine,
-    ...(magicKey ? { magicKey } : {}),
-    // No search extent: an address just outside the city should say "outside Detroit", not "not found".
-    location: DETROIT_CENTER,
-    locationType: "street",
-    maxLocations: "1",
-    outFields: "Match_addr,Addr_type,AddNum,StPreDir,StName,City,Postal,DisplayX,DisplayY",
-    f: "json",
-  });
-  const c = data.candidates.find((c) => c.score >= 85 && /PointAddress|StreetAddress|StreetAddressExt|Subaddress/.test(c.attributes.Addr_type));
-  if (!c) return null;
+const c = (c: { attributes: Record<string, string>; location: { x: number; y: number } }): Geocoded => {
   const a = c.attributes;
   const display = Number(a.DisplayX) && Number(a.DisplayY) ? ([Number(a.DisplayX), Number(a.DisplayY)] as LngLat) : null;
   return {
@@ -81,6 +69,21 @@ async function findCandidate(singleLine: string, magicKey?: string): Promise<Geo
     zip: a.Postal,
     source: "arcgis",
   };
+};
+
+async function findCandidate(singleLine: string, magicKey?: string): Promise<Geocoded | null> {
+  const data = await getJson<{ candidates: ArcgisCandidate[] }>(`${ARCGIS_GEOCODER}/findAddressCandidates`, {
+    SingleLine: singleLine,
+    ...(magicKey ? { magicKey } : {}),
+    // No search extent: an address just outside the city should say "outside Detroit", not "not found".
+    location: DETROIT_CENTER,
+    locationType: "street",
+    maxLocations: "1",
+    outFields: "Match_addr,Addr_type,AddNum,StPreDir,StName,City,Postal,DisplayX,DisplayY",
+    f: "json",
+  });
+  const match = data.candidates.find((cand) => cand.score >= 85 && /PointAddress|StreetAddress|StreetAddressExt|Subaddress/.test(cand.attributes.Addr_type));
+  return match ? c(match) : null;
 }
 
 export async function geocode(address: string, magicKey?: string): Promise<Geocoded | null> {
@@ -109,15 +112,15 @@ async function geocodeCensus(address: string): Promise<Geocoded | null> {
   });
   const m = data.result.addressMatches[0];
   if (!m) return null;
-  const c = m.addressComponents;
+  const comp = m.addressComponents;
   return {
     label: m.matchedAddress,
     lngLat: [m.coordinates.x, m.coordinates.y],
     number: m.matchedAddress.split(" ")[0],
-    preDir: c.preDirection ?? "",
-    street: c.streetName ?? "",
-    city: c.city ?? "",
-    zip: c.zip ?? "",
+    preDir: comp.preDirection ?? "",
+    street: comp.streetName ?? "",
+    city: comp.city ?? "",
+    zip: comp.zip ?? "",
     source: "census",
   };
 }
@@ -165,17 +168,29 @@ export function centroid(g: GeoJSON.Polygon | GeoJSON.MultiPolygon | null): LngL
 }
 
 export async function findParcel(g: Geocoded): Promise<Parcel | null> {
-  const street = [g.preDir, g.street].filter(Boolean).join(" ").toUpperCase().replace(/'/g, "''");
+  const rawStreet = [g.preDir, g.street].filter(Boolean).join(" ").toUpperCase().replace(/'/g, "''");
+  // Remove common street type suffixes because Detroit parcel records often omit them (e.g. "16776 PREVOST")
+  const cleanStreet = rawStreet
+    .replace(/\b(STREET|ST|AVENUE|AVE|ROAD|RD|BOULEVARD|BLVD|DRIVE|DR|LANE|LN|WAY|COURT|CT|PLACE|PL|TERRACE|TER|CIRCLE|CIR)\b$/i, "")
+    .trim();
   const base = { outFields: PARCEL_FIELDS, returnGeometry: "true", outSR: "4326", f: "geojson" };
   const number = g.number.replace(/\D/g, "");
-  if (number && street) {
-    // Parcel addresses appear both with and without the street type ("1 WOODWARD AVE", "15888 STANSBURY").
+
+  if (number && cleanStreet) {
+    const conditions = [
+      `address = '${number} ${cleanStreet}'`,
+      `address LIKE '${number} ${cleanStreet} %'`,
+    ];
+    if (cleanStreet !== rawStreet) {
+      conditions.push(`address = '${number} ${rawStreet}'`, `address LIKE '${number} ${rawStreet} %'`);
+    }
     const exact = await getJson<{ features: ParcelFeature[] }>(PARCELS, {
       ...base,
-      where: `address = '${number} ${street}' OR address LIKE '${number} ${street} %'`,
-    });
+      where: conditions.join(" OR "),
+    }, 18000);
     if (exact.features.length) return toParcel(exact.features[0], "exact");
   }
+
   const near = await getJson<{ features: ParcelFeature[] }>(PARCELS, {
     ...base,
     geometry: g.lngLat.join(","),
@@ -184,7 +199,7 @@ export async function findParcel(g: Geocoded): Promise<Parcel | null> {
     spatialRel: "esriSpatialRelIntersects",
     distance: "40",
     units: "esriSRUnit_Meter",
-  });
+  }, 18000);
   const best = near.features
     .map((f) => ({ f, c: centroid(f.geometry) }))
     .filter((x): x is { f: ParcelFeature; c: LngLat } => x.c !== null)

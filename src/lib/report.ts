@@ -4,8 +4,9 @@ import { buildPrograms } from "./programs";
 import { centroid, findParcel, floodZone, geocode, lowModIncome } from "./sources";
 import type { Evidence, Report, ReportError, Situation, Unknown } from "./types";
 import golden from "@/data/golden.json";
+import { propertySite } from "./property-site-source";
 
-const MAIN_RADIUS_M = 90; // alley behind a typical Detroit lot is 20–60 m from the front door
+const MAIN_RADIUS_M = 120; // alley behind a typical Detroit lot is 20–60 m from the front door, wide lots 80-110m
 const MAP_MAIN_RADIUS_M = 250;
 const PROJECT_RADIUS_M = 400;
 const REPORT_RADIUS_M = 200;
@@ -54,6 +55,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
       message: `That address is in ${g.city || "another city"}, outside Detroit's city limits. BelowTrace covers the City of Detroit's programs only.`,
     };
   }
+  const siteLookup = propertySite(g.lngLat, g.streetLngLat ?? null, [g.preDir, g.street].filter(Boolean).join(" "));
   const warnings: string[] = [];
   const mailingCity = g.city && !/^detroit$/i.test(g.city) ? g.city : null;
   if (mailingCity) {
@@ -101,6 +103,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
     lngLat: at,
     generatedAt: new Date().toISOString(),
     parcel: parcel.ok ? parcel.value : null,
+    site: await siteLookup,
     psrpNeighborhood: {
       name: hood?.name ?? null,
       inProgram: Boolean(hood),
@@ -146,9 +149,12 @@ export async function getReport(query: string, situation: Situation, magicKey?: 
   } else {
     core = await buildCore(query, magicKey);
     if ("error" in core && core.error === "upstream" && goldenReports[key]) {
-      core = { ...goldenReports[key], cached: true };
+      const saved = goldenReports[key];
+      core = { ...saved, cached: true, site: await propertySite(saved.lngLat, null, saved.query.replace(/^\s*\d+\s+/, "").split(",")[0]) };
     }
-    if (!("error" in core)) cache.set(key, { at: Date.now(), core });
+    if (!("error" in core) && core.parcel) {
+      cache.set(key, { at: Date.now(), core });
+    }
   }
   if ("error" in core) return core;
   return { ...core, programs: buildPrograms(core, situation) };

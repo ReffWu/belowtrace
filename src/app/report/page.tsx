@@ -200,12 +200,10 @@ function ReportView({ r, situation }: { r: Report; situation: Situation }) {
       <Section
         id="responsibility"
         eyebrow="Whose pipe is it?"
-        title="The line from your house to the alley is yours"
+        title="Your line connects to the city sewer. You own that connection."
         intro="In Detroit, property owners are responsible for the private sewer line from where it leaves the house all the way to the connection at the city sewer — usually in the alley. The City owns and maintains the sewer under the alley and street."
       >
-        <div className="rounded-2xl border border-line bg-surface p-4 sm:p-6">
-          <OwnershipDiagram parcel={p} main={r.nearestMain} side={r.mainSide} />
-        </div>
+        <OwnershipDiagram parcel={p} main={r.nearestMain} side={r.mainSide} site={r.site} center={r.lngLat} />
         <div className="mt-4 rounded-xl border-l-4 border-brand bg-brand-tint/60 px-4 py-3 text-[0.95rem] text-ink-2">
           <strong className="text-ink">Told the sewer “isn&apos;t on the City&apos;s records”?</strong> It has happened: in April 2026 DWSD told
           an 86-year-old resident it didn&apos;t know whose sewer served his home, then checked deeds and easements.{" "}
@@ -227,7 +225,7 @@ function ReportView({ r, situation }: { r: Report; situation: Situation }) {
       >
         <div className="space-y-4">
           {programCards.map((c) => (
-            <ProgramCard key={c.id} card={c}>
+            <ProgramCard key={c.id} card={c} address={r.address} hood={r.psrpNeighborhood.name ?? undefined}>
               {c.id === "psrp" && r.psrpNeighborhood.inProgram && !r.floodZone.isSFHA && (
                 <PsrpScreener
                   auto={{
@@ -236,6 +234,7 @@ function ReportView({ r, situation }: { r: Report; situation: Situation }) {
                     isSFHA: r.floodZone.isSFHA,
                     residential,
                   }}
+                  address={r.address}
                 />
               )}
             </ProgramCard>

@@ -94,6 +94,15 @@ describe("at a glance and next steps", () => {
   it("gives 45 days to file a damage claim", () => {
     expect(claimDeadline("2026-09-18").toISOString().slice(0, 10)).toBe("2026-11-02");
   });
+
+  it("includes word-for-word call scripts for DWSD with what-not-to-say warnings", () => {
+    const plan = buildPlan(full(prevost, beforeChr), "backup", beforeChr);
+    const dwsdStep = plan.find((s) => s.id === "call-dwsd");
+    expect(dwsdStep?.callScript).toBeDefined();
+    expect(dwsdStep?.callScript?.recipient).toContain("DWSD");
+    expect(dwsdStep?.callScript?.script.join(" ")).toContain("Service Request");
+    expect(dwsdStep?.callScript?.whatNotToSay.length).toBeGreaterThan(0);
+  });
 });
 
 describe("normalizeQuery", () => {

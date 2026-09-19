@@ -10,6 +10,8 @@ import {
   type PsrpAuto,
 } from "@/lib/psrp";
 import { PHONES, SOURCES } from "@/lib/facts";
+import { getCallProtocol } from "@/lib/call-protocols";
+import { CallScriptDrawer } from "./call-script-drawer";
 
 type Option = { value: string | number; label: string; hint?: string };
 const money = (n: number) => `$${n.toLocaleString("en-US")}`;
@@ -90,7 +92,7 @@ const VERDICT_STYLE = {
 const ICON = { pass: "✓", fail: "✕", warn: "!" };
 const ICON_STYLE = { pass: "bg-go text-white", fail: "bg-stop text-white", warn: "bg-warn text-white" };
 
-export function PsrpScreener({ auto }: { auto: PsrpAuto }) {
+export function PsrpScreener({ auto, address }: { auto: PsrpAuto; address?: string }) {
   const [started, setStarted] = useState(false);
   const [answers, setAnswers] = useState<PsrpAnswers>({});
   const [step, setStep] = useState(0);
@@ -192,6 +194,9 @@ export function PsrpScreener({ auto }: { auto: PsrpAuto }) {
               </a>
               . Program staff should contact you within 5 days. If you&apos;re denied, you can appeal within 30 days.
             </p>
+            {getCallProtocol("psrp", { address, hood: auto.neighborhoodName ?? undefined }) && (
+              <CallScriptDrawer protocol={getCallProtocol("psrp", { address, hood: auto.neighborhoodName ?? undefined })!} />
+            )}
           </div>
         )}
 

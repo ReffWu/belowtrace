@@ -10,6 +10,21 @@ export type Evidence = {
 
 export type LngLat = [number, number];
 
+export type PropertySite = {
+  streetPoint: LngLat | null;
+  streetName: string;
+  buildings: {
+    id: string;
+    parcelId: string | null;
+    kind: string | null;
+    geometry: GeoJSON.Polygon | GeoJSON.MultiPolygon;
+  }[];
+  roads: { name: string; parts: LngLat[][] }[];
+  buildingsAvailable: boolean;
+  roadsAvailable: boolean;
+  fetchedAt: string;
+};
+
 export type Situation = "backup" | "broken-line" | "checking";
 
 export type Parcel = {
@@ -88,6 +103,7 @@ export type Report = {
   lngLat: LngLat;
   generatedAt: string;
   parcel: Parcel | null;
+  site?: PropertySite;
   psrpNeighborhood: { name: string | null; inProgram: boolean; evidence: Evidence };
   floodZone: { zone: string | null; isSFHA: boolean | null; evidence: Evidence };
   lmi: { blockGroup: string; lowModPct: number; meetsAsrpIncomeTest: boolean; evidence: Evidence } | null;

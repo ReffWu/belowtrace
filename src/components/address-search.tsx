@@ -23,10 +23,51 @@ export function AddressSearch({
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [error, setError] = useState("");
+  const [locating, setLocating] = useState(false);
   const [pending, startTransition] = useTransition();
   const picked = useRef<Suggestion | null>(null);
   const listId = useId();
   const inputId = useId();
+
+  function useCurrentLocation() {
+    if (typeof window === "undefined" || !navigator.geolocation) {
+      setError("Geolocation is not supported on this device.");
+      return;
+    }
+    setError("");
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const res = await fetch(`/api/locate?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}`);
+          const data = await res.json();
+          if (data.ok && data.inDetroit && data.address) {
+            setValue(data.address);
+            setLocating(false);
+            go(data.address);
+          } else if (data.ok && !data.inDetroit) {
+            setLocating(false);
+            setError(`Your location appears to be in ${data.city || "another area"}, outside Detroit city limits.`);
+          } else {
+            setLocating(false);
+            setError(data.error || "Could not match a Detroit property at your current location.");
+          }
+        } catch {
+          setLocating(false);
+          setError("Failed to look up address from your location. Please enter your address manually.");
+        }
+      },
+      (err) => {
+        setLocating(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          setError("Location permission was denied. Please enter your address manually.");
+        } else {
+          setError("Could not retrieve GPS location. Please enter your address manually.");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
 
   useEffect(() => {
     const text = value.trim();
@@ -141,6 +182,20 @@ export function AddressSearch({
               "Check my address"
             )}
           </button>
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-2 px-1">
+          <button
+            type="button"
+            onClick={useCurrentLocation}
+            disabled={locating || pending}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:underline disabled:opacity-50"
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+              <path fillRule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a16.892 16.892 0 0 0 1.25-.662c1.096-.642 2.58-1.674 3.823-3.15 2.47-2.935 3.593-6.143 3.593-8.86 0-4.604-3.582-8.25-8-8.25S3 1.646 3 6.25c0 2.717 1.123 5.925 3.593 8.86 1.243 1.476 2.727 2.508 3.823 3.15.42.246.804.453 1.14.615l.11.047.018.008.006.003ZM10 9a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5Z" clipRule="evenodd" />
+            </svg>
+            {locating ? "Locating your Detroit address…" : "Use my current location"}
+          </button>
+          <span className="text-[0.7rem] text-ink-3">City of Detroit only</span>
         </div>
         {error && (
           <p id={`${inputId}-error`} className="mt-2 text-sm font-medium text-stop">
