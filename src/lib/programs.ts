@@ -45,7 +45,7 @@ function asrp({ lmi, projects }: Inputs): ProgramCard {
     shortName: "Alley Sewer Repair",
     status: "upcoming",
     statusLabel: `Starts ${new Date(`${ASRP_STARTS}-01T12:00:00`).toLocaleString("en-US", { month: "short", year: "numeric" })} · No application`,
-    amount: "Free — about 8,000 connections over 4 years ($184M)",
+    amount: "Free — about 9,000 connections by 2030 ($184M)",
     verdict,
     headline,
     reasons,

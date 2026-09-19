@@ -49,6 +49,14 @@ export const SOURCES = {
     url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-backup-and-flood-protection",
   },
   habitat: { label: "Habitat Detroit — Critical Home Repair", url: "https://habitatdetroit.org/critical-home-repair/" },
+  handbook: {
+    label: "DWSD Basement Backup & Flooding Handbook (2023)",
+    url: "https://detroitmi.gov/sites/detroitmi.localhost/files/2023-07/DWSD%20Basement%20Backup%20&%20Flooding%20Handbook%20-%20Version%202023-1.pdf",
+  },
+  glwaClaims: {
+    label: "Planet Detroit — GLWA denies all 2021 flood claims (July 2022)",
+    url: "https://planetdetroit.org/2022/07/glwa-denies-all-flood-claims-from-2021-lawsuits-will-continue/",
+  },
   hope: {
     label: "City of Detroit — HOPE property tax exemption",
     url: "https://detroitmi.gov/government/mayors-office/chief-financial-officer/homeowners-property-exemption-hope",
@@ -86,6 +94,10 @@ export const SOURCES = {
     url: "https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/LOW_MOD_INCOME_BY_BG/FeatureServer",
   },
 } as const;
+
+// What things cost, from the DWSD Basement Backup & Flooding Handbook (2023): p. 16 for snaking and
+// lateral repair; p. 26 for the most DWSD's own backup program paid for a camera inspection.
+export const COSTS = { snaking: "$75–$150", lateral: "$5,000–$20,000", camera: "~$400" };
 
 // Wayne County, MSHDA income limits effective May 1, 2026. Index 0 = 1 person … index 7 = 8 people.
 export const INCOME_LIMITS = {

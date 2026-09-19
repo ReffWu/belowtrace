@@ -3,7 +3,7 @@
 import { useId } from "react";
 import { callbackDue, EVIDENCE, type Case, type CaseReport, type Verdict } from "@/lib/case";
 import { psrpFits, whoCanPay, type BreakAt } from "@/lib/guide";
-import { PHONES, SOURCES } from "@/lib/facts";
+import { COSTS, PHONES, SOURCES } from "@/lib/facts";
 import { claimDeadline } from "@/lib/plan";
 import { deadlineIcs, downloadIcs } from "@/lib/ics";
 import { AddressSearch } from "@/components/address-search";
@@ -89,11 +89,42 @@ function SrField({ c, update }: Pick<StageProps, "c" | "update">) {
   );
 }
 
+const RAIN = [
+  { value: "yes", label: "Yes" },
+  { value: "no", label: "No" },
+  { value: "unsure", label: "Not sure" },
+] as const;
+
+// Whether heavy rain caused it decides whether DWSD is likely to pay for damage, so ask while it's fresh.
+function RainQuestion({ c, update }: Pick<StageProps, "c" | "update">) {
+  return (
+    <div role="group" aria-labelledby="rain-now">
+      <p id="rain-now" className="font-semibold">
+        Was it raining hard when the water came in?
+      </p>
+      <p className="text-sm text-ink-3">It changes whether DWSD is likely to pay for damage.</p>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {RAIN.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            aria-pressed={c.rain === o.value}
+            onClick={() => update({ rain: o.value })}
+            className={`min-h-12 rounded-xl border-2 font-semibold transition ${c.rain === o.value ? "border-ink bg-ink text-white" : "border-line-2 bg-surface hover:border-ink"}`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ---- 1 · Call DWSD ----
 
 export function CallStage({ c, update, report, street }: StageProps) {
   const dateId = useId();
-  const markCalled = () => update({ calledAt: new Date().toISOString() });
+  const markCalled = (address?: string) => update({ calledAt: new Date().toISOString(), ...(address ? { address } : {}) });
   return (
     <div className="grid gap-6">
       <Title sub="They check whether the city sewer is backed up. If it is, fixing it is their job, not yours.">Call DWSD first. It&apos;s free.</Title>
@@ -138,8 +169,9 @@ export function CallStage({ c, update, report, street }: StageProps) {
               />
             </label>
           </div>
+          <RainQuestion c={c} update={update} />
           {report ? (
-            <button type="button" onClick={markCalled} className={action}>
+            <button type="button" onClick={() => markCalled()} className={action}>
               Save and continue <span aria-hidden="true">→</span>
             </button>
           ) : (
@@ -247,7 +279,14 @@ export function PipeStage({ c, update, report }: StageProps) {
                 {c.sr ? ` with number ${c.sr}` : ""}.
               </li>
             )}
-            {report && psrpFits(report) && <li>If you qualify for the Private Sewer Repair Program, it pays for the inspection.</li>}
+            {report && psrpFits(report) && (
+              <>
+                <li>If you qualify for the Private Sewer Repair Program, it pays for the inspection.</li>
+                <li>
+                  <strong className="text-ink">Apply before you sign a repair contract.</strong> The program can&apos;t pay for work that starts before its review.
+                </li>
+              </>
+            )}
           </ul>
         </Part>
       )}
@@ -270,13 +309,24 @@ export function PipeStage({ c, update, report }: StageProps) {
       </Part>
 
       <Part kind="remind">
-        <p className="text-[1.05rem]">Get a second written quote before you sign anything. Repairs can easily pass $10,000.</p>
+        <p className="text-[1.05rem]">
+          {report && psrpFits(report)
+            ? "Don't sign anything until you've checked the programs in the next step."
+            : `Get a second written quote before you sign anything. Repairs like this often cost ${COSTS.lateral}.`}
+        </p>
       </Part>
     </div>
   );
 }
 
 // ---- 4 · Get it paid for: the City's pipe → damage claim ----
+
+// Michigan law: DWSD pays only when a failure in its system caused at least half the backup.
+const CLAIM_SUB = {
+  no: "The City's sewer failed on a dry day, which is what a damage claim is for. DWSD fixes the sewer and decides each claim.",
+  yes: "DWSD says claims are likely denied when heavy rain overwhelms the sewers, unless a failure in its system caused at least half the problem. Filing by the deadline keeps your right to be paid.",
+  unsure: "DWSD pays for damage only if a failure in its sewer caused at least half the problem. Filing by the deadline keeps your right to be paid.",
+};
 
 export function ClaimStage({ c, update }: StageProps) {
   const due = claimDeadline(c.found);
@@ -308,7 +358,7 @@ export function ClaimStage({ c, update }: StageProps) {
 
   return (
     <div className="grid gap-6">
-      <Title sub="It was the City's sewer, so DWSD fixes it. You can also ask them to pay for the damage.">File your damage claim.</Title>
+      <Title sub={CLAIM_SUB[c.rain ?? "unsure"]}>{c.rain === "yes" ? "File a claim, and call your insurer." : "File your damage claim."}</Title>
 
       <div className="overflow-hidden rounded-3xl bg-ink text-white">
         <div className="grid gap-5 p-6 sm:grid-cols-[1fr_auto] sm:items-end sm:p-8">
@@ -331,6 +381,15 @@ export function ClaimStage({ c, update }: StageProps) {
           </a>
         </div>
       </div>
+
+      {c.rain !== "no" && (
+        <Part kind="know">
+          <p className="text-[1.05rem] text-ink-2">
+            Call your home insurance too. Ask whether your policy has a <strong className="text-ink">sewer backup rider</strong>: without one, most policies
+            don&apos;t cover basement backups.
+          </p>
+        </Part>
+      )}
 
       <Part kind="write" label="Gather for your claim">
         <ul className="grid gap-2">
@@ -371,7 +430,7 @@ export function PayStage({ c, update, report, street }: StageProps) {
           return <PayOptions fits={fits} checked={checked} report={report} />;
         })()
       ) : (
-        <AddressSearch defaultSituation="broken-line" target="/case" params={{}} cta="Check" compact />
+        <AddressSearch defaultSituation="broken-line" target="/case" params={{}} cta="Check" compact onGo={(address) => update({ address })} />
       )}
       {report && (
         <button type="button" onClick={() => update({ closedAt: todayInDetroit() })} className={action}>

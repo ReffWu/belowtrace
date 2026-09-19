@@ -31,6 +31,8 @@ const RULES = [
   SOURCES.psrpPolicy,
   SOURCES.chr,
   SOURCES.claims,
+  SOURCES.handbook,
+  SOURCES.glwaClaims,
   SOURCES.bbpp,
   SOURCES.habitat,
   SOURCES.hope,

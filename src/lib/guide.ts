@@ -58,7 +58,7 @@ export function whoCanPay(r: Pick<Report, "psrpNeighborhood" | "floodZone" | "pa
       id: "psrp",
       name: "Private Sewer Repair Program",
       amount: "Up to $40,000",
-      why: `It's for homes hit by the June 2021 flood, and you're in ${r.psrpNeighborhood.name}, one of the 97 neighborhoods it serves. Eight questions tell you if you're likely to qualify.`,
+      why: `It's for homes hit by the June 2021 flood, and you're in ${r.psrpNeighborhood.name}, one of the 97 neighborhoods it serves. Eight questions tell you if you're likely to qualify. Apply before any work starts: it can't pay for work done first.`,
       action: { label: "Check if I qualify", href: "#psrp" },
       screener: true,
     };

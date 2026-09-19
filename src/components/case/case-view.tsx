@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { newCase, stageOf, stepBack, type Case, type CaseReport } from "@/lib/case";
 import { claimDeadline } from "@/lib/plan";
+import { whoPays } from "@/lib/money";
 import { PHONES } from "@/lib/facts";
 import { AddressSearch } from "@/components/address-search";
 import { Spine } from "./journey";
+import { WhoPays } from "./who-pays";
 import { CallStage, CheckStage, ClaimStage, ClosedStage, PayStage, PipeStage } from "./stages";
 import { caseHref, longDate, saveCase, todayInDetroit, useCase } from "./store";
 
@@ -30,12 +32,11 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
     shown.current = stage;
   }, [stage]);
 
-  // Keep the URL and the saved case pointing at the same home, so the server can load its records.
+  // Load the saved home's records when the case is opened without an address in the URL.
+  // (The case only takes an address the resident typed in this tab; a link never rewrites it.)
   useEffect(() => {
-    if (!c) return;
-    if (report && queryAddress && !c.address) saveCase({ ...c, address: queryAddress });
-    else if (!queryAddress && c.address) router.replace(caseHref(c));
-  }, [c, report, queryAddress, router]);
+    if (c?.address && !queryAddress) router.replace(caseHref(c));
+  }, [c, queryAddress, router]);
 
   if (c === undefined) return <div className="mx-auto h-[60vh] max-w-3xl" aria-busy="true" />;
 
@@ -45,7 +46,7 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
   const step = stageOf(c);
   const street = (report?.address ?? c.address)?.split(",")[0] ?? null;
   const props = { c, update, report, street };
-  const otherHome = report && c.address && queryAddress && c.address !== queryAddress;
+  const otherHome = report && queryAddress && c.address !== queryAddress;
 
   return (
     <article>
@@ -66,15 +67,17 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
           <div className="mt-6 rounded-2xl bg-warn-tint p-5" role="alert">
             <p className="font-semibold text-[#6b3d00]">{error.message}</p>
             <div className="mt-3">
-              <AddressSearch defaultSituation="backup" target="/case" params={{}} cta="Save" compact />
+              <AddressSearch defaultSituation="backup" target="/case" params={{}} cta="Save" compact onGo={(address) => update({ address })} />
             </div>
           </div>
         )}
         {otherHome && (
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-warn-tint p-5">
-            <p className="text-[#6b3d00]">Your case is for {c.address!.split(",")[0]}. Switch it to {queryAddress!.split(",")[0]}?</p>
+            <p className="text-[#6b3d00]">
+              {c.address ? `Your case is for ${c.address.split(",")[0]}. Switch it to ${queryAddress!.split(",")[0]}?` : `Use ${queryAddress!.split(",")[0]} for your case?`}
+            </p>
             <button type="button" onClick={() => update({ address: queryAddress })} className="min-h-11 rounded-xl bg-ink px-4 font-bold text-white">
-              Switch
+              {c.address ? "Switch" : "Use it"}
             </button>
           </div>
         )}
@@ -105,6 +108,14 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
             Go back a step
           </button>
         )}
+        {step < 5 && (
+          <div className="mt-10">
+            <WhoPays
+              rows={whoPays(c, report)}
+              onRain={c.entry === "backup" && !c.rain && c.verdict !== "mine" && step > 1 ? (rain) => update({ rain }) : undefined}
+            />
+          </div>
+        )}
       </div>
 
       <CaseFile c={c} report={report} update={update} />
@@ -116,6 +127,7 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
 const dayOf = (c: Case) => Math.max(1, Math.round((Date.parse(todayInDetroit()) - Date.parse(c.found)) / 86_400_000) + 1);
 
 const VERDICT = { city: "The city sewer was the problem", mine: "The problem is in the owner's line", unsure: "Not clear yet" };
+const RAIN = { yes: "Yes, it was raining hard", no: "No", unsure: "Not sure" };
 const BREAK = { alley: "Near the alley connection", yard: "Under the yard or house", unsure: "Not known yet" };
 
 // One page a resident can hand to DWSD, a plumber or a program: every date and number in the case.
@@ -127,6 +139,7 @@ function CaseFile({ c, report, update }: { c: Case; report: CaseReport | null; u
     ["Water found", c.entry === "backup" ? at(c.found) : null],
     ["DWSD called", c.calledAt ? new Date(c.calledAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Detroit" }) : null],
     ["Service request #", c.sr || null],
+    ["Heavy rain", c.entry === "backup" && c.rain ? RAIN[c.rain] : null],
     ["DWSD found", c.verdict && c.entry === "backup" ? VERDICT[c.verdict] : null],
     ["Break", c.breakAt ? BREAK[c.breakAt] : null],
     ["Quote", c.quote || null],

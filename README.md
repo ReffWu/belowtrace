@@ -9,7 +9,7 @@ BelowTrace stays with a Detroit resident through a sewer backup, from the first 
 3. **Whose pipe.** The City's: go to step 4. The owner's: what to tell the plumber (camera video, where the break is, a written quote with a permit), and where the break turned out to be.
 4. **Get it paid for.** The City's pipe: the 45-day damage-claim deadline, an evidence checklist and a reminder. The owner's line: only the programs that fit this home and this break, and why each other program doesn't.
 
-Every answer moves the case forward, and a mistaken one can be undone. The case — dates, numbers, findings — lives only on the resident's phone and prints as a one-page case file for DWSD, a plumber or a program. A plumber's quote opens a case at step 3. "Just curious" shows what public records say is under a home, including a 3D view of the parcel, the building and the nearest recorded city sewer. The private line is never drawn, because no public record locates it.
+Every answer moves the case forward, and a mistaken one can be undone. From the first screen, a **Who pays, so far** card shows each cost — fixing the pipe, the damage, today's cleanup — what it typically runs (DWSD's own handbook: $5,000–$20,000 for a private line) and who is likely to pay. It narrows with every answer: one question, whether it was raining hard, decides whether a DWSD damage claim is worth filing, because Michigan law only makes DWSD pay when a failure in its sewer caused at least half the backup (after the June 2021 storm, all 24,000+ claims to GLWA were denied). And anyone who may qualify for PSRP is told to apply before signing a repair contract, since the program can't pay for work that starts before its review. The case — dates, numbers, findings — lives only on the resident's phone and prints as a one-page case file for DWSD, a plumber or a program. A plumber's quote opens a case at step 3. "Just curious" shows what public records say is under a home, including a 3D view of the parcel, the building and the nearest recorded city sewer. The private line is never drawn, because no public record locates it.
 
 Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportation, Infrastructure & Sustainability.
 
@@ -66,6 +66,7 @@ address ─► Esri geocoder (Census backup) ─► City parcel (exact match, el
 - `src/lib/facts.ts` — every phone number, deadline, income limit and source URL, with the date it was checked.
 - `src/lib/psrp.ts` — the PSRP screener rules, citing page numbers in the City's guide.
 - `src/lib/case.ts` — the case: its four steps, what moves it forward, reminders.
+- `src/lib/money.ts` — who pays, so far: each cost, its typical amount, and who is likely to pay, given the answers so far.
 - `src/lib/guide.ts` — which programs fit this home and this problem, and why the others don't.
 - `src/lib/programs.ts`, `glance.ts`, `plan.ts` — program cards, the at-a-glance summary and the step plan for the full record page.
 - `src/lib/geo.ts` — spatial lookups (Flatbush index) over the bundled data.

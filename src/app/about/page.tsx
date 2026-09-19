@@ -32,7 +32,7 @@ export default function AboutPage() {
           Detroiters asked the City to investigate water in their basements{" "}
           <strong className="text-ink">{stats.total.toLocaleString("en-US")} times</strong> between January 2023 and {stats.snapshot}. DWSD
           says about one in three private sewer connections is clogged, offset, or has fallen off the City&apos;s sewer. When the
-          problem is on the homeowner&apos;s side, a repair can cost $10,000–$25,000.
+          problem is on the homeowner&apos;s side, a repair can cost $5,000–$20,000.
         </p>
         <p>
           The help is real but scattered: a $184M Alley Sewer Repair Program that starts in October 2026 with no application and no

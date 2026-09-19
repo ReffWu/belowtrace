@@ -23,7 +23,7 @@ export function AddressSearch({
   target?: string;
   params?: Record<string, string>;
   cta?: string;
-  onGo?: () => void;
+  onGo?: (address: string) => void;
 }) {
   const router = useRouter();
   const [value, setValue] = useState(defaultAddress);
@@ -114,8 +114,9 @@ export function AddressSearch({
     }
     setError("");
     setOpen(false);
-    onGo?.();
-    const query = new URLSearchParams({ address: text.replace(/, USA$/, ""), situation, ...params });
+    const clean = text.replace(/, USA$/, "");
+    onGo?.(clean);
+    const query = new URLSearchParams({ address: clean, situation, ...params });
     if (key) query.set("key", key);
     startTransition(() => router.push(`${target}?${query}`));
   }

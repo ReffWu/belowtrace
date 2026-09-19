@@ -145,7 +145,7 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
             {
               id: "scope",
               title: "Buying? Get a sewer camera inspection before closing",
-              detail: "It costs a few hundred dollars and can reveal a $10,000–$25,000 repair.",
+              detail: "It costs a few hundred dollars and can reveal a $5,000–$20,000 repair.",
             },
             {
               id: "prevent",

@@ -9,6 +9,7 @@ export type Case = {
   entry: "backup" | "quote";
   startedAt: string; // YYYY-MM-DD
   found: string; // YYYY-MM-DD, when the water was found
+  rain?: "yes" | "no" | "unsure"; // raining hard when it happened: decides whether a DWSD claim is likely to pay
   sr: string; // DWSD service request number
   address?: string;
   calledAt?: string; // ISO time the resident saved the DWSD call

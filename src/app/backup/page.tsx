@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { JourneyMap } from "@/components/case/journey";
 import { StartCase } from "@/components/case/start-case";
+import { WhoPays } from "@/components/case/who-pays";
+import { newCase } from "@/lib/case";
+import { whoPays } from "@/lib/money";
 
 export const metadata: Metadata = { title: "What happens after a backup" };
 
@@ -21,6 +24,9 @@ export default function BackupOverview() {
       <div className="rise rise-3 mt-10">
         <StartCase />
         <p className="mt-4 text-center text-ink-3">Free. No sign-up. Your case stays on this phone.</p>
+      </div>
+      <div className="mt-12">
+        <WhoPays title="What it can cost, and who pays" rows={whoPays(newCase("backup", ""), null)} />
       </div>
     </div>
   );

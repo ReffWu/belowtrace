@@ -68,7 +68,7 @@ function Checking({ r }: { r: Report }) {
       <UnderHome r={r} situation="checking" street={r.address.split(",")[0]} lead />
       <Block eyebrow="Before you buy" title="Get a sewer camera inspection first.">
         <p className="max-w-2xl text-[1.15rem] leading-relaxed text-ink-2">
-          It costs a few hundred dollars and can reveal a $10,000–$25,000 repair. The line from the house to the city sewer is the owner&apos;s to fix.
+          It costs a few hundred dollars and can reveal a $5,000–$20,000 repair. The line from the house to the city sewer is the owner&apos;s to fix.
         </p>
       </Block>
       <Block eyebrow="If something goes wrong here" title="Who could help pay">
