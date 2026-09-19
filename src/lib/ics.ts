@@ -4,8 +4,8 @@ const stamp = (d: Date) =>
   `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}00Z`;
 const escapeText = (s: string) => s.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
 
-export function deadlineIcs({ title, detail, due, url }: { title: string; detail: string; due: Date; url?: string }) {
-  // A 30-minute block ending at the deadline, with alarms 3 days and 1 day before.
+export function deadlineIcs({ title, detail, due, url, alarms = ["-P3D", "-P1D"], prefix = "Deadline: " }: { title: string; detail: string; due: Date; url?: string; alarms?: string[]; prefix?: string }) {
+  // A 30-minute block ending at the deadline, with alarms 3 days and 1 day before unless told otherwise.
   const start = new Date(due.getTime() - 30 * 60 * 1000);
   return [
     "BEGIN:VCALENDAR",
@@ -16,19 +16,16 @@ export function deadlineIcs({ title, detail, due, url }: { title: string; detail
     `DTSTAMP:${stamp(new Date())}`,
     `DTSTART:${stamp(start)}`,
     `DTEND:${stamp(due)}`,
-    `SUMMARY:${escapeText(`Deadline: ${title}`)}`,
+    `SUMMARY:${escapeText(`${prefix}${title}`)}`,
     `DESCRIPTION:${escapeText(detail + (url ? `\n${url}` : ""))}`,
     ...(url ? [`URL:${url}`] : []),
-    "BEGIN:VALARM",
-    "TRIGGER:-P3D",
-    "ACTION:DISPLAY",
-    `DESCRIPTION:${escapeText(title)} in 3 days`,
-    "END:VALARM",
-    "BEGIN:VALARM",
-    "TRIGGER:-P1D",
-    "ACTION:DISPLAY",
-    `DESCRIPTION:${escapeText(title)} tomorrow`,
-    "END:VALARM",
+    ...alarms.flatMap((trigger) => [
+      "BEGIN:VALARM",
+      `TRIGGER:${trigger}`,
+      "ACTION:DISPLAY",
+      `DESCRIPTION:${escapeText(title)}`,
+      "END:VALARM",
+    ]),
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");

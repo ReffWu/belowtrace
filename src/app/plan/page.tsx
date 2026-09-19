@@ -1,29 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getReport, parseSituation } from "@/lib/report";
-import { parseBreak, whoCanPay, type BreakAt } from "@/lib/guide";
-import { SOURCES } from "@/lib/facts";
-import type { Report, Situation } from "@/lib/types";
+import { whoCanPay } from "@/lib/guide";
+import type { Report } from "@/lib/types";
 import { AddressSearch } from "@/components/address-search";
-import { ClaimCard } from "@/components/flow/claim-card";
 import { PayOptions } from "@/components/flow/pay-options";
 import { UnderHome } from "@/components/flow/under-home";
-import stats from "@/data/citywide-stats.json";
 
 export async function generateMetadata(props: PageProps<"/plan">): Promise<Metadata> {
   const { address } = await props.searchParams;
-  return { title: typeof address === "string" ? address : "Your plan" };
+  return { title: typeof address === "string" ? address : "What's under a home" };
 }
 
+// "Just checking": what's under a home, and who could help if something goes wrong.
+// A backup or a plumber's quote belongs in a case, so those links move there.
 export default async function PlanPage(props: PageProps<"/plan">) {
   const sp = await props.searchParams;
   const address = typeof sp.address === "string" ? sp.address : "";
-  const situation = parseSituation(sp.situation);
-  const breakAt = parseBreak(sp.break);
+  if (parseSituation(sp.situation) !== "checking") redirect(address ? `/case?${new URLSearchParams({ address })}` : "/backup");
   const key = typeof sp.key === "string" ? sp.key : undefined;
-  const params: Record<string, string> = situation === "broken-line" ? { break: breakAt } : {};
 
-  const report = address ? await getReport(address, situation, key) : null;
+  const report = address ? await getReport(address, "checking", key) : null;
   if (!report || "error" in report) {
     const outside = report && "error" in report && report.error === "outside-detroit";
     return (
@@ -39,21 +37,16 @@ export default async function PlanPage(props: PageProps<"/plan">) {
           </p>
         )}
         <div className="mt-8">
-          <AddressSearch defaultAddress={outside ? "" : address} defaultSituation={situation} target="/plan" params={params} cta="Show me" />
+          <AddressSearch defaultAddress={outside ? "" : address} defaultSituation="checking" target="/plan" params={{}} cta="Show me" />
         </div>
       </div>
     );
   }
-
-  const street = report.address.split(",")[0];
-  return <Plan r={report} situation={situation} breakAt={breakAt} street={street} />;
+  return <Checking r={report} />;
 }
 
-function Plan({ r, situation, breakAt, street }: { r: Report; situation: Situation; breakAt: BreakAt; street: string }) {
-  const { fits, checked } = whoCanPay(r, situation, breakAt);
-  const pay = <PayOptions fits={fits} checked={checked} report={r} />;
-  const under = <UnderHome r={r} situation={situation} street={street} lead={situation === "checking"} />;
-
+function Checking({ r }: { r: Report }) {
+  const { fits, checked } = whoCanPay(r, "checking");
   return (
     <article>
       <header className="mx-auto max-w-3xl px-5 pt-6">
@@ -71,102 +64,26 @@ function Plan({ r, situation, breakAt, street }: { r: Report; situation: Situati
           </div>
         )}
       </header>
-
-      {situation === "backup" && (
-        <>
-          <Intro title="Here's what happens next." lead={`For ${street}. Your claim deadline is saved on this device.`} />
-          <Block>
-            <ClaimCard claimsUrl={SOURCES.claims.url} />
-            <Timeline />
-          </Block>
-          <Block id="pay" eyebrow="If it's your line" title={`Who can help pay for ${street}`}>
-            {pay}
-          </Block>
-          {under}
-        </>
-      )}
-
-      {situation === "broken-line" && (
-        <>
-          <Intro
-            title={breakAt === "alley" ? "A break at the alley may be fixed for free." : "Here's who can help pay."}
-            lead={`Checked against every City repair program for ${street}.`}
-          />
-          <Block>{pay}</Block>
-          {under}
-        </>
-      )}
-
-      {situation === "checking" && (
-        <>
-          <div className="h-8" />
-          {under}
-          <Block eyebrow="Before you buy" title="Get a sewer camera inspection first.">
-            <p className="max-w-2xl text-[1.15rem] leading-relaxed text-ink-2">
-              It costs a few hundred dollars and can reveal a $10,000–$25,000 repair. The line from the house to the city sewer is the owner&apos;s to fix.
-            </p>
-          </Block>
-          <Block eyebrow="If something goes wrong here" title="Who could help pay">
-            {pay}
-          </Block>
-        </>
-      )}
+      <div className="h-8" />
+      <UnderHome r={r} situation="checking" street={r.address.split(",")[0]} lead />
+      <Block eyebrow="Before you buy" title="Get a sewer camera inspection first.">
+        <p className="max-w-2xl text-[1.15rem] leading-relaxed text-ink-2">
+          It costs a few hundred dollars and can reveal a $10,000–$25,000 repair. The line from the house to the city sewer is the owner&apos;s to fix.
+        </p>
+      </Block>
+      <Block eyebrow="If something goes wrong here" title="Who could help pay">
+        <PayOptions fits={fits} checked={checked} report={r} />
+      </Block>
     </article>
   );
 }
 
-function Intro({ title, lead }: { title: string; lead: string }) {
+function Block({ eyebrow, title, children }: { eyebrow: string; title: string; children: React.ReactNode }) {
   return (
-    <div className="mx-auto max-w-3xl px-5 pt-10">
-      <h1 className="rise text-[2.5rem] font-extrabold leading-[1.04] tracking-[-0.035em] sm:text-[3.3rem]">{title}</h1>
-      <p className="rise rise-1 mt-3 text-[1.2rem] text-ink-2">{lead}</p>
-    </div>
-  );
-}
-
-function Block({ id, eyebrow, title, children }: { id?: string; eyebrow?: string; title?: string; children: React.ReactNode }) {
-  return (
-    <section id={id} className="rise rise-2 mx-auto max-w-3xl scroll-mt-4 px-5 py-10">
-      {eyebrow && <p className="text-sm font-bold uppercase tracking-[0.14em] text-own">{eyebrow}</p>}
-      {title && <h2 className="mb-6 mt-1 text-[1.9rem] font-extrabold leading-tight tracking-[-0.03em]">{title}</h2>}
+    <section className="rise rise-2 mx-auto max-w-3xl px-5 py-10">
+      <p className="text-sm font-bold uppercase tracking-[0.14em] text-own">{eyebrow}</p>
+      <h2 className="mb-6 mt-1 text-[1.9rem] font-extrabold leading-tight tracking-[-0.03em]">{title}</h2>
       {children}
     </section>
-  );
-}
-
-// The one fork every backup reaches: DWSD's answer decides who fixes it and who pays.
-function Timeline() {
-  return (
-    <ol className="mt-10 grid gap-8">
-      <li className="grid grid-cols-[2.5rem_1fr] gap-4">
-        <span className="grid h-10 w-10 place-items-center rounded-full bg-ink font-bold text-white">1</span>
-        <div>
-          <h3 className="text-xl font-bold">DWSD checks the city sewer</h3>
-          <p className="mt-1 text-[1.05rem] text-ink-2">
-            Over the past year, DWSD closed {stats.response.within48Pct}% of requests like yours within 2 days. Closed means the visit is done, not
-            always that the problem is fixed.
-          </p>
-        </div>
-      </li>
-      <li className="grid grid-cols-[2.5rem_1fr] gap-4">
-        <span className="grid h-10 w-10 place-items-center rounded-full bg-ink font-bold text-white">2</span>
-        <div>
-          <h3 className="text-xl font-bold">You&apos;ll hear one of two answers</h3>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl bg-brand-tint p-5">
-              <p className="font-bold text-brand-ink">&ldquo;It&apos;s the city sewer.&rdquo;</p>
-              <p className="mt-1 text-ink-2">DWSD fixes it at no cost to you. File your damage claim before the deadline above.</p>
-            </div>
-            <a href="#pay" className="group rounded-2xl bg-own-tint p-5 transition hover:ring-2 hover:ring-own">
-              <p className="font-bold text-[#6b3a06]">&ldquo;It&apos;s your line.&rdquo;</p>
-              <p className="mt-1 text-ink-2">
-                The repair is yours to arrange. Get a camera inspection before anyone digs, then see who can help pay.{" "}
-                <span aria-hidden="true" className="font-bold text-own">↓</span>
-              </p>
-            </a>
-          </div>
-        </div>
-      </li>
-    </ol>
   );
 }

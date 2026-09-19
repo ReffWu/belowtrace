@@ -1,5 +1,6 @@
 import Link from "next/link";
 import stats from "@/data/citywide-stats.json";
+import { ContinueCase } from "@/components/case/continue-case";
 
 const CHOICES = [
   { href: "/backup", title: "Water or sewage is coming in", note: "Right now, or it just happened" },
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <>
       <section className="mx-auto max-w-3xl px-5 pb-14 pt-12 sm:pt-20">
+        <ContinueCase />
         <p className="rise text-sm font-bold uppercase tracking-[0.14em] text-own">Detroit · Free · No sign-up</p>
         <h1 className="rise rise-1 mt-4 text-[2.7rem] font-extrabold leading-[1.02] tracking-[-0.04em] sm:text-[4.2rem]">
           Sewage in the basement?

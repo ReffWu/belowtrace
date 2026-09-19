@@ -26,7 +26,7 @@ export function psrpFits(r: Pick<Report, "psrpNeighborhood" | "floodZone" | "par
   return r.psrpNeighborhood.inProgram && r.floodZone.isSFHA !== true && residential;
 }
 
-export function whoCanPay(r: Report, situation: Situation, breakAt: BreakAt = "unsure", now = new Date()): { fits: Fit[]; checked: Checked[] } {
+export function whoCanPay(r: Pick<Report, "psrpNeighborhood" | "floodZone" | "parcel" | "lmi" | "projects">, situation: Situation, breakAt: BreakAt = "unsure", now = new Date()): { fits: Fit[]; checked: Checked[] } {
   const fits: Fit[] = [];
   const checked: Checked[] = [];
   const alleyWork = r.projects.find((p) => p.isAlley && p.phase !== "Closed");

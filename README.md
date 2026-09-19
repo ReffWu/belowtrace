@@ -2,13 +2,14 @@
 
 **Sewage in your basement? Start here.** → **[belowtrace.vercel.app](https://belowtrace.vercel.app)**
 
-BelowTrace walks a Detroit resident through a sewer problem one step at a time, starting from what is happening, not from a form.
+BelowTrace stays with a Detroit resident through a sewer backup, from the first phone call to the last claim. It starts by showing the whole road — four steps — and then walks it with them:
 
-1. **Water or sewage is coming in.** Call DWSD first (free; they check the city sewer). Save the service request number and the date, and see the 45-day damage-claim deadline. Then enter the address.
-2. **A plumber quoted a big repair.** Don't sign yet: ask for the camera video and where the break is. At the alley connection, the free $184M Alley Sewer Repair Program may fix it; under the yard, the Private Sewer Repair Program may pay up to $40,000.
-3. **Buying, or just curious.** See what public records show under the home.
+1. **Call DWSD** (free; they check the city sewer). What to say when they answer; then write down the service request number, the date and the address.
+2. **DWSD checks.** What to ask the crew, and a calendar reminder to call back if no one comes in two days. Record what they found.
+3. **Whose pipe.** The City's: go to step 4. The owner's: what to tell the plumber (camera video, where the break is, a written quote with a permit), and where the break turned out to be.
+4. **Get it paid for.** The City's pipe: the 45-day damage-claim deadline, an evidence checklist and a reminder. The owner's line: only the programs that fit this home and this break, and why each other program doesn't.
 
-Every path ends on one page for that address: what happens next, **only the programs that fit this home and this problem** (with the reason each other program doesn't), and a 3D view of the parcel, the building and the nearest recorded city sewer. The private line is not drawn, because no public record locates it.
+Every answer moves the case forward, and a mistaken one can be undone. The case — dates, numbers, findings — lives only on the resident's phone and prints as a one-page case file for DWSD, a plumber or a program. A plumber's quote opens a case at step 3. "Just curious" shows what public records say is under a home, including a 3D view of the parcel, the building and the nearest recorded city sewer. The private line is never drawn, because no public record locates it.
 
 Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportation, Infrastructure & Sustainability.
 
@@ -29,9 +30,9 @@ Built for the Venture 313 Buildathon 2026 · Challenge 03: Reliable Transportati
 
 | Address | What it shows |
 |---|---|
-| [16776 Prevost St](https://belowtrace.vercel.app/plan?address=16776+Prevost+St&situation=backup) | A 1928 combined sewer 24 m away; 43 water-in-basement reports nearby; inside the PSRP area |
-| [16821 Fenmore St](https://belowtrace.vercel.app/plan?address=16821+Fenmore+St&situation=backup) | DWSD alley sewer work under construction 68 m away |
-| [14600 Archdale St](https://belowtrace.vercel.app/plan?address=14600+Archdale+St&situation=broken-line&break=alley) | Outside the PSRP area — see how the options change |
+| [16776 Prevost St](https://belowtrace.vercel.app/case?address=16776+Prevost+St) | A 1928 combined sewer 24 m away; 43 water-in-basement reports nearby; inside the PSRP area |
+| [16821 Fenmore St](https://belowtrace.vercel.app/plan?address=16821+Fenmore+St&situation=checking) | DWSD alley sewer work under construction 68 m away |
+| [14600 Archdale St](https://belowtrace.vercel.app/case?address=14600+Archdale+St) | Outside the PSRP area — see how the options change |
 
 The full record for any address is still at `/report?address=…`.
 
@@ -64,6 +65,7 @@ address ─► Esri geocoder (Census backup) ─► City parcel (exact match, el
 
 - `src/lib/facts.ts` — every phone number, deadline, income limit and source URL, with the date it was checked.
 - `src/lib/psrp.ts` — the PSRP screener rules, citing page numbers in the City's guide.
+- `src/lib/case.ts` — the case: its four steps, what moves it forward, reminders.
 - `src/lib/guide.ts` — which programs fit this home and this problem, and why the others don't.
 - `src/lib/programs.ts`, `glance.ts`, `plan.ts` — program cards, the at-a-glance summary and the step plan for the full record page.
 - `src/lib/geo.ts` — spatial lookups (Flatbush index) over the bundled data.

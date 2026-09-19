@@ -14,6 +14,7 @@ export function AddressSearch({
   target = "/report",
   params,
   cta = "Check my address",
+  onGo,
 }: {
   defaultAddress?: string;
   defaultSituation?: Situation;
@@ -22,6 +23,7 @@ export function AddressSearch({
   target?: string;
   params?: Record<string, string>;
   cta?: string;
+  onGo?: () => void;
 }) {
   const router = useRouter();
   const [value, setValue] = useState(defaultAddress);
@@ -112,6 +114,7 @@ export function AddressSearch({
     }
     setError("");
     setOpen(false);
+    onGo?.();
     const query = new URLSearchParams({ address: text.replace(/, USA$/, ""), situation, ...params });
     if (key) query.set("key", key);
     startTransition(() => router.push(`${target}?${query}`));

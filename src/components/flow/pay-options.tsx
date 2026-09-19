@@ -12,7 +12,7 @@ const closes = (iso: string, now = new Date()) => {
   return `Closes ${when} · ${days === 0 ? "today" : days === 1 ? "tomorrow" : `${days} days left`}`;
 };
 
-export function PayOptions({ fits, checked, report }: { fits: Fit[]; checked: Checked[]; report: Report }) {
+export function PayOptions({ fits, checked, report }: { fits: Fit[]; checked: Checked[]; report: Pick<Report, "address" | "psrpNeighborhood" | "floodZone"> & { parcel: { propertyClass?: string } | null } }) {
   const residential = report.parcel?.propertyClass ? /RESIDENTIAL/i.test(report.parcel.propertyClass) : null;
   return (
     <div className="grid gap-4">
