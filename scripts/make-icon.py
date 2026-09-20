@@ -24,9 +24,9 @@ F = 132
 OUTER = (INNER[0] - F, INNER[1] - F, INNER[2] + F, INNER[3] + F)
 OUTER_R = INNER_R + F
 FRAME_RGB = (26, 26, 28)
-ENGRAVING = (128, 128, 134, 255)
+ENGRAVING = (225, 225, 235, 255)
 FONT_PATH = "/System/Library/Fonts/Optima.ttc"
-FONT_SIZE = 46
+FONT_SIZE = 120
 TRACKING = 16
 NAME = "BELOWTRACE"
 SIGNATURE = "REFFWU"
@@ -196,7 +196,7 @@ def ring_point(distance, box, radius):
 
 def engrave(canvas, text, position, upright):
     k = 2
-    font = ImageFont.truetype(FONT_PATH, FONT_SIZE * k)
+    font = ImageFont.truetype(FONT_PATH, FONT_SIZE * k, index=1)
     box = (OUTER[0] + F / 2, OUTER[1] + F / 2, OUTER[2] - F / 2, OUTER[3] - F / 2)
     radius = (OUTER_R + INNER_R) / 2
     perimeter = 2 * (box[2] - box[0] - 2 * radius) + 2 * (box[3] - box[1] - 2 * radius) + 2 * math.pi * radius
@@ -209,7 +209,7 @@ def engrave(canvas, text, position, upright):
         x, y, angle = ring_point(cursor + direction * w / 2, box, radius)
         if upright:
             angle += 180
-        side = FONT_SIZE * 2 * k
+        side = int(FONT_SIZE * 2.5 * k)
         glyph = Image.new("RGBA", (side, side), (0, 0, 0, 0))
         ImageDraw.Draw(glyph).text((side / 2, side / 2), ch, font=font, fill=ENGRAVING, anchor="mm")
         glyph = glyph.rotate(-angle, resample=Image.BICUBIC)

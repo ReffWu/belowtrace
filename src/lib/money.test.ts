@@ -20,26 +20,27 @@ describe("whoPays", () => {
     expect(row(newCase("backup", today), "now")?.label).toBe("Clearing the drain");
   });
 
-  it("warns early that heavy rain makes a DWSD claim unlikely", () => {
-    expect(row({ ...called, rain: "yes" }, "damage")?.tag?.text).toBe("Claim likely denied");
+  it("keeps a claim path open without predicting the outcome from rain", () => {
+    const damage = row({ ...called, rain: "yes" }, "damage");
+    expect(damage?.tag?.text).toBe("Confirm the cause");
+    expect(damage?.note).not.toMatch(/likely denied/);
   });
 
-  it("says a claim is worth filing when the city sewer failed on a dry day", () => {
+  it("keeps the claim conditional even when the city sewer failed on a dry day", () => {
     const d = row({ ...called, verdict: "city", rain: "no" }, "damage");
-    expect(d?.tag?.text).toBe("Worth filing");
+    expect(d?.tag?.text).toBe("Confirm the cause");
     expect(d?.amount).toBe("Claim by Nov 3");
     expect(row({ ...called, verdict: "city", rain: "no" }, "pipe")?.amount).toBe("$0");
   });
 
-  it("keeps the claim open but warns when the city sewer was overwhelmed by rain", () => {
-    expect(row({ ...called, verdict: "city", rain: "yes" }, "damage")?.tag?.tone).toBe("warn");
+  it("does not predict the claim outcome from rain alone", () => {
+    expect(row({ ...called, verdict: "city", rain: "yes" }, "damage")?.tag?.tone).toBe("open");
   });
 
-  it("rules out a DWSD claim when the owner's line caused it", () => {
+  it("does not rule out a claim based on a resident's line-location answer", () => {
     const d = row({ ...called, verdict: "mine" }, "damage");
-    expect(d?.tag?.text).toBe("DWSD claim: no");
-    expect(d?.note).toMatch(/basement cleaning/);
-    expect(row({ ...called, verdict: "mine" }, "damage", archdale)?.note).not.toMatch(/basement cleaning/);
+    expect(d?.tag?.text).toBe("Confirm the cause");
+    expect(d?.note).toMatch(/written claim/);
   });
 
   it("tells a PSRP-area owner to apply before signing, and uses their own quote", () => {

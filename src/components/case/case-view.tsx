@@ -14,15 +14,16 @@ import { CallStage, CheckStage, ClaimStage, ClosedStage, PayStage, PipeStage } f
 import { caseHref, longDate, saveCase, todayInDetroit, useCase } from "./store";
 
 type Props = {
+  caseId?: string;
   queryAddress?: string;
   report: CaseReport | null;
   error: { message: string; outside: boolean } | null;
   under: React.ReactNode;
 };
 
-export function CaseView({ queryAddress, report, error, under }: Props) {
+export function CaseView({ caseId, queryAddress, report, error, under }: Props) {
   const router = useRouter();
-  const c = useCase();
+  const c = useCase(caseId);
   const stage = c ? stageOf(c) : null;
 
   // The case always opens at its current step, and each answer brings the next step's title into view.
@@ -44,9 +45,15 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
 
   const update = (patch: Partial<Case>) => saveCase({ ...c, ...patch });
   const step = stageOf(c);
-  const street = (report?.address ?? c.address)?.split(",")[0] ?? null;
-  const props = { c, update, report, street };
   const otherHome = report && queryAddress && c.address !== queryAddress;
+  const caseReport = otherHome ? null : report;
+  const street = (caseReport?.address ?? c.address)?.split(",")[0] ?? null;
+  const props = { c, update, report: caseReport, street };
+  const startSeparateCase = () => {
+    const next = newCase(c.entry, todayInDetroit(), { address: queryAddress });
+    saveCase(next);
+    router.replace(caseHref(next));
+  };
 
   return (
     <article>
@@ -74,10 +81,10 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
         {otherHome && (
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-warn-tint p-5">
             <p className="text-[#6b3d00]">
-              {c.address ? `Your case is for ${c.address.split(",")[0]}. Switch it to ${queryAddress!.split(",")[0]}?` : `Use ${queryAddress!.split(",")[0]} for your case?`}
+              {c.address ? `This case is for ${c.address.split(",")[0]}. Start a separate case for ${queryAddress!.split(",")[0]}?` : `Use ${queryAddress!.split(",")[0]} for a new case?`}
             </p>
-            <button type="button" onClick={() => update({ address: queryAddress })} className="min-h-11 rounded-xl bg-ink px-4 font-bold text-white">
-              {c.address ? "Switch" : "Use it"}
+            <button type="button" onClick={startSeparateCase} className="min-h-11 rounded-xl bg-ink px-4 font-bold text-white">
+              Start separate case
             </button>
           </div>
         )}
@@ -111,15 +118,14 @@ export function CaseView({ queryAddress, report, error, under }: Props) {
         {step < 5 && (
           <div className="mt-10">
             <WhoPays
-              rows={whoPays(c, report)}
-              onRain={c.entry === "backup" && !c.rain && c.verdict !== "mine" && step > 1 ? (rain) => update({ rain }) : undefined}
+              rows={whoPays(c, caseReport)}
             />
           </div>
         )}
       </div>
 
-      <CaseFile c={c} report={report} update={update} />
-      <div className="no-print">{under}</div>
+      <CaseFile c={c} report={caseReport} update={update} />
+      <div className="no-print">{caseReport ? under : null}</div>
     </article>
   );
 }
@@ -137,7 +143,7 @@ function CaseFile({ c, report, update }: { c: Case; report: CaseReport | null; u
     ["Home", report?.address ?? c.address ?? null],
     ["Parcel", report?.parcel?.id ?? null],
     ["Water found", c.entry === "backup" ? at(c.found) : null],
-    ["DWSD called", c.calledAt ? new Date(c.calledAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Detroit" }) : null],
+    ["DWSD report saved", c.calledAt ? new Date(c.calledAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Detroit" }) : null],
     ["Service request #", c.sr || null],
     ["Heavy rain", c.entry === "backup" && c.rain ? RAIN[c.rain] : null],
     ["DWSD found", c.verdict && c.entry === "backup" ? VERDICT[c.verdict] : null],

@@ -66,75 +66,22 @@ function pipe(c: Case, r: Area | null, now: Date): MoneyRow {
   };
 }
 
-function damage(c: Case, r: Area | null): MoneyRow | null {
+function damage(c: Case): MoneyRow | null {
   if (c.entry !== "backup") return null;
   const label = "Your damage";
   const by = day(claimDeadline(c.found));
-  if (c.verdict === "mine") {
-    return {
-      id: "damage",
-      label,
-      amount: "—",
-      note: `DWSD won't pay: the cause was your own line, and home insurance often won't either.${
-        r && psrpFits(r) ? " PSRP can add basement cleaning and furnace or water-heater service once the line is fixed." : ""
-      }`,
-      tag: { tone: "no", text: "DWSD claim: no" },
-    };
-  }
-  if (c.verdict === "city") {
-    if (c.rain === "yes") {
-      return {
-        id: "damage",
-        label,
-        amount: `Claim by ${by}`,
-        note: "DWSD says claims are likely denied when heavy rain overwhelms the sewers, unless a failure in its system caused at least half. File anyway, and ask your insurer about a sewer backup rider.",
-        tag: { tone: "warn", text: "Claim likely denied" },
-      };
-    }
-    if (c.rain === "no") {
-      return {
-        id: "damage",
-        label,
-        amount: `Claim by ${by}`,
-        note: "A city sewer that failed on a dry day is what a damage claim is for. DWSD decides each claim.",
-        tag: { tone: "ok", text: "Worth filing" },
-      };
-    }
-    return {
-      id: "damage",
-      label,
-      amount: `Claim by ${by}`,
-      note: "A claim pays only if a failure in the city sewer caused at least half the problem. DWSD decides.",
-      tag: { tone: "open", text: "DWSD decides" },
-    };
-  }
-  if (c.verdict === "unsure") {
-    return {
-      id: "damage",
-      label,
-      amount: `Claim by ${by}`,
-      note: "Ask DWSD what caused it: a claim pays only if the city sewer was at fault. Filing by the deadline keeps your right to be paid.",
-      tag: { tone: "open", text: "Get a clear answer" },
-    };
-  }
-  if (c.rain === "yes") {
-    return {
-      id: "damage",
-      label,
-      amount: "Varies",
-      note: "Heavy rain alone usually isn't DWSD's fault, so claims are likely denied. Home insurance pays only with a sewer backup rider.",
-      tag: { tone: "warn", text: "Claim likely denied" },
-    };
-  }
+  const causeNote =
+    c.verdict === "city"
+      ? "DWSD said its sewer may be involved. Follow its claim instructions and keep its finding in writing."
+      : c.verdict === "mine"
+        ? "A preliminary finding points to a private line. Ask whether that is final and request a written claim record before the deadline."
+        : "Record what you observed and ask DWSD for its written or recorded finding before the deadline.";
   return {
     id: "damage",
     label,
-    amount: "Varies",
-    note:
-      c.rain === "no"
-        ? "If DWSD finds the city sewer blocked, a damage claim is worth filing. Keep photos and receipts."
-        : "A DWSD claim pays only if the city sewer was at fault. Heavy rain alone usually isn't.",
-    tag: c.rain === "no" ? { tone: "open", text: "Depends on what DWSD finds" } : { tone: "open", text: "Was it raining hard?" },
+    amount: `Claim by ${by}`,
+    note: `${causeNote} A claim outcome depends on the agency review and applicable law; rain or a preliminary finding alone does not decide it.`,
+    tag: { tone: "open", text: "Confirm the cause" },
   };
 }
 
@@ -150,5 +97,5 @@ function now(c: Case): MoneyRow | null {
 }
 
 export function whoPays(c: Case, r: Area | null, at = new Date()): MoneyRow[] {
-  return [pipe(c, r, at), damage(c, r), now(c)].filter((x): x is MoneyRow => x !== null);
+  return [pipe(c, r, at), damage(c), now(c)].filter((x): x is MoneyRow => x !== null);
 }

@@ -30,6 +30,12 @@ describe("evaluatePsrp", () => {
     expect(evaluatePsrp(strong, { ...inArea, isSFHA: true }).verdict).toBe("unlikely");
   });
 
+  it("keeps missing FEMA and home-type records as unknown, never likely", () => {
+    const r = evaluatePsrp(strong, { ...inArea, isSFHA: null, residential: null });
+    expect(r.verdict).toBe("possible");
+    expect(r.checks.filter((c) => c.status === "warn")).toHaveLength(2);
+  });
+
   it("treats the 50–80% band as possible because the guide contradicts itself", () => {
     const r = evaluatePsrp({ ...strong, income: "50to80" }, inArea);
     expect(r.verdict).toBe("possible");
@@ -57,11 +63,12 @@ describe("evaluatePsrp", () => {
     }
   });
 
-  it("sends renters to their landlord", () => {
+  it("shows renters the consent path without overriding hard failures", () => {
     const r = evaluatePsrp({ ownership: "renter" }, inArea);
     expect(r.verdict).toBe("possible");
     expect(r.complete).toBe(true);
-    expect(r.summary).toMatch(/landlord/);
+    expect(r.summary).toMatch(/consent/);
+    expect(evaluatePsrp({ ownership: "renter" }, { ...inArea, inNeighborhood: false, isSFHA: true }).verdict).toBe("unlikely");
   });
 
   it("marks incomplete answers as possible, never likely", () => {

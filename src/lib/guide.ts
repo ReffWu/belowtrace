@@ -103,8 +103,8 @@ export function whoCanPay(r: Pick<Report, "psrpNeighborhood" | "floodZone" | "pa
     name: "HOPE property tax exemption",
     reason:
       now < new Date(HOPE_DEADLINE)
-        ? "Only matters if you're behind on property taxes. Repair programs require them to be current. Due Nov 6."
-        : "Only matters if you're behind on property taxes. Closed for 2026.",
+        ? "May lower this year's property taxes for income-eligible owner-occupants and can help meet repair-program tax requirements. Due Nov 6."
+        : "May help meet repair-program tax requirements for income-eligible owner-occupants. Closed for 2026.",
     href: SOURCES.hope.url,
   });
   checked.push({ name: "Basement Backup Protection", reason: "Closed. Reopens only with new funding.", href: SOURCES.bbpp.url });

@@ -11,13 +11,13 @@ export function CallScriptDrawer({ protocol, defaultOpen = false }: { protocol: 
     `Agency: ${protocol.agency} (${protocol.phoneDisplay})`,
     `Goal: ${protocol.goal}`,
     "",
-    "--- SCRIPT TO SAY ---",
+    "--- A TRUTHFUL OPENING YOU CAN ADAPT ---",
     protocol.openingScript,
     "",
     "--- KEY QUESTIONS TO ASK ---",
     ...protocol.keyQuestions.map((q, i) => `${i + 1}. ${q}`),
     "",
-    "--- WATCH OUT ---",
+    "--- KEEP THE FACTS CLEAR ---",
     protocol.watchOut,
   ].join("\n");
 
@@ -90,9 +90,9 @@ export function CallScriptDrawer({ protocol, defaultOpen = false }: { protocol: 
               </div>
             )}
 
-            {/* Word-for-word Opening Script */}
+            {/* Truthful Opening Script */}
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-2">📋 Say this word-for-word:</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-ink-2">📋 A truthful opening you can adapt:</span>
               <div className="mt-1.5 rounded-xl border border-line bg-sunk/60 p-3.5 text-xs sm:text-[0.83rem] leading-relaxed text-ink font-medium">
                 {protocol.openingScript}
               </div>
@@ -113,13 +113,13 @@ export function CallScriptDrawer({ protocol, defaultOpen = false }: { protocol: 
               </div>
             )}
 
-            {/* Watch Out */}
+            {/* Keep the facts clear */}
             <div className="rounded-xl border border-stop/25 bg-stop-tint/35 p-3.5 text-xs leading-relaxed text-ink">
               <div className="flex items-center gap-1.5 font-bold text-stop">
                 <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0" aria-hidden="true">
                   <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
                 </svg>
-                <span>WATCH OUT / WHAT NOT TO SAY:</span>
+                <span>KEEP THE FACTS CLEAR:</span>
               </div>
               <p className="mt-1 text-ink/90">{protocol.watchOut}</p>
             </div>

@@ -107,7 +107,7 @@ export function ActionPlan({ steps, askFoundDate }: { steps: Step[]; askFoundDat
                       <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden="true">
                         <path d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z" />
                       </svg>
-                      {openScript[s.id] ? "Hide call script" : "What to say on the call (Word-for-word script & Tips)"}
+                      {openScript[s.id] ? "Hide call guidance" : "Call guidance and factual questions"}
                     </button>
                     {openScript[s.id] && (
                       <div className="mt-3 rounded-xl border border-brand/20 bg-surface p-4 text-sm shadow-sm">
@@ -122,18 +122,18 @@ export function ActionPlan({ steps, askFoundDate }: { steps: Step[]; askFoundDat
                           </button>
                         </div>
                         <div className="mt-3 space-y-2">
-                          <p className="text-xs font-bold uppercase tracking-wider text-ink-2">Say this word-for-word:</p>
+                          <p className="text-xs font-bold uppercase tracking-wider text-ink-2">A truthful opening you can adapt:</p>
                           {s.callScript.script.map((line, idx) => (
                             <p key={idx} className="rounded-lg bg-sunk/60 p-2.5 text-xs leading-relaxed text-ink border border-line/60">
                               {line}
                             </p>
                           ))}
                         </div>
-                        {s.callScript.whatNotToSay?.length > 0 && (
+                        {s.callScript.factTips?.length > 0 && (
                           <div className="mt-3 rounded-lg bg-stop-tint/40 p-3 border border-stop/20">
-                            <p className="text-xs font-bold text-stop">⚠️ What NOT to say:</p>
+                            <p className="text-xs font-bold text-stop">⚠️ Keep the facts clear:</p>
                             <ul className="mt-1.5 list-disc space-y-1 pl-4 text-xs text-stop">
-                              {s.callScript.whatNotToSay.map((tip, idx) => (
+                              {s.callScript.factTips.map((tip, idx) => (
                                 <li key={idx}>{tip}</li>
                               ))}
                             </ul>

@@ -37,14 +37,14 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
         "The cross streets / rear alley location behind your home",
         "Your DWSD water account number (if applicable)",
       ],
-      openingScript: `“Hello, I am calling regarding the $184 Million Alley Sewer Repair Program (ASRP) for ${addr}. Our block has an active rear alley sewer, and I need to verify whether my parcel is scheduled for city-funded sewer lateral replacement before I contract private excavators.”`,
+      openingScript: `“Hello, I am calling about ASRP for ${addr}. Can you tell me whether any city work or inspection is scheduled for my address or alley? I do not know whether the problem is public or private.”`,
       keyQuestions: [
         "“Has DWSD logged a closed-circuit camera (CCTV) inspection for the alley sewer behind my parcel?”",
         "“If my block is not currently on the schedule, can you log a service request to inspect the alley connection for cave-ins?”",
         "“Who is the assigned capital project manager or liaison for alley sewer rehabilitation in my neighborhood?”",
       ],
       watchOut:
-        "DO NOT report this as an ordinary toilet or indoor plumbing clog. If you say internal pipes are backed up, the agent may categorize it as a private responsibility and close the ticket. Emphasize that you are requesting a verification of the public alley main connection.",
+        "Describe only what you observed. If you are unsure whether the problem is public or private, say so and ask how the representative will classify the request.",
       nextStep: "Note the representative's name and inquiry reference number. If a camera check is scheduled, ask for the expected inspection timeframe.",
     };
   },
@@ -65,14 +65,14 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
         "Documentation or photos of past basement flood impact (June 2021 storm)",
         "Proof of property tax compliance (current taxes or active HOPE/payment plan)",
       ],
-      openingScript: `“Hello, I am calling regarding the CDBG-DR Private Sewer Repair Program (PSRP) ${addr}${hoodText}. I understand my area is an eligible program neighborhood, and I need to verify whether new applications are being processed on Neighborly and what documentation is needed for household income verification.”`,
+      openingScript: `“Hello, I want to ask whether PSRP may be available ${addr}${hoodText}, and what I need to verify before applying.”`,
       keyQuestions: [
         "“Can an intake coordinator assist me over the phone or at a recreation center if I need help uploading documents to the Neighborly portal?”",
         "“Does an active HOPE exemption or Wayne County tax payment plan satisfy the property tax eligibility requirement?”",
         "“What is the current review timeline after submitting the full application packet?”",
       ],
       watchOut:
-        "The applicant name must match the recorded deed. If you are behind on taxes, do not simply say you are delinquent — state that you are actively applying for HOPE or on an approved payment plan.",
+        "Answer property-tax questions truthfully. Ask whether a HOPE application or payment plan can satisfy a program requirement.",
       nextStep: "Gather your deed and income documents into clear PDF or print copies. If applying online, create your account at portal.neighborlysoftware.com/cityofdetroitmi.",
     };
   },
@@ -91,7 +91,7 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
         "Identification for all household members (showing seniors 62+, children under 18, or disability documentation)",
         "Proof of current household income",
       ],
-      openingScript: `“Hello, I am calling regarding the Critical Home Repair Program for my home ${addr}. We have a critical underground plumbing and sewer issue that affects a vulnerable member of our household. I would like to confirm the intake deadline and ensure our pre-application is in order.”`,
+      openingScript: `“Hello, I want to ask whether Critical Home Repair may be available for an underground plumbing or sewer issue at my home ${addr}, and how I can confirm the intake deadline.”`,
       keyQuestions: [
         "“What priority weighting is given to households with seniors or disabled occupants experiencing severe sewer backups?”",
         "“If the current pre-application round has closed, when will the next intake window open for emergency repairs?”",
@@ -116,14 +116,14 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
         "Address where the backup occurred",
         "Photos or notes detailing the water level and affected basement contents",
       ],
-      openingScript: `“I am calling to report a municipal sewage backup ${addr}. Raw sewage entered the basement through the drains. I need to report this immediately and obtain an official Service Request number for a Michigan Public Act 222 damage claim.”`,
+      openingScript: `“Sewage or water entered my basement ${addr}. I need to report what happened and understand the claim process. I do not yet know the cause.”`,
       keyQuestions: [
         "“What is my exact Service Request (SR) number?” (Write this down immediately)",
         "“Can you dispatch a crew to inspect the city sewer main on our street for obstructions?”",
         "“Where should I email or submit my formal 45-day Notice of Claim form and damage receipts?”",
       ],
       watchOut:
-        "DO NOT speculate that your private line was clogged or admit to pre-existing pipe defects. State clearly that municipal sewage backed up into the structure. You only have 45 days from discovery to file in writing.",
+        "Use dates, photos, receipts, and what you observed. Do not guess about the cause or leave out material facts; ask how the report will be recorded. You may have a filing deadline.",
       nextStep: "Download and fill out the City of Detroit Sewer Backup Claim form. Mail it by certified mail or submit it online with your SR# attached.",
     };
   },
@@ -180,7 +180,7 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
     };
   },
 
-  insurance: (ctx) => {
+  insurance: () => {
     return {
       id: "insurance",
       agency: "Your Homeowner's Insurance Carrier",
@@ -195,14 +195,14 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
         "Itemized list and photos of damaged personal property",
       ],
       openingScript:
-        "“I am calling to report a water backup incident at my insured property. Municipal sewage backed up through the basement floor drain. I would like to check my endorsement limits for Water Backup coverage and open a claim.”",
+        "“I had a water-backup incident at my insured property. I need help understanding my coverage and the claim process.”",
       keyQuestions: [
         "“Does my declaration page include the Water Backup and Sump Overflow rider, and what is the coverage sub-limit?”",
         "“What is my deductible for this specific backup endorsement?”",
         "“When will an adjuster be assigned to inspect the property, and should I begin professional water mitigation immediately?”",
       ],
       watchOut:
-        "NEVER describe the event as 'wear and tear', 'seepage over time', or 'old pipes deteriorating'. Standard policies exclude normal wear. State clearly that it was a sudden backup through the plumbing drains.",
+        "Give the dates and facts you know. If the cause is unclear, say it is still being investigated rather than guessing.",
       nextStep: "Do not throw away high-value damaged items before the adjuster photographs them. Keep all mitigation company receipts.",
     };
   },

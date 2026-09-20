@@ -49,6 +49,11 @@ describe("whoCanPay", () => {
     expect(whoCanPay(prevost, "backup").checked.some((c) => c.name === "DWSD damage claim")).toBe(false);
     expect(whoCanPay(prevost, "broken-line").checked.some((c) => c.name === "DWSD damage claim")).toBe(true);
   });
+
+  it("describes HOPE as a tax-relief option, not only an arrears fix", () => {
+    const hope = whoCanPay(prevost, "backup", "unsure", beforeChr).checked.find((c) => c.name.includes("HOPE"));
+    expect(hope?.reason).not.toMatch(/Only matters if you're behind/);
+  });
 });
 
 describe("whoCanPay when nothing fits", () => {

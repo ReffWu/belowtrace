@@ -6,13 +6,16 @@ import type { Parcel, Report } from "./types";
 export type Verdict = "city" | "mine" | "unsure";
 
 export type Case = {
+  id?: string;
   entry: "backup" | "quote";
   startedAt: string; // YYYY-MM-DD
   found: string; // YYYY-MM-DD, when the water was found
-  rain?: "yes" | "no" | "unsure"; // raining hard when it happened: decides whether a DWSD claim is likely to pay
+  rain?: "yes" | "no" | "unsure"; // a fact to record; it does not decide a claim
   sr: string; // DWSD service request number
   address?: string;
-  calledAt?: string; // ISO time the resident saved the DWSD call
+  contactStatus?: "attempted" | "reported";
+  contactAttemptedAt?: string;
+  calledAt?: string; // ISO time the resident reported the issue to DWSD
   verdict?: Verdict; // what DWSD found
   breakAt?: BreakAt; // what the plumber's camera found
   quote?: string;
@@ -27,7 +30,8 @@ export type Stage = 1 | 2 | 3 | 4 | 5;
 export function stageOf(c: Case): Stage {
   if (c.closedAt) return 5;
   if (c.entry === "backup") {
-    if (!c.calledAt) return 1;
+    const reported = c.contactStatus === "reported" || (!c.contactStatus && Boolean(c.calledAt));
+    if (!reported) return 1;
     if (!c.verdict) return 2;
   }
   if (c.verdict !== "city" && !c.breakAt) return 3;
@@ -41,12 +45,21 @@ export function stepBack(c: Case): Case {
   if (stage === 4 && c.claimFiledAt) return { ...c, claimFiledAt: undefined };
   if (stage === 4 && c.verdict !== "city") return { ...c, breakAt: undefined };
   if (stage >= 3 && c.entry === "backup") return { ...c, verdict: undefined, breakAt: undefined };
-  if (stage === 2) return { ...c, calledAt: undefined };
+  if (stage === 2) return { ...c, calledAt: undefined, contactStatus: undefined };
   return c;
 }
 
 export function newCase(entry: Case["entry"], today: string, patch: Partial<Case> = {}): Case {
-  return { entry, startedAt: today, found: today, sr: "", kept: {}, ...(entry === "quote" ? { verdict: "mine" as const } : {}), ...patch };
+  return {
+    id: `case-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    entry,
+    startedAt: today,
+    found: today,
+    sr: "",
+    kept: {},
+    ...(entry === "quote" ? { verdict: "mine" as const } : {}),
+    ...patch,
+  };
 }
 
 // If DWSD hasn't come two days after the call, call back with the number.

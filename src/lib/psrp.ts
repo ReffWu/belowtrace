@@ -75,26 +75,36 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
     checks.push({ status: "fail", text: "FEMA maps this property in a Special Flood Hazard Area; the program excludes floodplain homes.", cite: "Guide p.4, p.12" });
   } else if (auto.isSFHA === false) {
     checks.push({ status: "pass", text: "Not in a FEMA floodplain.", cite: "Guide p.4" });
+  } else {
+    soft = true;
+    checks.push({ status: "warn", text: "We could not verify the FEMA flood-zone status. Ask PSRP staff to confirm it before relying on this screen.", cite: "Guide p.4" });
   }
 
   if (auto.residential === false) {
     soft = true;
     checks.push({ status: "warn", text: "City records don't list this parcel as a 1–4 unit residential home. Only 1–4 unit homes qualify.", cite: "Guide p.4, p.7" });
+  } else if (auto.residential === true) {
+    checks.push({ status: "pass", text: "City records list this as a residential parcel.", cite: "Guide p.4, p.7" });
+  } else {
+    soft = true;
+    checks.push({ status: "warn", text: "City records do not confirm whether this is a 1–4 unit residential property. Ask PSRP staff to confirm it.", cite: "Guide p.4, p.7" });
   }
 
   if (a.ownership === "renter") {
     return {
-      verdict: "possible",
-      summary: "Renters can't apply directly — but your landlord can, and the repair is free to you.",
+      verdict: hardFail ? "unlikely" : "possible",
+      summary: hardFail
+        ? "This address has a program requirement that may not match. A tenant may still ask PSRP staff whether an owner-consent path is available."
+        : "A tenant may apply with the property owner’s consent. Confirm the application path with PSRP before gathering documents.",
       checks: [
         ...checks,
         {
           status: "warn",
-          text: "Landlords renting to income-eligible tenants can get a 5-year forgivable loan for the repair. Ask your landlord to apply; you'll need to share income information.",
+          text: "Ask PSRP staff whether an owner-consent application path is available and what the owner must provide.",
           cite: "Guide p.5–6",
         },
       ],
-      documents: ["Your household income information (your landlord's application needs it)", "A signed lease"],
+      documents: ["A signed lease", "Written consent or contact information from the property owner"],
       complete: true,
     };
   }

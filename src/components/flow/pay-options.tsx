@@ -67,8 +67,8 @@ function NoFit() {
   const tel = `tel:${PHONES.dwsd.number.replace(/\D/g, "")}`;
   return (
     <article className="rounded-3xl border border-line bg-surface p-6 sm:p-7">
-      <p className="text-[1.6rem] font-extrabold leading-tight tracking-[-0.02em]">No City repair program is likely to pay for this home right now.</p>
-      <p className="mt-2 text-[1.1rem] text-ink-2">We checked every one below. What still saves money:</p>
+      <p className="text-[1.6rem] font-extrabold leading-tight tracking-[-0.02em]">No listed City repair program matches the address facts we could verify.</p>
+      <p className="mt-2 text-[1.1rem] text-ink-2">Review the requirements below with the program if any fact is missing or wrong. What can still save money:</p>
       <ol className="mt-5 grid gap-3 text-[1.05rem]">
         <li>
           <strong>Call DWSD before you pay.</strong> <span className="text-ink-2">If the break is on the City&apos;s side, the City fixes it.</span>{" "}

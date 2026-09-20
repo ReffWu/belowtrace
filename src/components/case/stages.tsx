@@ -95,14 +95,14 @@ const RAIN = [
   { value: "unsure", label: "Not sure" },
 ] as const;
 
-// Whether heavy rain caused it decides whether DWSD is likely to pay for damage, so ask while it's fresh.
+// Rain is an important fact to record while it is fresh, but it does not decide a claim.
 function RainQuestion({ c, update }: Pick<StageProps, "c" | "update">) {
   return (
     <div role="group" aria-labelledby="rain-now">
       <p id="rain-now" className="font-semibold">
         Was it raining hard when the water came in?
       </p>
-      <p className="text-sm text-ink-3">It changes whether DWSD is likely to pay for damage.</p>
+      <p className="text-sm text-ink-3">Record what you remember. DWSD and any insurer will review the full facts.</p>
       <div className="mt-2 grid grid-cols-3 gap-2">
         {RAIN.map((o) => (
           <button
@@ -124,7 +124,8 @@ function RainQuestion({ c, update }: Pick<StageProps, "c" | "update">) {
 
 export function CallStage({ c, update, report, street }: StageProps) {
   const dateId = useId();
-  const markCalled = (address?: string) => update({ calledAt: new Date().toISOString(), ...(address ? { address } : {}) });
+  const markReported = () => update({ calledAt: new Date().toISOString(), contactStatus: "reported" });
+  const markAttempted = () => update({ contactStatus: "attempted", contactAttemptedAt: new Date().toISOString() });
   return (
     <div className="grid gap-6">
       <Title sub="They check whether the city sewer is backed up. If it is, fixing it is their job, not yours.">Call DWSD first. It&apos;s free.</Title>
@@ -171,16 +172,21 @@ export function CallStage({ c, update, report, street }: StageProps) {
           </div>
           <RainQuestion c={c} update={update} />
           {report ? (
-            <button type="button" onClick={() => markCalled()} className={action}>
-              Save and continue <span aria-hidden="true">→</span>
-            </button>
+            <>
+              <button type="button" onClick={markReported} className={action}>
+                I reached DWSD and reported it <span aria-hidden="true">→</span>
+              </button>
+              <button type="button" onClick={markAttempted} className="rounded-xl border border-line px-4 py-3 font-semibold text-ink transition hover:border-brand">
+                I tried, but did not reach them
+              </button>
+            </>
           ) : (
             <div>
               <p className="mb-2 font-semibold">The home&apos;s address</p>
-              <AddressSearch defaultSituation="backup" target="/case" params={{}} cta="Save" compact onGo={markCalled} />
+              <AddressSearch defaultSituation="backup" target="/case" params={{}} cta="Save address" compact onGo={(address) => update({ address })} />
             </div>
           )}
-          <p className="text-ink-3">Couldn&apos;t get through yet? Save anyway and keep calling. The next step reminds you.</p>
+          {c.contactStatus === "attempted" && <p className="text-ink-3">Your attempt is saved. This case will stay on this step until DWSD receives your report.</p>}
         </div>
       </Part>
     </div>
@@ -212,7 +218,7 @@ export function CheckStage({ c, update }: StageProps) {
     );
   return (
     <div className="grid gap-6">
-      <Title sub={`Over the past year, DWSD closed ${stats.response.within48Pct}% of requests like this within 2 days.`}>DWSD is coming to check the city sewer.</Title>
+      <Title sub={`In the past year, DWSD closed ${stats.response.within48Pct}% of similar requests within 2 days. That is not a promise for this case.`}>After DWSD receives your report</Title>
 
       {!c.sr && (
         <Part kind="remind" label="You still need a number">
@@ -322,11 +328,7 @@ export function PipeStage({ c, update, report }: StageProps) {
 // ---- 4 · Get it paid for: the City's pipe → damage claim ----
 
 // Michigan law: DWSD pays only when a failure in its system caused at least half the backup.
-const CLAIM_SUB = {
-  no: "The City's sewer failed on a dry day, which is what a damage claim is for. DWSD fixes the sewer and decides each claim.",
-  yes: "DWSD says claims are likely denied when heavy rain overwhelms the sewers, unless a failure in its system caused at least half the problem. Filing by the deadline keeps your right to be paid.",
-  unsure: "DWSD pays for damage only if a failure in its sewer caused at least half the problem. Filing by the deadline keeps your right to be paid.",
-};
+const CLAIM_SUB = "DWSD reviews each claim. Keep the facts, photos, receipts, and any written finding together before you file.";
 
 export function ClaimStage({ c, update }: StageProps) {
   const due = claimDeadline(c.found);
@@ -358,7 +360,7 @@ export function ClaimStage({ c, update }: StageProps) {
 
   return (
     <div className="grid gap-6">
-      <Title sub={CLAIM_SUB[c.rain ?? "unsure"]}>{c.rain === "yes" ? "File a claim, and call your insurer." : "File your damage claim."}</Title>
+      <Title sub={CLAIM_SUB}>File your damage claim.</Title>
 
       <div className="overflow-hidden rounded-3xl bg-ink text-white">
         <div className="grid gap-5 p-6 sm:grid-cols-[1fr_auto] sm:items-end sm:p-8">
@@ -426,7 +428,7 @@ export function PayStage({ c, update, report, street }: StageProps) {
       </Title>
       {report ? (
         (() => {
-          const { fits, checked } = whoCanPay(report, "broken-line", breakAt);
+          const { fits, checked } = whoCanPay(report, c.entry === "backup" ? "backup" : "broken-line", breakAt);
           return <PayOptions fits={fits} checked={checked} report={report} />;
         })()
       ) : (

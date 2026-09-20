@@ -39,4 +39,11 @@ describe("call-protocols", () => {
   it("returns null for unknown program ids", () => {
     expect(getCallProtocol("non-existent-program")).toBeNull();
   });
+
+  it("never tells residents to hide, admit, or invent the cause of a problem", () => {
+    for (const id of knownPrograms) {
+      const p = getCallProtocol(id)!;
+      expect(`${p.openingScript} ${p.watchOut}`).not.toMatch(/DO NOT report|NEVER|do not simply say|municipal sewage backed up/i);
+    }
+  });
 });

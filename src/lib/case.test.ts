@@ -4,6 +4,11 @@ import { callbackDue, newCase, stageOf, stepBack } from "./case";
 const today = "2026-09-19";
 
 describe("stageOf", () => {
+  it("does not advance when a resident only tried to reach DWSD", () => {
+    const attempted = { ...newCase("backup", today), calledAt: "2026-09-19T15:00:00Z", contactStatus: "attempted" as const };
+    expect(stageOf(attempted)).toBe(1);
+  });
+
   it("walks a backup through all four stages", () => {
     const c = newCase("backup", today);
     expect(stageOf(c)).toBe(1);
@@ -21,6 +26,16 @@ describe("stageOf", () => {
     expect(c.verdict).toBe("mine");
     expect(stageOf(c)).toBe(3);
     expect(stageOf(newCase("quote", today, { breakAt: "alley" }))).toBe(4);
+  });
+});
+
+describe("newCase", () => {
+  it("gives each new case its own identity", () => {
+    const first = newCase("backup", today);
+    const second = newCase("backup", today);
+    expect(first.id).toMatch(/^case-/);
+    expect(second.id).toMatch(/^case-/);
+    expect(first.id).not.toBe(second.id);
   });
 });
 

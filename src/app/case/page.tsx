@@ -9,6 +9,7 @@ export const metadata: Metadata = { title: "Your case" };
 export default async function CasePage(props: PageProps<"/case">) {
   const sp = await props.searchParams;
   const address = typeof sp.address === "string" && sp.address.trim() ? sp.address : undefined;
+  const caseId = typeof sp.case === "string" && sp.case.trim() ? sp.case : undefined;
   const key = typeof sp.key === "string" ? sp.key : undefined;
   const result = address ? await getReport(address, "backup", key) : null;
   const report = result && !("error" in result) ? result : null;
@@ -16,6 +17,7 @@ export default async function CasePage(props: PageProps<"/case">) {
 
   return (
     <CaseView
+      caseId={caseId}
       queryAddress={address}
       report={report ? slimReport(report) : null}
       error={error}

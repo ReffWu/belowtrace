@@ -14,7 +14,7 @@ export type Step = {
     phone: string;
     goal: string;
     script: string[];
-    whatNotToSay: string[];
+    factTips: string[];
   };
 };
 
@@ -40,17 +40,17 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
     callScript: {
       recipient: "DWSD Dispatch / Customer Service",
       phone: PHONES.dwsd.number,
-      goal: "Get an official Service Request number (SR#) and dispatch a field crew to inspect the municipal main.",
+      goal: "Report the issue, get a Service Request number (SR#), and ask how DWSD will inspect it.",
       script: [
-        `"Hello, my name is [Your Name]. I am calling to report sewage backup and drain trouble at ${r.query}."`,
+        `"Hello, my name is [Your Name]. I am calling to report sewage backup and drain trouble at ${r.query}. I do not know the cause yet."`,
         r.nearestMain
           ? `"DWSD records show a city sewer near my property installed around ${r.nearestMain.installYear ?? "an unknown year"}. Please send a crew to check whether the city sewer serving my home is blocked or backed up."`
           : `"Please send a field technician to inspect the municipal sewer line on my street/alley to confirm if the public main is backing up."`,
-        `"Could you please give me the official Service Request (work order) number right now so I can record it for my 45-day claim window?"`,
+        `"Could you please give me the official Service Request (work order) number and explain the next step for this report?"`,
         `"Can you also check if this address or alley is scheduled for the upcoming Alley Sewer Repair Program (ASRP)?"`,
       ],
-      whatNotToSay: [
-        "DO NOT hang up without the Service Request number — without it, future damage claims to the City are rejected.",
+      factTips: [
+        "Write down the Service Request number if one is issued, the representative's name, and what they say will happen next. Use only facts you observed when describing the backup.",
       ],
     },
   };
@@ -90,7 +90,7 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
           {
             id: "claim",
             title: "File a DWSD damage claim",
-            detail: "Use your Service Request number. Claims must be filed within 45 days of finding the backup.",
+            detail: "Use your Service Request number. Ask DWSD for the current claim procedure and any deadline that applies to your situation.",
             due: "claim",
             dueLabel: "Due",
             link: { label: "Damage claims page", href: SOURCES.claims.url },
@@ -102,13 +102,13 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
             callScript: {
               recipient: "Homeowners Insurance Claims Desk",
               phone: "Your policy phone number",
-              goal: "Check if you have a Water/Sewer Backup rider without triggering an unnecessary claim record if below deductible.",
+              goal: "Check whether your policy includes a Water/Sewer Backup rider and understand the insurer's claim procedure.",
               script: [
                 `"Hello, I am calling about policy for ${r.query}. Can you review my declaration page to check if I have a Sewer Backup or Sump Overflow endorsement?"`,
                 `"What is my coverage limit and deductible for sewer backup?"`,
               ],
-              whatNotToSay: [
-                "DO NOT say 'flood water entered from the street' if sewage came up from floor drains — standard policies cover sewer backup differently from surface flooding.",
+              factTips: [
+                "Describe where the water entered, when you found it, and what you observed. If you do not know the cause, say it is still being investigated.",
               ],
             },
           },
