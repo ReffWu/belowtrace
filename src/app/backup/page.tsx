@@ -14,9 +14,9 @@ export default function BackupOverview() {
       <Link href="/" className="-ml-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 font-semibold text-ink-2 hover:text-ink">
         <span aria-hidden="true">←</span> Back
       </Link>
-      <h1 className="rise mt-8 text-[2.4rem] font-extrabold leading-[1.05] tracking-[-0.035em] sm:text-[3rem]">Here&apos;s how this usually goes.</h1>
+      <h1 className="rise mt-8 text-[2.4rem] font-extrabold leading-[1.05] tracking-[-0.035em] sm:text-[3rem]">Start safe. Keep the facts. Stay with the case.</h1>
       <p className="rise rise-1 mt-4 text-[1.2rem] leading-relaxed text-ink-2">
-        A backup gets sorted out in four steps. We&apos;ll go through them with you: what to say, what to write down, and when to come back.
+        A backup does not end with one call. We&apos;ll keep safety, address facts, official follow-up, claims, programs, and repair records together while you move through them.
       </p>
       <div className="rise rise-2 mt-10">
         <JourneyMap />

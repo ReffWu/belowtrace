@@ -4,6 +4,16 @@ import type { BreakAt } from "./guide";
 import type { Parcel, Report } from "./types";
 
 export type Verdict = "city" | "mine" | "unsure";
+export type TrackerStatus = "not-started" | "submitted" | "waiting" | "more-info" | "approved" | "scheduled" | "complete" | "not-approved";
+export type TrackerId = "claim" | "psrp" | "repair";
+
+export type CaseTracker = {
+  status: TrackerStatus;
+  reference?: string;
+  lastAction?: string;
+  due?: string;
+  note?: string;
+};
 
 export type Case = {
   id?: string;
@@ -16,11 +26,18 @@ export type Case = {
   contactStatus?: "attempted" | "reported";
   contactAttemptedAt?: string;
   calledAt?: string; // ISO time the resident reported the issue to DWSD
+  safeAcknowledgedAt?: string;
+  dwsdVisit?: "visited" | "not-yet" | "unknown";
+  dwsdFinding?: string;
+  dwsdRecord?: "yes" | "no" | "unknown";
+  dwsdNextStep?: string;
+  dwsdFollowUpDue?: string;
   verdict?: Verdict; // what DWSD found
   breakAt?: BreakAt; // what the plumber's camera found
   quote?: string;
   kept: Record<string, boolean>; // claim evidence checklist
   claimFiledAt?: string; // YYYY-MM-DD
+  trackers?: Partial<Record<TrackerId, CaseTracker>>;
   closedAt?: string; // YYYY-MM-DD
 };
 

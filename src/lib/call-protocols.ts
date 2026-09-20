@@ -30,8 +30,8 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "DWSD Customer Care & Capital Improvement",
       phone: PHONES.dwsd.number,
       phoneDisplay: PHONES.dwsd.number,
-      hours: "Mon–Fri 8:00 AM – 5:00 PM",
-      goal: "Confirm if your alley is scheduled for city-funded sewer replacement under the $184M ASRP, or request a CCTV camera inspection.",
+      hours: "Confirm current hours with DWSD",
+      goal: "Ask whether public work or an inspection is recorded for your address or alley.",
       haveReady: [
         "Exact property address and parcel number (if known)",
         "The cross streets / rear alley location behind your home",
@@ -57,8 +57,8 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "City of Detroit Housing & Revitalization Dept. (CDBG-DR)",
       phone: PHONES.hrd.number,
       phoneDisplay: PHONES.hrd.number,
-      hours: "Mon–Fri 8:30 AM – 4:30 PM",
-      goal: "Verify CDBG-DR Private Sewer Repair Program intake status, confirm income qualification guidelines, and request paper application assistance if needed.",
+      hours: "Confirm current hours and application support with HRD",
+      goal: "Verify current PSRP intake, official eligibility conditions, and available application help.",
       haveReady: [
         "Recorded property deed or property transfer affidavit (must show your name)",
         "Proof of household income (2025 W-2, 1040 tax return, or SSA-1099 for all adults)",
@@ -84,8 +84,8 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "HRD Housing Call Center (Critical Home Repair)",
       phone: PHONES.hrd.number,
       phoneDisplay: PHONES.hrd.number,
-      hours: "Mon–Fri 8:30 AM – 4:30 PM",
-      goal: "Confirm application status or register on the interest list for critical emergency plumbing/sewer repairs.",
+      hours: "Confirm current hours and application support with HRD",
+      goal: "Confirm whether Critical Home Repair is accepting applications and what its official conditions are.",
       haveReady: [
         "Proof of primary residency and home ownership",
         "Identification for all household members (showing seniors 62+, children under 18, or disability documentation)",
@@ -109,8 +109,8 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "DWSD Emergency Dispatch & City Law Department",
       phone: PHONES.dwsd.number,
       phoneDisplay: PHONES.dwsd.number,
-      hours: "24/7 Dispatch (Business claims: Mon–Fri 8:00 AM – 5:00 PM)",
-      goal: "Obtain an official DWSD Service Request # (SR#) immediately to lock in the 45-day legal deadline under Michigan Public Act 222.",
+      hours: "Confirm current reporting and claim hours with DWSD",
+      goal: "Report the backup, obtain a Service Request number, and understand the current claim instructions.",
       haveReady: [
         "Exact date and time the sewage backup was first discovered",
         "Address where the backup occurred",
@@ -119,12 +119,12 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       openingScript: `“Sewage or water entered my basement ${addr}. I need to report what happened and understand the claim process. I do not yet know the cause.”`,
       keyQuestions: [
         "“What is my exact Service Request (SR) number?” (Write this down immediately)",
-        "“Can you dispatch a crew to inspect the city sewer main on our street for obstructions?”",
-        "“Where should I email or submit my formal 45-day Notice of Claim form and damage receipts?”",
+        "“What will be recorded for this report, and what is the next step?”",
+        "“Where can I find the current Notice of Claim instructions and required materials?”",
       ],
       watchOut:
         "Use dates, photos, receipts, and what you observed. Do not guess about the cause or leave out material facts; ask how the report will be recorded. You may have a filing deadline.",
-      nextStep: "Download and fill out the City of Detroit Sewer Backup Claim form. Mail it by certified mail or submit it online with your SR# attached.",
+      nextStep: "Use the official DWSD claims page, save your SR number, and follow its current submission instructions.",
     };
   },
 
@@ -135,8 +135,8 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "Wayne Metro Community Action Agency (HOPE Hotline)",
       phone: PHONES.wayneMetro.number,
       phoneDisplay: PHONES.wayneMetro.number,
-      hours: "Mon–Fri 9:00 AM – 4:30 PM",
-      goal: "Schedule a free one-on-one appointment with a housing counselor to complete and notarize your HOPE property tax exemption application.",
+      hours: "Confirm current help availability with Wayne Metro",
+      goal: "Ask for current HOPE application help and the official document checklist.",
       haveReady: [
         "Michigan Driver's License or State ID with current property address",
         "Proof of income for ALL adults in household (2025 W-2, 1040, SSI/SSD letter, or Zero Income Affidavit)",
@@ -162,8 +162,8 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "Habitat for Humanity Detroit — Repair Services",
       phone: PHONES.habitat.number,
       phoneDisplay: PHONES.habitat.number,
-      hours: "Mon–Fri 9:00 AM – 4:00 PM",
-      goal: "Ask when the next critical repair funding round opens and request to be placed on the homeowner interest waitlist.",
+      hours: "Confirm current availability with Habitat Detroit",
+      goal: "Ask whether repair assistance is currently open and where future intake information will appear.",
       haveReady: [
         "Property address and owner contact information",
         "Summary of underground sewer/plumbing repair needs",
@@ -186,7 +186,7 @@ const PROTOCOLS: Record<string, (ctx: CallContext) => CallProtocol> = {
       agency: "Your Homeowner's Insurance Carrier",
       phone: "See insurance card / policy declaration",
       phoneDisplay: "Your Policy Claims #",
-      hours: "24/7 Claims Reporting Line",
+      hours: "See your policy or insurer for current claims hours",
       goal: "Verify whether your policy includes a 'Water Backup and Sump Discharge Rider' and file a formal claim.",
       haveReady: [
         "Homeowners Insurance Policy Number",

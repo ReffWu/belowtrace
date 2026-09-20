@@ -17,7 +17,7 @@ describe("whoPays", () => {
     const pipe = row(newCase("backup", today), "pipe");
     expect(pipe?.amount).toMatch(/^\$0 or \$5,000/);
     expect(pipe?.tag?.tone).toBe("open");
-    expect(row(newCase("backup", today), "now")?.label).toBe("Clearing the drain");
+    expect(row(newCase("backup", today), "now")?.label).toBe("Drain service");
   });
 
   it("keeps a claim path open without predicting the outcome from rain", () => {
@@ -26,11 +26,11 @@ describe("whoPays", () => {
     expect(damage?.note).not.toMatch(/likely denied/);
   });
 
-  it("keeps the claim conditional even when the city sewer failed on a dry day", () => {
+  it("keeps public-sewer involvement conditional until the official follow-up is complete", () => {
     const d = row({ ...called, verdict: "city", rain: "no" }, "damage");
     expect(d?.tag?.text).toBe("Confirm the cause");
     expect(d?.amount).toBe("Claim by Nov 3");
-    expect(row({ ...called, verdict: "city", rain: "no" }, "pipe")?.amount).toBe("$0");
+    expect(row({ ...called, verdict: "city", rain: "no" }, "pipe")?.amount).toBe("To be confirmed");
   });
 
   it("does not predict the claim outcome from rain alone", () => {
@@ -43,11 +43,11 @@ describe("whoPays", () => {
     expect(d?.note).toMatch(/written claim/);
   });
 
-  it("tells a PSRP-area owner to apply before signing, and uses their own quote", () => {
+  it("keeps PSRP map screening distinct from final approval, and uses their own quote", () => {
     const p = row({ ...called, verdict: "mine", breakAt: "yard", quote: "$14,800" }, "pipe");
     expect(p?.amount).toBe("$14,800");
-    expect(p?.note).toMatch(/Apply before you sign/);
-    expect(row({ ...called, verdict: "mine", breakAt: "yard" }, "pipe", archdale)?.tag?.text).toBe("Most likely you");
+    expect(p?.note).toMatch(/official review approves/);
+    expect(row({ ...called, verdict: "mine", breakAt: "yard" }, "pipe", archdale)?.tag?.text).toBe("Other help may be limited");
   });
 
   it("points an alley break to the free program", () => {

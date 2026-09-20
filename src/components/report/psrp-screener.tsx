@@ -84,7 +84,7 @@ function question(key: keyof PsrpAnswers, a: PsrpAnswers): { title: string; hint
 }
 
 const VERDICT_STYLE = {
-  likely: { box: "border-go bg-go-tint", title: "text-go", label: "You likely qualify" },
+  likely: { box: "border-go bg-go-tint", title: "text-go", label: "Your answers fit this screen" },
   possible: { box: "border-warn bg-warn-tint", title: "text-warn", label: "You might qualify" },
   unlikely: { box: "border-stop bg-stop-tint", title: "text-stop", label: "Probably not this program" },
 };
@@ -192,7 +192,7 @@ export function PsrpScreener({ auto, address }: { auto: PsrpAuto; address?: stri
               <a href={`tel:${PHONES.hrd.number.replace(/\D/g, "")}`} className="font-semibold text-brand underline">
                 {PHONES.hrd.number}
               </a>
-              . Program staff should contact you within 5 days. If you&apos;re denied, you can appeal within 30 days.
+              . Record any follow-up date, document request, or appeal information exactly as it appears in the official notice you receive.
             </p>
             {getCallProtocol("psrp", { address, hood: auto.neighborhoodName ?? undefined }) && (
               <CallScriptDrawer protocol={getCallProtocol("psrp", { address, hood: auto.neighborhoodName ?? undefined })!} />

@@ -11,6 +11,9 @@ import { AddressSearch } from "@/components/address-search";
 import { Spine } from "./journey";
 import { WhoPays } from "./who-pays";
 import { CallStage, CheckStage, ClaimStage, ClosedStage, PayStage, PipeStage } from "./stages";
+import { SafetyBrief } from "./safety-brief";
+import { AddressBrief } from "./address-brief";
+import { CaseTrackers } from "./case-trackers";
 import { caseHref, longDate, saveCase, todayInDetroit, useCase } from "./store";
 
 type Props = {
@@ -96,7 +99,14 @@ export function CaseView({ caseId, queryAddress, report, error, under }: Props) 
           </div>
         )}
 
-        <div key={step} className="rise mt-10">
+        {step < 5 && (
+          <div className="mt-6 grid gap-4">
+            <SafetyBrief c={c} update={update} />
+            <AddressBrief report={caseReport} />
+          </div>
+        )}
+
+        <div key={step} className="rise mt-8">
           {step === 1 && <CallStage {...props} />}
           {step === 2 && <CheckStage {...props} />}
           {step === 3 && <PipeStage {...props} />}
@@ -107,6 +117,7 @@ export function CaseView({ caseId, queryAddress, report, error, under }: Props) 
                 saveCase(null);
                 router.push("/backup");
               }}
+              onReopen={() => update({ closedAt: undefined })}
             />
           )}
         </div>
@@ -120,6 +131,7 @@ export function CaseView({ caseId, queryAddress, report, error, under }: Props) 
             <WhoPays
               rows={whoPays(c, caseReport)}
             />
+            <CaseTrackers c={c} update={update} hasPsrp={Boolean(caseReport?.psrpNeighborhood.inProgram && !caseReport.floodZone.isSFHA)} />
           </div>
         )}
       </div>
@@ -135,22 +147,38 @@ const dayOf = (c: Case) => Math.max(1, Math.round((Date.parse(todayInDetroit()) 
 const VERDICT = { city: "The city sewer was the problem", mine: "The problem is in the owner's line", unsure: "Not clear yet" };
 const RAIN = { yes: "Yes, it was raining hard", no: "No", unsure: "Not sure" };
 const BREAK = { alley: "Near the alley connection", yard: "Under the yard or house", unsure: "Not known yet" };
+const VISIT = { visited: "Yes", "not-yet": "Not yet", unknown: "I don't know" };
+const RECORD = { yes: "Yes", no: "No", unknown: "I don't know" };
+const TRACKER_STATUS = { "not-started": "Not started", submitted: "Submitted", waiting: "Waiting for a response", "more-info": "More information requested", approved: "Approved", scheduled: "Scheduled", complete: "Complete", "not-approved": "Not approved" };
 
 // One page a resident can hand to DWSD, a plumber or a program: every date and number in the case.
 function CaseFile({ c, report, update }: { c: Case; report: CaseReport | null; update: (p: Partial<Case>) => void }) {
   const at = (d: string) => longDate(new Date(`${d}T12:00:00`));
+  const trackerRows: [string, string | null][] = (["claim", "psrp", "repair"] as const).flatMap((id) => {
+    const tracker = c.trackers?.[id];
+    if (!tracker || tracker.status === "not-started") return [];
+    const label = id === "claim" ? "DWSD claim" : id === "psrp" ? "PSRP" : "Repair";
+    return [[`${label} status`, TRACKER_STATUS[tracker.status]]];
+  });
   const rows: [string, string | null][] = [
     ["Home", report?.address ?? c.address ?? null],
     ["Parcel", report?.parcel?.id ?? null],
     ["Water found", c.entry === "backup" ? at(c.found) : null],
     ["DWSD report saved", c.calledAt ? new Date(c.calledAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Detroit" }) : null],
+    ["DWSD attempt saved", c.contactAttemptedAt ? new Date(c.contactAttemptedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Detroit" }) : null],
     ["Service request #", c.sr || null],
     ["Heavy rain", c.entry === "backup" && c.rain ? RAIN[c.rain] : null],
     ["DWSD found", c.verdict && c.entry === "backup" ? VERDICT[c.verdict] : null],
+    ["DWSD visited or contacted", c.dwsdVisit ? VISIT[c.dwsdVisit] : null],
+    ["Written/searchable result", c.dwsdRecord ? RECORD[c.dwsdRecord] : null],
+    ["DWSD finding (resident record)", c.dwsdFinding || null],
+    ["DWSD next step", c.dwsdNextStep || null],
+    ["DWSD follow-up date", c.dwsdFollowUpDue ? at(c.dwsdFollowUpDue) : null],
     ["Break", c.breakAt ? BREAK[c.breakAt] : null],
     ["Quote", c.quote || null],
     ["Claim deadline", c.entry === "backup" && c.verdict !== "mine" ? longDate(claimDeadline(c.found)) : null],
     ["Claim filed", c.claimFiledAt ? at(c.claimFiledAt) : null],
+    ...trackerRows,
   ];
   return (
     <section className="mx-auto mt-14 max-w-3xl px-5 pb-16" aria-labelledby="case-file">

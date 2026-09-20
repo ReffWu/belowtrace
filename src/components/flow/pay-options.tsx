@@ -71,7 +71,7 @@ function NoFit() {
       <p className="mt-2 text-[1.1rem] text-ink-2">Review the requirements below with the program if any fact is missing or wrong. What can still save money:</p>
       <ol className="mt-5 grid gap-3 text-[1.05rem]">
         <li>
-          <strong>Call DWSD before you pay.</strong> <span className="text-ink-2">If the break is on the City&apos;s side, the City fixes it.</span>{" "}
+          <strong>Call DWSD before you pay.</strong> <span className="text-ink-2">Ask what the current public-system finding and next step are before authorizing non-emergency work.</span>{" "}
           <a href={tel} className="whitespace-nowrap font-semibold text-brand underline">
             {PHONES.dwsd.number}
           </a>
@@ -80,7 +80,7 @@ function NoFit() {
           <strong>Check your home insurance.</strong> <span className="text-ink-2">Ask whether your policy covers sewer backup.</span>
         </li>
         <li>
-          <strong>Get two written quotes.</strong> <span className="text-ink-2">From licensed plumbers who pull a City permit, with the camera video.</span>
+          <strong>Get written quotes.</strong> <span className="text-ink-2">Ask a licensed plumber for the inspection evidence and whether permits are required for the proposed work.</span>
         </li>
       </ol>
     </article>

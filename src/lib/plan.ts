@@ -58,7 +58,7 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
     id: "psrp",
     title: inPsrp ? "Check the Private Sewer Repair Program (up to $40,000)" : "Look at other ways to pay",
     detail: inPsrp
-      ? "Answer the 8 questions on this page, gather the documents on the checklist, then apply on Neighborly. Missing documents must be sent within 5 days of a request."
+      ? "Use the screener as preparation, then check the official conditions and apply on Neighborly. Record any document request and its exact deadline from the notice you receive."
       : "Your address is outside the PSRP area. Ask DWSD about the alley program, and check Critical Home Repair if you qualify.",
     link: inPsrp ? { label: "Check if I qualify", href: "#psrp-screener" } : undefined,
   };
@@ -79,7 +79,7 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
           {
             id: "safe",
             title: "Stay safe",
-            detail: "Keep children and pets out of the basement. Don't touch sewage without gloves and boots, and don't run water or flush until it drains.",
+            detail: "Do not enter standing water near a fuse box, electrical appliances, outlets, or wires. From a safe place, record the discovery time and take photos before cleanup.",
           },
           dwsd,
           {
@@ -98,7 +98,7 @@ export function buildPlan(r: Report, situation: Situation, now = new Date()): St
           {
             id: "insurance",
             title: "Call your home insurance company",
-            detail: "Ask whether your policy covers sewer backup. Any payout you get is subtracted from PSRP help later, so keep the paperwork.",
+            detail: "Ask whether your policy covers sewer backup and keep the paperwork. If you also apply for a public program, disclose other assistance when the official application asks for it.",
             callScript: {
               recipient: "Homeowners Insurance Claims Desk",
               phone: "Your policy phone number",

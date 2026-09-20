@@ -1,7 +1,7 @@
 // Every rule, phone number and date shown to residents lives here, with its source.
 // Update VERIFIED_ON whenever these are re-checked.
 
-export const VERIFIED_ON = "2026-09-18";
+export const VERIFIED_ON = "2026-09-20";
 
 export const PHONES = {
   dwsd: { label: "DWSD Customer Service", number: "313-267-8000" },
@@ -52,6 +52,10 @@ export const SOURCES = {
   handbook: {
     label: "DWSD Basement Backup & Flooding Handbook (2023)",
     url: "https://detroitmi.gov/sites/detroitmi.localhost/files/2023-07/DWSD%20Basement%20Backup%20&%20Flooding%20Handbook%20-%20Version%202023-1.pdf",
+  },
+  floodSafety: {
+    label: "DWSD — Flood Safety and Reduction Tips",
+    url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/dwsd-flood-safety-and-reduction-tips",
   },
   glwaClaims: {
     label: "Planet Detroit — GLWA denies all 2021 flood claims (July 2022)",

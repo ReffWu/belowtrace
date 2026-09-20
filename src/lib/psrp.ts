@@ -166,14 +166,14 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
 
   if (a.otherAssistance === "yes") {
     soft = true;
-    checks.push({ status: "warn", text: "Money you already received for the same repair (insurance, FEMA, other programs) is subtracted from the award.", cite: "Guide p.14" });
+    checks.push({ status: "warn", text: "Other assistance for the same repair must be disclosed. Ask the program how it affects its duplication-of-benefits review.", cite: "Guide p.14" });
   }
 
   const complete = activeQuestions(a).every((q) => a[q] !== undefined);
   const verdict: PsrpResult["verdict"] = hardFail ? "unlikely" : soft || !complete ? "possible" : "likely";
   const summary =
     verdict === "likely"
-      ? "You likely qualify. Gather the documents below before you apply — you'll only get 5 days to send anything missing."
+      ? "Your answers appear consistent with the screen. Gather the documents below and apply; only the City can determine eligibility and any later document deadline."
       : verdict === "possible"
         ? "You might qualify. Check the yellow items with the program before you give up."
         : "You probably don't qualify for this program. See the other options on this page.";

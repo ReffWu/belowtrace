@@ -66,11 +66,11 @@ export default function AboutPage() {
           </li>
           <li>
             <strong className="text-ink">Helpers</strong>: plumbers and waterproofers who meet these families first, block clubs, district
-            managers, and the community organizations the City pays to do outreach and application intake for PSRP.
+            managers, and community organizations that help residents understand and complete applications.
           </li>
           <li>
-            <strong className="text-ink">The City</strong>: fewer calls asking “am I eligible?”, fewer incomplete applications (PSRP gives
-            applicants only 5 days to send missing documents), and a clear picture of where the need sits outside current programs.
+            <strong className="text-ink">The City</strong>: fewer calls asking “am I eligible?”, better-prepared applications, and a clear
+            picture of where the need sits outside current programs.
           </li>
         </ul>
       </Block>

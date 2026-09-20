@@ -1,15 +1,14 @@
 "use client";
 
 import { useId } from "react";
-import { callbackDue, EVIDENCE, type Case, type CaseReport, type Verdict } from "@/lib/case";
+import { EVIDENCE, type Case, type CaseReport, type Verdict } from "@/lib/case";
 import { psrpFits, whoCanPay, type BreakAt } from "@/lib/guide";
 import { COSTS, PHONES, SOURCES } from "@/lib/facts";
 import { claimDeadline } from "@/lib/plan";
 import { deadlineIcs, downloadIcs } from "@/lib/ics";
 import { AddressSearch } from "@/components/address-search";
 import { PayOptions } from "@/components/flow/pay-options";
-import stats from "@/data/citywide-stats.json";
-import { caseHref, daysFromToday, longDate, shortDate, todayInDetroit } from "./store";
+import { caseHref, daysFromToday, longDate, todayInDetroit } from "./store";
 
 export type StageProps = { c: Case; update: (patch: Partial<Case>) => void; report: CaseReport | null; street: string | null };
 
@@ -128,7 +127,7 @@ export function CallStage({ c, update, report, street }: StageProps) {
   const markAttempted = () => update({ contactStatus: "attempted", contactAttemptedAt: new Date().toISOString() });
   return (
     <div className="grid gap-6">
-      <Title sub="They check whether the city sewer is backed up. If it is, fixing it is their job, not yours.">Call DWSD first. It&apos;s free.</Title>
+      <Title sub="Report the backup and ask for a Service Request number (SR). An SR is required before a DWSD damage claim can be filed.">Report the backup to DWSD.</Title>
       <a
         href={tel}
         className="flex min-h-20 items-center justify-center gap-3 rounded-2xl bg-brand text-[1.6rem] font-extrabold tracking-tight text-white shadow-[0_14px_30px_-14px_rgb(13_92_107/0.7)] transition hover:bg-brand-ink active:scale-[0.99]"
@@ -143,13 +142,13 @@ export function CallStage({ c, update, report, street }: StageProps) {
       <Part kind="know" label="While you wait">
         <ul className="grid gap-2 text-[1.05rem]">
           <li>
-            <strong>Water still rising?</strong> <span className="text-ink-2">Call a drain cleaning company too. Keep the receipt.</span>
+            <strong>Do not guess the cause.</strong> <span className="text-ink-2">The address facts above are useful background, but only an official review or inspection can establish what caused this event.</span>
           </li>
           <li>
-            <strong>Stay safe.</strong> <span className="text-ink-2">Keep children and pets out. Wear gloves and boots near sewage.</span>
+            <strong>Prepare your record.</strong> <span className="text-ink-2">Keep photos, the date you found the water, and every cleanup or inspection receipt.</span>
           </li>
           <li>
-            <strong>Take photos first.</strong> <span className="text-ink-2">Before you clean up or throw anything away.</span>
+            <strong>You can keep going here.</strong> <span className="text-ink-2">If you have not reached DWSD yet, use the address report and case trackers while you try again.</span>
           </li>
         </ul>
       </Part>
@@ -186,7 +185,7 @@ export function CallStage({ c, update, report, street }: StageProps) {
               <AddressSearch defaultSituation="backup" target="/case" params={{}} cta="Save address" compact onGo={(address) => update({ address })} />
             </div>
           )}
-          {c.contactStatus === "attempted" && <p className="text-ink-3">Your attempt is saved. This case will stay on this step until DWSD receives your report.</p>}
+          {c.contactStatus === "attempted" && <p className="text-ink-3">Your attempt is saved. You still need an SR for a DWSD claim, but your address facts, evidence list, and case trackers remain available now.</p>}
         </div>
       </Part>
     </div>
@@ -196,29 +195,18 @@ export function CallStage({ c, update, report, street }: StageProps) {
 // ---- 2 · DWSD checks ----
 
 const VERDICTS: { value: Verdict; title: string; note: string }[] = [
-  { value: "city", title: "The city sewer was the problem", note: "They cleared it, or will fix it" },
-  { value: "mine", title: "The problem is in my line", note: "The part from my house to the city sewer" },
-  { value: "unsure", title: "They didn't say, or I'm not sure", note: "We'll help you find out" },
+  { value: "city", title: "They said the public sewer was involved", note: "Record exactly what they said; a claim still needs review." },
+  { value: "mine", title: "They said the private line was involved", note: "A camera inspection may still be needed to locate a defect." },
+  { value: "unsure", title: "The cause is still not confirmed", note: "It is okay to keep this unknown." },
 ];
 
 export function CheckStage({ c, update }: StageProps) {
-  const due = c.calledAt ? callbackDue(c.calledAt) : null;
-  const remind = () =>
-    due &&
-    downloadIcs(
-      "call-dwsd-back.ics",
-      deadlineIcs({
-        title: "Call DWSD back if no one came",
-        detail: `Call ${PHONES.dwsd.number}${c.sr ? ` and give service request #${c.sr}` : " and ask for a service request number"}.`,
-        due,
-        url: caseUrl(c),
-        alarms: ["PT0M"],
-        prefix: "",
-      }),
-    );
+  const findingId = useId();
+  const nextId = useId();
+  const followUpId = useId();
   return (
     <div className="grid gap-6">
-      <Title sub={`In the past year, DWSD closed ${stats.response.within48Pct}% of similar requests within 2 days. That is not a promise for this case.`}>After DWSD receives your report</Title>
+      <Title sub="Use this page to preserve what was actually communicated. It does not decide who is responsible.">Record the DWSD visit or follow-up.</Title>
 
       {!c.sr && (
         <Part kind="remind" label="You still need a number">
@@ -232,23 +220,28 @@ export function CheckStage({ c, update }: StageProps) {
       )}
 
       <Part kind="say" label="When the crew comes, ask">
-        <Lines lines={["Is the city sewer blocked?", "What did you find, and what happens next?"]} />
-        <p className="mt-3 text-ink-2">Write down their answer and the date. It helps if you need to follow up.</p>
+        <Lines lines={["What is recorded for this Service Request?", "Can you tell me the finding and next step?", "If there is a result I can check, which official channel should I use?"]} />
+        <p className="mt-3 text-ink-2">This is a request for a clear record, not an accusation. Write down only what was actually said or provided.</p>
       </Part>
 
-      {due && (
-        <Part kind="remind">
-          <p className="text-[1.05rem]">
-            No one by <strong>{shortDate(due)}</strong>? Call <span className="whitespace-nowrap">{PHONES.dwsd.number}</span>
-            {c.sr ? ` and give them number ${c.sr}` : ""}.
-          </p>
-          <button type="button" onClick={remind} className="mt-3 min-h-11 rounded-xl bg-ink px-4 font-bold text-white hover:bg-brand-ink">
-            Remind me on {shortDate(due)}
-          </button>
-        </Part>
-      )}
-
-      <Part kind="write" label="What did DWSD find?">
+      <Part kind="write" label="What was actually communicated?">
+        <div className="grid gap-4">
+          <div role="group" aria-label="Did DWSD visit">
+            <p className="font-semibold">Did DWSD visit or contact you?</p>
+            <div className="mt-2 grid grid-cols-3 gap-2">
+              {(["visited", "not-yet", "unknown"] as const).map((value) => (
+                <button key={value} type="button" aria-pressed={c.dwsdVisit === value} onClick={() => update({ dwsdVisit: value })} className={`min-h-11 rounded-xl border-2 px-2 text-sm font-semibold ${c.dwsdVisit === value ? "border-ink bg-ink text-white" : "border-line-2 bg-surface hover:border-ink"}`}>
+                  {value === "visited" ? "Yes" : value === "not-yet" ? "Not yet" : "I don't know"}
+                </button>
+              ))}
+            </div>
+          </div>
+          <label htmlFor={findingId} className="grid gap-2"><span className="font-semibold">Their finding, in your own words</span><textarea id={findingId} value={c.dwsdFinding ?? ""} onChange={(e) => update({ dwsdFinding: e.target.value })} rows={3} className="rounded-xl border-2 border-line-2 bg-surface p-3" placeholder="Optional — record only what they told you" /></label>
+          <div role="group" aria-label="Written or searchable record"><p className="font-semibold">Did they give you a written or searchable result?</p><div className="mt-2 grid grid-cols-3 gap-2">{(["yes", "no", "unknown"] as const).map((value) => <button key={value} type="button" aria-pressed={c.dwsdRecord === value} onClick={() => update({ dwsdRecord: value })} className={`min-h-11 rounded-xl border-2 px-2 text-sm font-semibold ${c.dwsdRecord === value ? "border-ink bg-ink text-white" : "border-line-2 bg-surface hover:border-ink"}`}>{value === "yes" ? "Yes" : value === "no" ? "No" : "I don't know"}</button>)}</div></div>
+          <label htmlFor={nextId} className="grid gap-2"><span className="font-semibold">Next step they gave you</span><input id={nextId} value={c.dwsdNextStep ?? ""} onChange={(e) => update({ dwsdNextStep: e.target.value })} className={field} placeholder="Optional" /></label>
+          <label htmlFor={followUpId} className="grid gap-2"><span className="font-semibold">Follow-up date they gave you</span><input id={followUpId} type="date" value={c.dwsdFollowUpDue ?? ""} onChange={(e) => update({ dwsdFollowUpDue: e.target.value })} className={field} /></label>
+        </div>
+        <p className="mt-5 mb-2 font-semibold">Based on what you were told, which statement fits today?</p>
         <div className="grid gap-2">
           {VERDICTS.map((v) => (
             <Choice key={v.value} title={v.title} note={v.note} onClick={() => update({ verdict: v.value })} />
@@ -272,7 +265,7 @@ export function PipeStage({ c, update, report }: StageProps) {
   const unsure = c.verdict === "unsure";
   return (
     <div className="grid gap-6">
-      <Title sub="Only a camera (CCTV) inspection shows where a sewer line is broken. Don't let anyone dig before that.">
+      <Title sub="A CCTV inspection can help identify a private sewer-line defect. Ask a licensed plumber what inspection and permit requirements apply before authorizing work.">
         {unsure ? "Find out where the problem is." : "Your line needs a camera inspection."}
       </Title>
 
@@ -281,15 +274,14 @@ export function PipeStage({ c, update, report }: StageProps) {
           <ul className="grid gap-2 text-[1.05rem] text-ink-2">
             {unsure && (
               <li>
-                Ask DWSD for a clear answer too: call <span className="whitespace-nowrap">{PHONES.dwsd.number}</span>
-                {c.sr ? ` with number ${c.sr}` : ""}.
+                The cause is still unconfirmed. Follow the next step recorded for your SR, and ask DWSD how to confirm its finding if you did not receive one.
               </li>
             )}
             {report && psrpFits(report) && (
               <>
-                <li>If you qualify for the Private Sewer Repair Program, it pays for the inspection.</li>
+                <li>Your address is in a PSRP program area. The official application decides whether your home and work qualify.</li>
                 <li>
-                  <strong className="text-ink">Apply before you sign a repair contract.</strong> The program can&apos;t pay for work that starts before its review.
+                  <strong className="text-ink">Before non-emergency work, ask the program whether it affects eligibility or covered scope.</strong> Keep every estimate, invoice, photo, and inspection record.
                 </li>
               </>
             )}
@@ -298,7 +290,7 @@ export function PipeStage({ c, update, report }: StageProps) {
       )}
 
       <Part kind="say" label="Tell the plumber">
-        <Lines lines={["Please run a camera through my sewer line.", "Send me the video and show me exactly where the break is.", "Put the quote in writing, and pull a City permit."]} />
+        <Lines lines={["Can you tell me whether a camera inspection is needed before repair?", "Please give me the video or written findings and a written estimate.", "What permit requirements apply to this work?"]} />
       </Part>
 
       <Part kind="write" label="What did the camera show?">
@@ -317,7 +309,7 @@ export function PipeStage({ c, update, report }: StageProps) {
       <Part kind="remind">
         <p className="text-[1.05rem]">
           {report && psrpFits(report)
-            ? "Don't sign anything until you've checked the programs in the next step."
+            ? "Before non-emergency work, check the program conditions and ask the official intake team how this work affects an application."
             : `Get a second written quote before you sign anything. Repairs like this often cost ${COSTS.lateral}.`}
         </p>
       </Part>
@@ -347,13 +339,10 @@ export function ClaimStage({ c, update }: StageProps) {
   if (c.claimFiledAt) {
     return (
       <div className="grid gap-6">
-        <Title sub={`You filed on ${longDate(new Date(`${c.claimFiledAt}T12:00:00`))}. DWSD reviews each claim and decides whether to pay.`}>Your claim is in.</Title>
+        <Title sub={`You recorded a filing on ${longDate(new Date(`${c.claimFiledAt}T12:00:00`))}. Keep the official claim number, notices, and any requested materials in the tracker below.`}>Your filing is recorded.</Title>
         <Part kind="know">
-          <p className="text-[1.05rem] text-ink-2">Keep every receipt and photo until you hear back. If DWSD asks for more, your case file below has the dates and numbers.</p>
+          <p className="text-[1.05rem] text-ink-2">A filing does not establish responsibility or payment. Keep every receipt and photo until you receive the official outcome.</p>
         </Part>
-        <button type="button" onClick={() => update({ closedAt: todayInDetroit() })} className={action}>
-          Everything&apos;s sorted. Close my case <span aria-hidden="true">→</span>
-        </button>
       </div>
     );
   }
@@ -409,7 +398,7 @@ export function ClaimStage({ c, update }: StageProps) {
             </li>
           ))}
         </ul>
-        <button type="button" onClick={() => update({ claimFiledAt: todayInDetroit() })} className={`${action} mt-5`}>
+        <button type="button" onClick={() => update({ claimFiledAt: todayInDetroit(), trackers: { ...c.trackers, claim: { ...c.trackers?.claim, status: "submitted", lastAction: todayInDetroit() } } })} className={`${action} mt-5`}>
           I filed my claim <span aria-hidden="true">→</span>
         </button>
       </Part>
@@ -434,21 +423,16 @@ export function PayStage({ c, update, report, street }: StageProps) {
       ) : (
         <AddressSearch defaultSituation="broken-line" target="/case" params={{}} cta="Check" compact onGo={(address) => update({ address })} />
       )}
-      {report && (
-        <button type="button" onClick={() => update({ closedAt: todayInDetroit() })} className={action}>
-          It&apos;s fixed. Close my case <span aria-hidden="true">→</span>
-        </button>
-      )}
     </div>
   );
 }
 
 // ---- 5 · Closed ----
 
-export function ClosedStage({ onNew }: { onNew: () => void }) {
+export function ClosedStage({ onNew, onReopen }: { onNew: () => void; onReopen: () => void }) {
   return (
     <div className="grid gap-6">
-      <Title sub="Glad it's behind you. Your case file stays on this phone until you delete it.">Case closed.</Title>
+      <Title sub="You marked this local record complete. It does not tell DWSD, HRD, an insurer, or a contractor that the work is done.">Local case marked complete.</Title>
       <Part kind="know" label="Lower the risk next time">
         <ul className="grid gap-2 text-[1.05rem] text-ink-2">
           <li>Disconnect downspouts that drain into the sewer.</li>
@@ -458,6 +442,9 @@ export function ClosedStage({ onNew }: { onNew: () => void }) {
       </Part>
       <button type="button" onClick={onNew} className={action}>
         Start a new case <span aria-hidden="true">→</span>
+      </button>
+      <button type="button" onClick={onReopen} className="min-h-11 rounded-xl border-2 border-line-2 bg-surface px-4 font-bold hover:border-ink">
+        Reopen this case
       </button>
     </div>
   );

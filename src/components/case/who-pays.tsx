@@ -36,16 +36,7 @@ export function WhoPays({ rows, title = "Who pays, so far" }: { rows: MoneyRow[]
           DWSD Basement Backup Handbook
         </a>
         .
-        {rows.some((r) => r.id === "damage") && (
-          <>
-            {" "}
-            Claims follow Michigan law: DWSD pays only if its sewer caused at least half the backup. After the June 2021 storm,{" "}
-            <a href={SOURCES.glwaClaims.url} target="_blank" rel="noreferrer" className="underline">
-              all 24,000+ claims to GLWA were denied
-            </a>
-            .
-          </>
-        )}
+        {rows.some((r) => r.id === "damage") && <> A damage claim is reviewed under the applicable official process; filing one does not guarantee responsibility or payment.</>}
       </p>
     </section>
   );

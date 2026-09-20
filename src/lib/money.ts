@@ -21,11 +21,11 @@ function pipe(c: Case, r: Area | null, now: Date): MoneyRow {
       id: "pipe",
       label,
       amount: `$0 or ${COSTS.lateral}`,
-      note: "If the city sewer is at fault, the City fixes it. If it's your line, you pay, unless a program helps.",
+      note: "The public system and the private line have different responsibility rules. Keep the cause unconfirmed until an official finding or inspection supports it.",
       tag: { tone: "open", text: "Depends on what DWSD finds" },
     };
   }
-  if (c.verdict === "city") return { id: "pipe", label, amount: "$0", note: "The City fixes its own sewer.", tag: { tone: "ok", text: "The City pays" } };
+  if (c.verdict === "city") return { id: "pipe", label, amount: "To be confirmed", note: "You recorded that DWSD said the public sewer was involved. Keep the official finding and follow its stated next step.", tag: { tone: "open", text: "Official follow-up needed" } };
   if (c.verdict === "unsure" && !c.breakAt) {
     return {
       id: "pipe",
@@ -41,19 +41,19 @@ function pipe(c: Case, r: Area | null, now: Date): MoneyRow {
       id: "pipe",
       label,
       amount,
-      note: `The free Alley Sewer Repair Program fixes breaks where your line meets the alley sewer, if DWSD picks your alley. Ask before you pay.${psrp ? " PSRP may cover it too." : ""}`,
+      note: `A break near the alley connection may warrant a DWSD/ASRP question. Program selection and covered work are decided by DWSD.${psrp ? " PSRP may also be worth checking." : ""}`,
       tag: { tone: "ok", text: "May be free" },
     };
   }
   if (psrp === null) {
-    return { id: "pipe", label, amount, note: "Your line is yours to fix. Up to $40,000 is available in 97 neighborhoods.", tag: { tone: "open", text: "Add the address to check" } };
+    return { id: "pipe", label, amount, note: "Add the address to check mapped program areas and official conditions. Responsibility for a private line still depends on the confirmed location and facts.", tag: { tone: "open", text: "Add the address to check" } };
   }
   if (psrp) {
     return {
       id: "pipe",
       label,
       amount,
-      note: "Up to $40,000 from the Private Sewer Repair Program may cover it. Apply before you sign a contract: it can't pay for work done first.",
+      note: "This address passed the map screen for PSRP. Up to $40,000 may be available if the official review approves the household and eligible work. Ask before non-emergency work whether it affects the application.",
       tag: { tone: "ok", text: "You may qualify for help" },
     };
   }
@@ -61,8 +61,8 @@ function pipe(c: Case, r: Area | null, now: Date): MoneyRow {
     id: "pipe",
     label,
     amount,
-    note: `Your line is yours to fix, and this address is outside the $40,000 program. Get two written quotes.${now < new Date(CHR_CLOSES) ? " Critical Home Repair may help some households." : ""}`,
-    tag: { tone: "warn", text: "Most likely you" },
+    note: `This address is outside the mapped PSRP area. That does not settle responsibility or rule out other help. Keep written estimates and check any current alternatives.${now < new Date(CHR_CLOSES) ? " Critical Home Repair may be relevant for some households." : ""}`,
+    tag: { tone: "warn", text: "Other help may be limited" },
   };
 }
 
@@ -88,10 +88,10 @@ function damage(c: Case): MoneyRow | null {
 function now(c: Case): MoneyRow | null {
   const stage = stageOf(c);
   if (c.entry === "backup" && stage <= 2) {
-    return { id: "now", label: "Clearing the drain", amount: COSTS.snaking, note: "What a plumber charges to snake a line. You pay now; keep the receipt for a claim or insurance." };
+    return { id: "now", label: "Drain service", amount: COSTS.snaking, note: "Typical handbook cost for snaking a line. If you choose urgent service, keep the receipt and ask the professional what work is being performed." };
   }
   if (c.verdict !== "city" && !c.breakAt && stage === 3) {
-    return { id: "now", label: "Camera inspection", amount: COSTS.camera, note: "What DWSD's own program budgets for one. PSRP pays for it if you qualify." };
+    return { id: "now", label: "Camera inspection", amount: COSTS.camera, note: "Typical handbook cost. A camera can help locate a defect; any program coverage is subject to official approval." };
   }
   return null;
 }

@@ -32,7 +32,7 @@ const RULES = [
   SOURCES.chr,
   SOURCES.claims,
   SOURCES.handbook,
-  SOURCES.glwaClaims,
+  SOURCES.floodSafety,
   SOURCES.bbpp,
   SOURCES.habitat,
   SOURCES.hope,
@@ -93,7 +93,7 @@ export default function SourcesPage() {
       </p>
       <SourceTable rows={SNAPSHOT} />
 
-      <h2 className="mt-12 text-2xl font-bold">Program rules (checked {VERIFIED_ON})</h2>
+      <h2 className="mt-12 text-2xl font-bold">Program rules &amp; official guidance (checked {VERIFIED_ON})</h2>
       <p className="mt-2 text-ink-2">
         The PSRP screener applies the City&apos;s published rules. The program guide lists an income limit of 80% of area median income
         on pages 3–4 and 50% on page 10; the 2026 policy repeats both. We show incomes between the two as “might qualify” rather than

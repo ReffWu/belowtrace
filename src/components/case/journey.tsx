@@ -2,10 +2,10 @@ import type { Stage } from "@/lib/case";
 
 // The whole shape of a sewer backup, so a resident knows where they are and what's left.
 export const STAGES = [
-  { n: 1, short: "Call DWSD", when: "Today", title: "Stop the damage", note: "Call DWSD and get a service request number." },
-  { n: 2, short: "DWSD checks", when: "1–2 days", title: "DWSD checks the city sewer", note: "A crew looks at the sewer that serves your home." },
-  { n: 3, short: "Whose pipe", when: "Then", title: "You learn whose pipe it is", note: "The City's: they fix it. Yours: a camera shows where it broke." },
-  { n: 4, short: "Get it paid", when: "Within 45 days", title: "Get it paid for", note: "A damage claim, or a program that pays for the repair." },
+  { n: 1, short: "Safety & report", when: "Now", title: "Get safe and report the backup", note: "Keep safe, record facts, and ask DWSD for a Service Request number." },
+  { n: 2, short: "Record findings", when: "After contact", title: "Record what DWSD communicates", note: "Keep the finding, any written record, and the next official step." },
+  { n: 3, short: "Confirm cause", when: "If needed", title: "Keep the cause evidence-based", note: "It is okay for the cause to remain unknown until a proper inspection." },
+  { n: 4, short: "Track paths", when: "45-day claim window", title: "Track claims, programs, and repair", note: "Submitting an application is the start of follow-through, not the end." },
 ] as const;
 
 export function JourneyMap({ current = 1 }: { current?: Stage }) {
