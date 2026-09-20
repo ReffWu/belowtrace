@@ -84,6 +84,13 @@ export default function SourcesPage() {
       <SourceTable rows={LIVE} />
 
       <h2 className="mt-12 text-2xl font-bold">City open data (snapshot {DATA_SNAPSHOT})</h2>
+      <p className="mt-2 text-ink-2">
+        The repository keeps a small, reviewable{" "}
+        <a href="https://github.com/ReffWu/belowtrace/blob/main/data/manifest.json" target="_blank" rel="noreferrer" className="text-brand underline decoration-brand/30 hover:decoration-brand">
+          source receipt
+        </a>
+        {" "}for this snapshot: each public query, record count and raw-file SHA-256. The large raw downloads can be recreated from those public services.
+      </p>
       <SourceTable rows={SNAPSHOT} />
 
       <h2 className="mt-12 text-2xl font-bold">Program rules (checked {VERIFIED_ON})</h2>

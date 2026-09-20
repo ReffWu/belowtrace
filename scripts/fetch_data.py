@@ -3,6 +3,7 @@
 Usage: python3 scripts/fetch_data.py
 """
 import json
+import hashlib
 import time
 import urllib.parse
 import urllib.request
@@ -57,9 +58,32 @@ def fetch(url, where):
     return {"type": "FeatureCollection", "features": features}
 
 
+def write_manifest(records):
+    """Keep a small, versioned receipt for the untracked source downloads."""
+    snapshot_dates = [(OUT.parent.parent / record["file"]).stat().st_mtime for record in records]
+    manifest = {
+        "schemaVersion": 1,
+        "snapshotDate": time.strftime("%Y-%m-%d", time.gmtime(max(snapshot_dates))),
+        "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "layers": records,
+    }
+    (OUT.parent / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
+    records = []
     for name, (url, where) in LAYERS.items():
         fc = fetch(url, where)
-        (OUT / f"{name}.geojson").write_text(json.dumps(fc))
+        file = OUT / f"{name}.geojson"
+        file.write_text(json.dumps(fc))
+        records.append({
+            "id": name,
+            "endpoint": url,
+            "where": where,
+            "file": str(file.relative_to(OUT.parent.parent)),
+            "featureCount": len(fc["features"]),
+            "sha256": hashlib.sha256(file.read_bytes()).hexdigest(),
+        })
         print(f"{name}: {len(fc['features'])}")
+    write_manifest(records)

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-09-18",
+  "generatedAt": "2026-09-20T19:41:30Z",
+  "layers": [
+    {
+      "id": "sewer_gravity_mains_dev",
+      "endpoint": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Sewer_Cleaning_Dashboard_DEV/FeatureServer/7",
+      "where": "1=1",
+      "file": "data/raw/sewer_gravity_mains_dev.geojson",
+      "featureCount": 5220,
+      "sha256": "1cebb9f9a67a25cf5eaed3f87c417bdf1fe8805e0c94bb906d04a86cf2a7026b"
+    },
+    {
+      "id": "sewer_catch_basins_dev",
+      "endpoint": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Sewer_Cleaning_Dashboard_DEV/FeatureServer/6",
+      "where": "1=1",
+      "file": "data/raw/sewer_catch_basins_dev.geojson",
+      "featureCount": 294,
+      "sha256": "32c730047a4a33998f7fa656ec0d84021917d3ad3503b136c3f14b402f037c29"
+    },
+    {
+      "id": "sewer_capital_projects",
+      "endpoint": "https://utility.arcgis.com/usrsvcs/servers/afe480be72214d84b1ac283f4c3681b3/rest/services/DWSD_Capital_Improvement_Projects_Public_View/FeatureServer/5",
+      "where": "1=1",
+      "file": "data/raw/sewer_capital_projects.geojson",
+      "featureCount": 2074,
+      "sha256": "17aeaa2c79d4451e9cdc1fc38ad9ae6ea379abdcc98ba822ed71c81e730b498f"
+    },
+    {
+      "id": "sewer_condition_assessment",
+      "endpoint": "https://utility.arcgis.com/usrsvcs/servers/afe480be72214d84b1ac283f4c3681b3/rest/services/DWSD_Capital_Improvement_Projects_Public_View/FeatureServer/7",
+      "where": "1=1",
+      "file": "data/raw/sewer_condition_assessment.geojson",
+      "featureCount": 60,
+      "sha256": "b9cb9ad507832ff1f6aac8358fb5ef1342d12499a6c9b5a04e5dc5114771e842"
+    },
+    {
+      "id": "psrp_neighborhoods",
+      "endpoint": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Neighborhoods_CDBG_DR_Private_Sewer_Repair_Program/FeatureServer/0",
+      "where": "1=1",
+      "file": "data/raw/psrp_neighborhoods.geojson",
+      "featureCount": 97,
+      "sha256": "0bf051677b016a861d2536f48da579fd6d609e3b2b0250a57ac755e699d7a5bc"
+    },
+    {
+      "id": "city_boundary",
+      "endpoint": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/City_of_Detroit_Boundary/FeatureServer/0",
+      "where": "1=1",
+      "file": "data/raw/city_boundary.geojson",
+      "featureCount": 1,
+      "sha256": "33fbd61d4732fbd5990dd778973fe0c0c6bccc2d7b9e400e173c2a7e21f8146f"
+    },
+    {
+      "id": "311_water_in_basement",
+      "endpoint": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/improve_detroit/FeatureServer/0",
+      "where": "request_type IN ('Water In Basement Investigation','Investigate Water in Basement')",
+      "file": "data/raw/311_water_in_basement.geojson",
+      "featureCount": 14115,
+      "sha256": "8e900f73c2f91c770639d2d9baad83ab20d280b1f38dd061f85a188ce39e4353"
+    },
+    {
+      "id": "311_sewer_cave_ins",
+      "endpoint": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/improve_detroit/FeatureServer/0",
+      "where": "request_type IN ('Cave-In over the Sewer','Investigate Cave In (Sink Hole)')",
+      "file": "data/raw/311_sewer_cave_ins.geojson",
+      "featureCount": 13573,
+      "sha256": "194c9002e654640f7b51978292bd0eb54cbc9fb190eff9dd624a61c449193ef4"
+    }
+  ]
+}
