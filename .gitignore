@@ -21,6 +21,8 @@
 /build
 /.build313-deck/
 /.build313-template-inspect/
+/.build313-export*/
+/.build313-review*/
 
 # misc
 .DS_Store
