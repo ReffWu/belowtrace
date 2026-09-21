@@ -13,17 +13,14 @@ export default function Home() {
       <section className="mx-auto max-w-xl px-5 pb-12 pt-8 sm:pt-14">
         <p className="rise text-[0.8rem] font-bold uppercase tracking-[0.14em] text-own">Detroit · Free · No sign-up</p>
         <h1 className="rise rise-1 mt-4 text-[2.4rem] font-extrabold leading-[1.03] tracking-[-0.04em] sm:text-[3.1rem]">
-          Detroit is spending ${(ASRP.total / 1_000_000).toFixed(0)}M fixing sewer connections.
-          <span className="mt-2 block text-ink-3">It does not publish where.</span>
+          Detroit is spending ${(ASRP.total / 1_000_000).toFixed(0)}M on sewer connections.
+          <span className="mt-2 block text-ink-3">It won&rsquo;t say where.</span>
         </h1>
-        <p className="rise rise-2 mt-5 text-[1.15rem] leading-relaxed text-ink-2">
-          If a contract reaches your alley, the repair is free. If it never does, you pay $5,000–25,000 yourself. Nobody can apply,
-          there is no list, and nobody is told either way.
-        </p>
-
-        <p className="rise rise-2 mt-5 text-[1.15rem] font-semibold leading-relaxed text-ink">
-          So we rebuilt the City&rsquo;s selection logic from the City&rsquo;s own open data, and scored every Detroit address against
-          the {calibration.selected.n} alleys it has already contracted.
+        <p className="rise rise-2 mt-5 text-[1.12rem] leading-relaxed text-ink-2">
+          Free if a contract reaches your alley. <strong className="text-ink">$5,000–25,000 if it never does.</strong> No application,
+          no list, nobody is told either way — so we{" "}
+          <strong className="text-ink">reverse-engineered the City&rsquo;s selection model</strong> from its own open data and scored
+          every address in Detroit.
         </p>
 
         <div className="rise rise-3 mt-8">
