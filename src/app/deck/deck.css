@@ -29,7 +29,7 @@
 
 .slide__body {
   flex: 1;
-  padding: 54px 78px 80px;
+  padding: 50px 78px 84px;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -42,10 +42,13 @@
 }
 
 .slide__foot {
+  z-index: 2;
+  background: inherit;
+  padding-top: 6px;
   position: absolute;
   left: 78px;
   right: 78px;
-  bottom: 26px;
+  bottom: 18px;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -57,6 +60,9 @@
 }
 
 .slide--dark .slide__foot {
+  z-index: 2;
+  background: inherit;
+  padding-top: 6px;
   color: rgb(255 255 255 / 0.45);
 }
 
@@ -196,7 +202,7 @@
   .slide .slide__body,
   .slide section,
   .slide article {
-    padding: 54px 78px 80px !important;
+    padding: 50px 78px 84px !important;
   }
   .slide .slide__body > *,
   .slide figure,

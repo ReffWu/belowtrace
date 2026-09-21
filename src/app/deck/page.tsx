@@ -33,7 +33,7 @@ export default function Deck() {
 
 function Title() {
   return (
-    <Slide dark n="1" section="Title">
+    <Slide dark n="1" section="">
       <div style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
         <p className="eyebrow">Venture 313 Buildathon · Showcase, September 22, 2026</p>
 
@@ -83,52 +83,57 @@ function Problem() {
   return (
     <Slide n="2" section="Problem Identified" rule="var(--stop)">
       <p className="eyebrow">2 · Problem</p>
-      <h2 className="h2" style={{ marginTop: 14, maxWidth: 1180 }}>
-        A Detroit homeowner with sewage in the basement cannot find out whether the City is coming.
+      <h2 className="h2" style={{ marginTop: 12, maxWidth: 1420 }}>
+        A homeowner with sewage in the basement cannot find out if the City is coming.
       </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.02fr", gap: 46, marginTop: 34, flex: 1, minHeight: 0 }}>
-        <div style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
-          <div className="shot" style={{ flex: 1, minHeight: 0 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.05fr", gap: 44, marginTop: 26 }}>
+        <div>
+          <div className="shot" style={{ height: 372 }}>
             <img src="/press/reddit-basement.jpg" alt="Sewage across a Detroit basement floor" />
           </div>
           <p className="credit">Photo: u/MarcRocket, r/Detroit, November 2025</p>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 22, minHeight: 0 }}>
-          <Figure n="1 in 3" t="Detroit homes have a failing private sewer connection, by DWSD&rsquo;s own director." />
-          <Figure n="336" t="water in basement reports to Detroit 311 every month, for 42 months straight." />
-          <Figure n="68,000" t="households no City program will reach, against roughly 11,500 it can." tone="stop" />
-
-          <div className="card" style={{ borderColor: "var(--own)", borderLeftWidth: 8, padding: "22px 26px" }}>
-            <p style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.35 }}>
+          <div className="card" style={{ marginTop: 16, borderColor: "var(--own)", borderLeftWidth: 8, padding: "18px 22px" }}>
+            <p style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.34 }}>
               &ldquo;I go to homes with children&rsquo;s bedrooms in one corner of the basement and feces in the floor in the opposite
               corner. I&rsquo;ve called the city, I&rsquo;ve emailed and never got a reply.&rdquo;
             </p>
-            <p className="tiny" style={{ marginTop: 10 }}>
-              A foundation repair contractor asking r/Detroit for any program he could refer families to. 184 upvotes, 55 replies, no
-              working answer.
+            <p className="tiny" style={{ marginTop: 8 }}>
+              A contractor asking r/Detroit for any program he could refer families to. 184 upvotes, 55 replies, no working answer.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gap: 20 }}>
+            <Figure n="1 in 3" t="Detroit homes have a failing private sewer connection, by DWSD&rsquo;s own director." />
+            <Figure n="336" t="water in basement reports to Detroit 311 every month, for 42 months straight." />
+            <Figure n="68,000" t="households no City program will reach, against roughly 11,500 it can." tone="stop" />
+          </div>
+
+          <div className="card" style={{ marginTop: 24, padding: "20px 24px" }}>
+            <p className="h3" style={{ fontSize: 23 }}>
+              Why it is still unsolved
+            </p>
+            <p className="small" style={{ marginTop: 9, fontSize: 18 }}>
+              The {M(ASRP.total)} alley program picks addresses itself and takes no applications. The {"$30,000"} repair grant requires
+              proof of flood damage from June 2021, five years ago, and cannot pay for work already started. They sit in different
+              departments, and the City&rsquo;s own guide states two different income limits on pages 3 and 10.
             </p>
           </div>
         </div>
       </div>
-
-      <p className="small" style={{ marginTop: 22, maxWidth: 1300 }}>
-        <strong>Why it is still unsolved.</strong> The {M(ASRP.total)} alley program picks addresses itself and takes no applications.
-        The {"$30,000"} repair grant requires proof of flood damage from June 2021, five years ago, and cannot pay for work already
-        started. They sit in different departments, and the City&rsquo;s own guide states two different income limits on pages 3 and 10.
-      </p>
     </Slide>
   );
 }
 
 function Figure({ n, t, tone }: { n: string; t: string; tone?: "stop" }) {
   return (
-    <div style={{ display: "flex", alignItems: "baseline", gap: 24 }}>
-      <span className="stat" style={{ fontSize: 62, color: tone === "stop" ? "var(--stop)" : "var(--ink)", minWidth: 220 }}>
+    <div style={{ display: "flex", alignItems: "baseline", gap: 22 }}>
+      <span className="stat" style={{ fontSize: 54, color: tone === "stop" ? "var(--stop)" : "var(--ink)", width: 252, flexShrink: 0 }}>
         {n}
       </span>
-      <span className="small" style={{ fontSize: 21 }} dangerouslySetInnerHTML={{ __html: t }} />
+      <span className="small" style={{ fontSize: 20 }} dangerouslySetInnerHTML={{ __html: t }} />
     </div>
   );
 }
@@ -231,7 +236,7 @@ function ProductDemo() {
         Two Detroit addresses, three miles apart. Opposite answers, in one tap.
       </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "248px 248px 1fr", gap: 30, marginTop: 24, flex: 1, minHeight: 0, alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "292px 292px 1fr", gap: 28, marginTop: 22, alignItems: "start" }}>
         <Phone src="/deck/framed-green.png" alt="BelowTrace showing a green covered verdict for 7806 Mettetal St" />
         <Phone src="/deck/framed-red.png" alt="BelowTrace showing a red not coming verdict for 5017 W Outer Dr" />
 
@@ -287,7 +292,7 @@ function ProductRoadmap() {
         The reading is measured against the alleys the City actually chose.
       </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "0.82fr 1fr 1.05fr", gap: 32, marginTop: 26, flex: 1, minHeight: 0 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "0.86fr 1fr 1.02fr", gap: 30, marginTop: 40, alignItems: "start" }}>
         <div style={{ display: "flex", gap: 18, minHeight: 0 }}>
           <Surface src="/deck/framed-3d.png" cap="What is under the house. The private line is never drawn." />
           <Surface src="/deck/framed-records.png" cap="Every 311 report and sewer project on the block." />
@@ -341,7 +346,7 @@ function ProductRoadmap() {
 function Surface({ src, cap }: { src: string; cap: string }) {
   return (
     <figure style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
-      <img src={src} alt="" style={{ display: "block", width: 152, height: "auto", filter: "drop-shadow(0 14px 22px rgb(21 33 43 / 0.24))" }} />
+      <img src={src} alt="" style={{ display: "block", width: 172, height: "auto", filter: "drop-shadow(0 14px 22px rgb(21 33 43 / 0.24))" }} />
       <figcaption className="tiny" style={{ marginTop: 7, lineHeight: 1.3 }}>
         {cap}
       </figcaption>
@@ -355,7 +360,7 @@ function Phone({ src, alt }: { src: string; alt: string }) {
     <img
       src={src}
       alt={alt}
-      style={{ display: "block", width: 248, height: "auto", filter: "drop-shadow(0 22px 34px rgb(21 33 43 / 0.28))" }}
+      style={{ display: "block", width: 292, height: "auto", filter: "drop-shadow(0 22px 34px rgb(21 33 43 / 0.28))" }}
     />
   );
 }
@@ -426,7 +431,7 @@ function Impact() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, marginTop: 20, flex: 1, minHeight: 0 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, marginTop: 18, alignItems: "start" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 14, minHeight: 0 }}>
           <div className="card" style={{ padding: "20px 24px" }}>
             <p className="h3" style={{ fontSize: 23 }}>
@@ -434,7 +439,7 @@ function Impact() {
             </p>
             <p className="small" style={{ marginTop: 8 }}>
               Three years and most of the budget are still to be allocated, so publishing this now is the only moment it can change
-              anything. Districts 2, 3, 4 and 5 have no alley in the first round.
+              anything.
             </p>
           </div>
           <div style={{ flex: 1, minHeight: 0 }}>
@@ -449,11 +454,11 @@ function Impact() {
           <p className="h3" style={{ marginTop: 10, fontSize: 25, color: "#fff" }}>
             The method travels. The program rules are configuration.
           </p>
-          <p className="small" style={{ marginTop: 11, color: "rgb(255 255 255 / 0.75)" }}>
+          <p className="small" style={{ marginTop: 10, color: "rgb(255 255 255 / 0.75)", fontSize: 18 }}>
             Homeowners own their sewer laterals in most American cities, and the three datasets this runs on exist almost everywhere:
             311 requests, capital project phases, and census income.
           </p>
-          <p className="small" style={{ marginTop: 11, color: "rgb(255 255 255 / 0.75)" }}>
+          <p className="small" style={{ marginTop: 10, color: "rgb(255 255 255 / 0.75)", fontSize: 18 }}>
             What another city changes is the list of programs and the criteria of whichever agency holds the money. What it does not
             change is the approach: take the criteria an agency publishes, measure them against the work it has contracted, and give a
             household the answer.
