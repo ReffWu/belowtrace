@@ -67,7 +67,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </p>
             <p>
               Free and open source. Built for the Venture 313 Buildathon 2026 with public data from the City of Detroit, DWSD, HUD and
-              FEMA. <Link href="/sources" className="font-medium text-brand underline">See every source</Link>.
+              FEMA. <Link href="/sources" className="font-medium text-brand underline">See every source</Link>.{" "}
+              <a href="https://github.com/ReffWu/belowtrace" target="_blank" rel="noreferrer" className="font-medium text-brand underline">
+                GitHub
+              </a>.
             </p>
           </div>
         </footer>
