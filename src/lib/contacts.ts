@@ -5,6 +5,8 @@
 export type Contact = {
   id: string;
   name: string;
+  /** Fits on one line under the number on a 320px screen. */
+  short?: string;
   phone: string;
   /** Digits only, for tel: links. */
   tel: string;
@@ -25,6 +27,7 @@ export const CONTACTS = {
   emergency: {
     id: "emergency",
     name: "Emergency",
+    short: "Fire or injury",
     phone: "911",
     tel: "911",
     say: "Fire, a live wire in water, or someone hurt.",
@@ -33,6 +36,7 @@ export const CONTACTS = {
   dte: {
     id: "dte",
     name: "DTE Energy — gas leak or electrical emergency",
+    short: "DTE · gas & electrical",
     phone: "800-477-4747",
     tel: "8004774747",
     hours: "24 hours",
@@ -49,6 +53,7 @@ export const CONTACTS = {
   dwsd: {
     id: "dwsd",
     name: "DWSD Customer Service",
+    short: "Detroit Water & Sewerage",
     phone: "313-267-8000",
     tel: "3132678000",
     hours: "24 hours",
@@ -67,6 +72,7 @@ export const CONTACTS = {
   glwa: {
     id: "glwa",
     name: "Great Lakes Water Authority — Office of the General Counsel",
+    short: "GLWA legal office",
     phone: "844-455-4592",
     tel: "8444554592",
     say: "I am filing a sewage backup claim and need to confirm where to send my written notice.",
@@ -83,6 +89,7 @@ export const CONTACTS = {
   dpw: {
     id: "dpw",
     name: "Detroit Public Works — flood debris pickup",
+    short: "Detroit Public Works",
     phone: "313-876-0004",
     tel: "3138760004",
     say: "I have flood-damaged items from a sewer backup that need a special bulk pickup.",
@@ -94,6 +101,7 @@ export const CONTACTS = {
   wayneHealth: {
     id: "wayneHealth",
     name: "Wayne County Environmental Health",
+    short: "Wayne County health",
     phone: "734-727-7400",
     tel: "7347277400",
     say: "I need guidance on cleaning up after raw sewage in my home.",
@@ -107,6 +115,7 @@ export const CONTACTS = {
   mi211: {
     id: "mi211",
     name: "Michigan 2-1-1",
+    short: "Michigan 2-1-1",
     phone: "211",
     tel: "211",
     hours: "24 hours",
@@ -116,6 +125,7 @@ export const CONTACTS = {
   hrd: {
     id: "hrd",
     name: "Housing & Revitalization Department",
+    short: "City housing dept.",
     phone: "313-224-6380",
     tel: "3132246380",
     say: "I want to ask about the Private Sewer Repair Program for my home.",
@@ -132,6 +142,7 @@ export const CONTACTS = {
   wayneMetro: {
     id: "wayneMetro",
     name: "Wayne Metro Community Action Agency",
+    short: "Wayne Metro",
     phone: "866-313-2520",
     tel: "8663132520",
     say: "I need help with a water bill, or with the HOPE property tax exemption.",
@@ -145,6 +156,7 @@ export const CONTACTS = {
   missDig: {
     id: "missDig",
     name: "MISS DIG 811",
+    short: "MISS DIG 811",
     phone: "811",
     tel: "811",
     say: "I need public utilities marked before digging.",

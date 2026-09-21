@@ -4,10 +4,16 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AddressSearch } from "./address-search";
 
+const TONE: Record<string, string> = {
+  go: "bg-go-tint text-[#14532d]",
+  stop: "bg-stop-tint text-stop",
+  brand: "bg-brand-tint text-brand-ink",
+};
+
 const EXAMPLES = [
-  { a: "7806 Mettetal St", n: "work contracted 200 m away" },
-  { a: "5017 W Outer Dr", n: "District 2 — nothing in round one" },
-  { a: "16776 Prevost St", n: "107 flooding reports, not selected" },
+  { a: "7806 Mettetal St", n: "Covered", tone: "go" },
+  { a: "5017 W Outer Dr", n: "Not coming", tone: "stop" },
+  { a: "16776 Prevost St", n: "Worth a call", tone: "brand" },
 ];
 
 export function StartSearch() {
@@ -28,10 +34,10 @@ export function StartSearch() {
               <button
                 type="button"
                 onClick={() => go(e.a)}
-                className="flex min-h-11 w-full flex-col items-start gap-0.5 rounded-lg px-1 py-1.5 text-left hover:bg-sunk/60 xs:flex-row xs:items-baseline xs:justify-between xs:gap-3 xs:py-0"
+                className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg px-1 text-left hover:bg-sunk/60"
               >
-                <span className="font-semibold text-brand underline decoration-brand/30 underline-offset-4">{e.a}</span>
-                <span className="min-w-0 text-[0.88rem] leading-snug text-ink-3 xs:shrink-0 xs:text-right">{e.n}</span>
+                <span className="truncate font-semibold text-brand underline decoration-brand/30 underline-offset-4">{e.a}</span>
+                <span className={`shrink-0 rounded-full px-2.5 py-1 text-[0.78rem] font-bold ${TONE[e.tone]}`}>{e.n}</span>
               </button>
             </li>
           ))}

@@ -7,22 +7,30 @@ import { useState } from "react";
 import type { Contact } from "@/lib/contacts";
 import { PhoneGlyph } from "./call";
 
-export function CallCard({ contact, tone = "primary", defaultOpen = false }: { contact: Contact; tone?: "primary" | "quiet"; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
+// Guidance is always collapsed to start: the number is the urgent thing, the script is there
+// for whoever wants it.
+export function CallCard({ contact, tone = "primary" }: { contact: Contact; tone?: "primary" | "quiet" | "onDark" }) {
+  const [open, setOpen] = useState(false);
   const hasScript = Boolean(contact.say || contact.ask?.length || contact.write?.length);
   const skin =
     tone === "primary"
       ? "bg-brand text-white hover:bg-brand-ink shadow-[0_14px_30px_-16px_rgb(13_92_107/0.85)]"
-      : "border-2 border-line-2 bg-surface hover:border-ink";
+      : tone === "onDark"
+        ? "bg-white text-ink hover:bg-white/90"
+        : "border-2 border-line-2 bg-surface hover:border-ink";
 
   return (
     <div className="grid min-w-0 gap-2">
-      <a href={`tel:${contact.tel}`} className={`flex min-h-[4.5rem] w-full items-center gap-4 rounded-2xl px-5 text-left transition active:scale-[0.99] ${skin}`}>
+      <a href={`tel:${contact.tel}`} className={`flex min-h-[4.25rem] w-full items-center gap-3 rounded-2xl px-4 text-left transition active:scale-[0.99] sm:gap-4 sm:px-5 ${skin}`}>
         <PhoneGlyph />
         <span className="min-w-0 flex-1">
-          <span className="block text-[1.45rem] font-extrabold leading-none tracking-tight tabular-nums sm:text-[1.6rem]">{contact.phone}</span>
-          <span className={`mt-1 block text-[0.95rem] leading-snug ${tone === "quiet" ? "text-ink-3" : "text-white/75"}`}>
-            {contact.name}
+          <span className="block text-[1.4rem] font-extrabold leading-none tracking-tight tabular-nums xs:text-[1.5rem] sm:text-[1.6rem]">
+            {contact.phone}
+          </span>
+          <span
+            className={`mt-1 block truncate text-[0.82rem] leading-tight sm:text-[0.9rem] ${tone === "primary" ? "text-white/75" : "text-ink-3"}`}
+          >
+            {contact.short ?? contact.name}
             {contact.hours ? ` · ${contact.hours}` : ""}
           </span>
         </span>
@@ -34,7 +42,7 @@ export function CallCard({ contact, tone = "primary", defaultOpen = false }: { c
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="min-h-11 rounded-lg px-1 text-left text-[0.95rem] font-bold text-brand underline decoration-brand/30 underline-offset-4"
+            className={`min-h-11 rounded-lg px-1 text-left text-[0.95rem] font-bold underline underline-offset-4 ${tone === "onDark" ? "text-white/90 decoration-white/40" : "text-brand decoration-brand/30"}`}
           >
             {open ? "Hide the call" : "Before you dial — what to say and ask"}
           </button>

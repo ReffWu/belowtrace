@@ -3,6 +3,8 @@ import Link from "next/link";
 import stats from "@/data/citywide-stats.json";
 import { SOURCES } from "@/lib/facts";
 import calibration from "@/data/asrp-calibration.json";
+import { ComparisonChart, DistrictChart, Pull, Shot, VerdictPair } from "@/components/about-visuals";
+import { SplitMap } from "@/components/split-map";
 import { ASRP } from "@/lib/asrp";
 
 export const metadata: Metadata = { title: "About", description: "What BelowTrace does, what it refuses to do, and what has not been proven yet." };
@@ -59,6 +61,23 @@ export default function AboutPage() {
           homeowner who can afford to fix this… I&rsquo;ve called the city, I&rsquo;ve emailed… and never got a reply.&rdquo; Fifty-five
           people replied. Not one produced a working answer.
         </p>
+        <Shot
+          src="/press/reddit-basement.jpg"
+          alt="A Detroit basement floor covered in sewage, photographed by a contractor on a service call."
+          caption="What the contractor was photographing. He posted it asking, publicly, whether anyone knew of a program he could send these families to."
+          credit="u/MarcRocket, r/Detroit"
+          url="https://www.reddit.com/r/Detroit/comments/1oxsd72/sewage_on_the_floor_and_nobody_to_fix_it/"
+          tall
+        />
+        <Pull
+          who="A foundation-repair contractor"
+          where="r/Detroit"
+          when="November 2025"
+          url="https://www.reddit.com/r/Detroit/comments/1oxsd72/sewage_on_the_floor_and_nobody_to_fix_it/"
+        >
+          &ldquo;I go to homes with children&rsquo;s bedrooms in one corner of the basement and feces in the floor in the opposite
+          corner… I&rsquo;ve called the city, I&rsquo;ve emailed Rebuilding Detroit and other offices and never got a reply.&rdquo;
+        </Pull>
       </Block>
 
       <Block eyebrow="The problem" title="A basement full of sewage, and a $15,000 quote">
@@ -99,9 +118,21 @@ export default function AboutPage() {
           yours, physically it sits under public ground, and it is what the ${(ASRP.total / 1_000_000).toFixed(0)}M program repairs
           for free — if it reaches you.
         </p>
+        <p>Two real Detroit addresses, three miles apart, both with a city main on record:</p>
+        <VerdictPair />
+        <p className="text-[0.95rem] text-ink-3">
+          Same question, opposite answers — and today there is nowhere either household could find that out.
+        </p>
       </Block>
 
       <Block eyebrow="The finding" title="The first round is not going where the basements flood">
+        <Shot
+          src="/press/dwsd-asrp.jpg"
+          alt="The City of Detroit announcing the $184M Alley Sewer Repair Program."
+          caption="July 2026: the City announces $184M to repair about 9,000 residential sewer connections. Residents cannot apply, and the list of alleys is not published."
+          credit="City of Detroit"
+          url="https://detroitmi.gov/news/mayor-sheffield-dwsd-announce-184m-alley-sewer-repair-program-fix-9000-private-residential-sewer"
+        />
         <p>
           DWSD publishes its selection criteria but not its list. We queried all 782 feature services on the City&rsquo;s ArcGIS
           organization: for sewers, only catch basins and gravity mains are public. The{" "}
@@ -123,6 +154,17 @@ export default function AboutPage() {
           </Link>
           .
         </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <ComparisonChart />
+          <DistrictChart />
+        </div>
+        <figure className="overflow-hidden rounded-2xl border border-line">
+          <SplitMap height="clamp(17rem, 44vw, 24rem)" />
+          <figcaption className="border-t border-line bg-surface px-4 py-3 text-[0.9rem] text-ink-2">
+            Blue: 14,115 basement-flooding reports since 2023. Orange: the {calibration.selected.n} alleys in the first round of
+            contracts. 1.0% of the reports fall within 200 m of one.
+          </figcaption>
+        </figure>
       </Block>
 
       <Block eyebrow="Why it is still unsolved" title="Three departments, two logics, one invisible list">
@@ -136,6 +178,26 @@ export default function AboutPage() {
           The cruelest rule is the sequencing one: <strong className="text-ink">PSRP cannot pay for work that has already started.</strong>{" "}
           Acting sensibly in an emergency disqualifies you from up to $30,000. That is written in the policy, and it is not surfaced at
           the moment anyone needs it.
+        </p>
+        <Shot
+          src="/press/wdiv-beasley.jpg"
+          alt="A Detroit couple outside their home, from a WDIV Local 4 report on fifty years of basement flooding."
+          caption="Fifty years of flooding. The couple called the City repeatedly and got nowhere; the City arrived within thirty minutes of a TV crew, and the fix was clearing a manhole and snaking the line."
+          credit="WDIV Local 4"
+          url="https://www.clickondetroit.com/news/local/2026/05/02/5-decades-of-basement-flooding-but-no-record-of-sewer-line-a-michigan-couples-story/"
+        />
+        <Pull
+          who="Sam Smalley, DWSD deputy director, to a family flooded for 50 years"
+          where="WDIV Local 4"
+          when="May 2026"
+          url="https://www.clickondetroit.com/news/local/2026/05/02/5-decades-of-basement-flooding-but-no-record-of-sewer-line-a-michigan-couples-story/"
+        >
+          &ldquo;This sewer is not on our records, it&rsquo;s not on our maps. We don&rsquo;t know whose sewer it is.&rdquo;
+        </Pull>
+        <p>
+          The city cleared that line within days of the broadcast. We sampled 1,500 flooding reports and asked whether any city sewer
+          main appears within 120 m in the published data: <strong className="text-ink">29% do</strong>. For the other 71%, a household
+          looking up its own block finds nothing at all.
         </p>
       </Block>
 

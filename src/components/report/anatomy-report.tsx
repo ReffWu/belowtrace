@@ -15,10 +15,10 @@ import { PsrpScreener } from "./psrp-screener";
 import { SourceLine } from "@/components/evidence-badge";
 
 const TONE = {
-  good: { bar: "bg-go", chip: "bg-go text-white", ring: "border-go/40" },
-  info: { bar: "bg-brand", chip: "bg-brand text-white", ring: "border-brand/40" },
-  warn: { bar: "bg-warn", chip: "bg-warn text-white", ring: "border-warn/40" },
-  stop: { bar: "bg-stop", chip: "bg-stop text-white", ring: "border-stop/40" },
+  good: { bar: "bg-go", chip: "bg-go text-white", ring: "border-go/40", mark: "✓", word: "Covered" },
+  info: { bar: "bg-brand", chip: "bg-brand text-white", ring: "border-brand/40", mark: "?", word: "Worth one call" },
+  warn: { bar: "bg-warn", chip: "bg-warn text-white", ring: "border-warn/40", mark: "!", word: "Unlikely" },
+  stop: { bar: "bg-stop", chip: "bg-stop text-white", ring: "border-stop/40", mark: "✕", word: "Not coming" },
 } as const;
 
 const STATUS: Record<Payer["status"], { label: string; cls: string }> = {
@@ -59,14 +59,26 @@ export function AnatomyReport({
         </p>
       </header>
 
-      {/* The one line. */}
-      <section className={`mt-6 overflow-hidden rounded-3xl border-2 bg-surface ${tone.ring}`}>
-        <div className={`h-1.5 ${tone.bar}`} />
-        <div className="p-6 sm:p-7">
-          <h2 className="text-[1.75rem] font-extrabold leading-[1.12] tracking-[-0.03em] sm:text-[2rem]">{verdict.headline}</h2>
-          <p className="mt-3 text-[1.08rem] leading-relaxed text-ink-2">{verdict.sub}</p>
-          <div className="mt-5">
-            <CallCard contact={CONTACTS.dwsd} defaultOpen />
+      {/* The verdict, at the size of the decision it carries. */}
+      <section className={`mt-6 overflow-hidden rounded-3xl text-white ${tone.bar}`}>
+        <div className="flex items-start gap-4 p-6 sm:gap-5 sm:p-7">
+          <span
+            aria-hidden="true"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/20 text-[1.7rem] font-black leading-none sm:h-14 sm:w-14 sm:text-[2rem]"
+          >
+            {tone.mark}
+          </span>
+          <div className="min-w-0">
+            <p className="text-[0.75rem] font-bold uppercase tracking-[0.14em] text-white/70">
+              ${(ASRP.total / 1_000_000).toFixed(0)}M alley program · {tone.word}
+            </p>
+            <h2 className="mt-1.5 text-[1.7rem] font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-[2.1rem]">{verdict.headline}</h2>
+          </div>
+        </div>
+        <div className="bg-black/15 px-6 py-5 sm:px-7">
+          <p className="text-[1.05rem] leading-relaxed text-white/85">{verdict.sub}</p>
+          <div className="mt-4">
+            <CallCard contact={CONTACTS.dwsd} tone="onDark" />
           </div>
         </div>
       </section>

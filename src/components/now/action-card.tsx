@@ -84,7 +84,7 @@ export function ActionCard({
             </div>
           )}
 
-          {contact && <CallCard contact={contact} tone={action.urgency === "danger" ? "quiet" : "primary"} defaultOpen />}
+          {contact && <CallCard contact={contact} tone={action.urgency === "danger" ? "quiet" : "primary"} />}
 
           {action.points && (
             <ul className="grid gap-2.5">
