@@ -35,7 +35,11 @@ function Title() {
   return (
     <Slide dark n="1" section="">
       <div style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
-        <p className="eyebrow">Venture 313 Buildathon · Showcase, September 22, 2026</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/icon-256.png" alt="" style={{ width: 62, height: 62, borderRadius: 14, display: "block" }} />
+          <p className="eyebrow">Venture 313 Buildathon · Showcase, September 22, 2026</p>
+        </div>
 
         <div>
           <h1 className="h1" style={{ maxWidth: 1240 }}>
@@ -130,7 +134,7 @@ function Problem() {
 function Figure({ n, t, tone }: { n: string; t: string; tone?: "stop" }) {
   return (
     <div style={{ display: "flex", alignItems: "baseline", gap: 22 }}>
-      <span className="stat" style={{ fontSize: 54, color: tone === "stop" ? "var(--stop)" : "var(--ink)", width: 252, flexShrink: 0 }}>
+      <span className="stat figure-stat" style={{ fontSize: 54, color: tone === "stop" ? "var(--stop)" : "var(--ink)", width: 252, flexShrink: 0 }}>
         {n}
       </span>
       <span className="small" style={{ fontSize: 20 }} dangerouslySetInnerHTML={{ __html: t }} />
@@ -274,9 +278,6 @@ function ProductDemo() {
                 </li>
               ))}
             </ul>
-            <p className="tiny" style={{ marginTop: 14, borderTop: "1px solid var(--line)", paddingTop: 11 }}>
-              Live at belowtrace.vercel.app. Free, no sign up, and the address report works on a phone with bad signal.
-            </p>
           </div>
         </div>
       </div>

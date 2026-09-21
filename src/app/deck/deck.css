@@ -187,6 +187,9 @@
   .slide .stat {
     font-size: 84px !important;
   }
+  .slide .figure-stat {
+    font-size: 54px !important;
+  }
   .slide .lede {
     font-size: 24px !important;
   }
