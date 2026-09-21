@@ -3,7 +3,7 @@
 // DWSD selects alleys for the Alley Sewer Repair Program using CCTV-confirmed lateral defects,
 // recorded cave-ins, and federal low/moderate-income rules, then rolls them out in phases. It
 // publishes the criteria. It does not publish the list, and the 30,000+ failed-lateral data
-// points behind it are not in any open dataset, we checked all 782 services on the City's
+// points behind it are not in any open dataset; I checked all 782 services on the City's
 // ArcGIS org; only catch basins and gravity mains are public.
 //
 // So this does not predict DWSD's decision. It measures the criteria that ARE public at one
@@ -25,7 +25,7 @@ export const CALIBRATION = calibration;
 export type AsrpVerdict = "underway" | "possible" | "unlikely" | "no-work-yet";
 
 export type AsrpSignal = {
-  /** What we measured. */
+  /** What I measured. */
   label: string;
   value: string;
   /** How it compares to the alleys already chosen. */

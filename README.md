@@ -83,7 +83,7 @@ DWSD says it chooses alley work using camera-confirmed connection failures, reco
 
 BelowTrace queried all **782 feature services** in the City of Detroit's ArcGIS organization. For sewers, only catch basins and a partial gravity-main layer were public; none of the 30,000+ failed-connection observations appeared in an open layer. The calibration therefore tests only the criteria that can be reproduced from public data.
 
-We compared:
+I compared:
 
 - **138 current-program alleys**: 65 in construction and 73 in procurement;
 - **47 earlier completed alley projects**;

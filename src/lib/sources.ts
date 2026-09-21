@@ -59,7 +59,7 @@ const c = (c: { attributes: Record<string, string>; location: { x: number; y: nu
   const display = Number(a.DisplayX) && Number(a.DisplayY) ? ([Number(a.DisplayX), Number(a.DisplayY)] as LngLat) : null;
   return {
     label: a.Match_addr.replace(/, Michigan, /, ", MI "),
-    // Rooftop point for lookups; the street-side point tells us which way the lot faces.
+    // Rooftop point for lookups; the street-side point indicates which way the lot faces.
     lngLat: display ?? [c.location.x, c.location.y],
     streetLngLat: [c.location.x, c.location.y],
     number: a.AddNum,
@@ -91,7 +91,7 @@ export async function geocode(address: string, magicKey?: string): Promise<Geoco
   try {
     return (
       (await findCandidate(namesPlace ? address : `${address}, Detroit, MI`, magicKey)) ??
-      // Not a Detroit address? Find where it is so we can say so instead of "not found".
+      // Not a Detroit address? Find where it is so the result can say so instead of "not found".
       (namesPlace ? null : await findCandidate(`${address}, MI`))
     );
   } catch {

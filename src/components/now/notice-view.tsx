@@ -72,7 +72,7 @@ export function NoticeView() {
 
       {gaps.length > 0 && (
         <section className="no-print mt-7 rounded-3xl border-2 border-own/35 bg-surface p-5 sm:p-6">
-          <h2 className="text-[1.3rem] font-extrabold tracking-[-0.02em]">We need {gaps.join(" and ")}.</h2>
+          <h2 className="text-[1.3rem] font-extrabold tracking-[-0.02em]">I need {gaps.join(" and ")}.</h2>
           <p className="mt-2 text-ink-2">Used on the letter only. It stays on this phone.</p>
           <div className="mt-4 grid gap-4">
             {!fields.name && <Text label="Your full name" autoFocus value={c.name ?? ""} onChange={(v) => update({ ...c, name: v })} />}

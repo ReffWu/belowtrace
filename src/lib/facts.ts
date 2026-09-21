@@ -124,7 +124,7 @@ export const ASRP_STARTS = "2026-10";
 // HOPE property tax exemption 2026 application deadline.
 export const HOPE_DEADLINE = "2026-11-06T16:30:00-05:00";
 
-// DWSD material codes we can decode with confidence; anything else is shown as the raw code.
+// DWSD material codes decoded with confidence; anything else is shown as the raw code.
 export const MATERIALS: Record<string, string> = {
   VCP: "vitrified clay",
   CP: "concrete",

@@ -15,7 +15,7 @@ export type Owner = "you" | "you-in-row" | "city" | "regional";
 export type Payer = {
   name: string;
   amount: string;
-  /** Where this address stands, when we can say. */
+  /** Where this address stands, when it can be determined. */
   status: "yes" | "maybe" | "no" | "unknown" | "info";
   detail: string;
   href?: string;

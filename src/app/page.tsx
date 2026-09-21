@@ -18,7 +18,7 @@ export default function Home() {
         </h1>
         <p className="rise rise-2 mt-5 text-[1.12rem] leading-relaxed text-ink-2">
           Free if a contract reaches your alley. <strong className="text-ink">$5,000 to 25,000 if it never does.</strong> No application,
-          no list, nobody is told either way, so we{" "}
+          no list, nobody is told either way, so I{" "}
           <strong className="text-ink">reverse-engineered the City&rsquo;s selection model</strong> from its own open data and scored
           every address in Detroit.
         </p>
@@ -76,7 +76,7 @@ export default function Home() {
           </dl>
 
           <Link href="/method" className="mt-8 inline-flex min-h-12 items-center rounded-xl border border-white/25 px-5 font-semibold text-white hover:bg-white/10">
-            How we worked this out ↗
+            How I worked this out ↗
           </Link>
         </div>
       </section>
@@ -85,7 +85,7 @@ export default function Home() {
         <h2 className="text-[1.5rem] font-extrabold tracking-[-0.025em]">Nobody else can answer this</h2>
         <p className="mt-3 leading-relaxed text-ink-2">
           The City publishes the criteria but not the list, and the {ASRP.knownDefectPoints.toLocaleString("en-US")}+ failed-connection
-          data points behind it are in none of its open datasets, we checked all 782. Reconstructing it from what <em>is</em> public is
+          data points behind it are in none of its open datasets, I checked all 782. Reconstructing it from what <em>is</em> public is
           the only way a household can see anything at all.
         </p>
 

@@ -134,12 +134,12 @@ export default function AboutPage() {
           url="https://detroitmi.gov/news/mayor-sheffield-dwsd-announce-184m-alley-sewer-repair-program-fix-9000-private-residential-sewer"
         />
         <p>
-          DWSD publishes its selection criteria but not its list. We queried all 782 feature services on the City&rsquo;s ArcGIS
+          DWSD publishes its selection criteria but not its list. I queried all 782 feature services on the City&rsquo;s ArcGIS
           organization: for sewers, only catch basins and gravity mains are public. The{" "}
           {ASRP.knownDefectPoints.toLocaleString("en-US")}+ failed-connection data points the City says it holds are in none of them.
         </p>
         <p>
-          So we measured the criteria that do have open data, against the {calibration.selected.n} alleys already under contract and
+          So I measured the criteria that do have open data, against the {calibration.selected.n} alleys already under contract and
           the {calibration.comparison.n} the City completed before this program. Median basement-flooding reports within{" "}
           {calibration.radiusM} m: <strong className="text-ink">{calibration.water.median}</strong> around the chosen alleys, versus{" "}
           <strong className="text-ink">{calibration.comparison.waterMedian}</strong> around the earlier ones, p &lt; 0.0001. Cave-ins
@@ -195,7 +195,7 @@ export default function AboutPage() {
           &ldquo;This sewer is not on our records, it&rsquo;s not on our maps. We don&rsquo;t know whose sewer it is.&rdquo;
         </Pull>
         <p>
-          The city cleared that line within days of the broadcast. We sampled 1,500 flooding reports and asked whether any city sewer
+          The city cleared that line within days of the broadcast. I sampled 1,500 flooding reports and asked whether any city sewer
           main appears within 120 m in the published data: <strong className="text-ink">29% do</strong>. For the other 71%, a household
           looking up its own block finds nothing at all.
         </p>
@@ -233,7 +233,7 @@ export default function AboutPage() {
             <strong className="text-ink">Beyond Detroit:</strong> homeowners own their sewer laterals in most American cities, and the
             same three public datasets, 311 requests, capital project phases, and census income, exist almost everywhere. The
             selection criteria and the neighborhood rules are configuration; the method travels. What does not travel is Detroit&rsquo;s
-            particular program mix, which is why we say &ldquo;City of Detroit only&rdquo; rather than pretending otherwise.
+            particular program mix, which is why I say &ldquo;City of Detroit only&rdquo; rather than pretending otherwise.
           </li>
         </ul>
       </Block>
@@ -247,7 +247,7 @@ export default function AboutPage() {
         <p>
           Where revenue could come from, in order of how much evidence there is: the City&rsquo;s PSRP policy already contracts
           community organizations, for a fee, to do outreach and application intake, so a pre-screening tool has a buyer-shaped hole
-          to fill. <strong className="text-ink">Nobody has agreed to buy it.</strong> We deliberately refuse the obvious one, selling
+          to fill. <strong className="text-ink">Nobody has agreed to buy it.</strong> I deliberately refuse the obvious one, selling
           leads to contractors, because the advice &ldquo;do not pay for this yet&rdquo; is only worth anything if nobody is paid when
           you do.
         </p>

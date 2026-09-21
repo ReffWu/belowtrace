@@ -46,7 +46,7 @@ function Title() {
             BelowTrace Detroit
           </h1>
           <p className="lede" style={{ marginTop: 26, fontSize: 32, maxWidth: 1180, color: "rgb(255 255 255 / 0.85)" }}>
-            Detroit is spending {M(ASRP.total)} repairing sewer connections and does not publish where. We reverse engineered the
+            Detroit is spending {M(ASRP.total)} repairing sewer connections and does not publish where. I reverse engineered the
             City&rsquo;s selection model from its own open data, so any household can see whether that money is coming to them.
           </p>
         </div>
@@ -157,7 +157,7 @@ function Solution() {
           <Step
             n="1"
             t="Score the address"
-            d="DWSD publishes four selection criteria and no list. We measure all four at one address: alley cave ins, block group income, council district, and distance to contracted work."
+            d="DWSD publishes four selection criteria and no list. I measure all four at one address: alley cave ins, block group income, council district, and distance to contracted work."
           />
           <Step
             n="2"
@@ -302,7 +302,7 @@ function ProductRoadmap() {
         <div style={{ display: "flex", flexDirection: "column", gap: 12, minHeight: 0 }}>
           <ComparisonChart />
           <p className="tiny">
-            We checked every ArcGIS service the City publishes, all 782. The{" "}
+            I checked every ArcGIS service the City publishes, all 782. The{" "}
             {ASRP.knownDefectPoints.toLocaleString("en-US")}+ failed connection points behind the selection are in none of them.
           </p>
         </div>
@@ -483,7 +483,7 @@ function Market() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 28, marginTop: 24 }}>
         <Col
           k="First users"
-          body="The people who reach these households weekly and already ask this question for them: plumbers and waterproofing crews on service calls, community organizations doing repair intake, and council district staff. One contractor touches twenty households to find one who can pay. We reach them where they already ask."
+          body="The people who reach these households weekly and already ask this question for them: plumbers and waterproofing crews on service calls, community organizations doing repair intake, and council district staff. One contractor touches twenty households to find one who can pay. I reach them where they already ask."
         />
         <Col
           k="Size"
@@ -491,7 +491,7 @@ function Market() {
         />
         <Col
           k="Sustainability"
-          body="Every input is public open data and the app is static, with no AI at runtime and no accounts, so it costs close to nothing to run. The City's own repair policy already pays community organizations to do outreach and intake, which is the buyer shaped hole a screening tool fits. Nobody has agreed to buy it yet, and we say so."
+          body="Every input is public open data and the app is static, with no AI at runtime and no accounts, so it costs close to nothing to run. The City's own repair policy already pays community organizations to do outreach and intake, which is the buyer shaped hole a screening tool fits. Nobody has agreed to buy it yet, and I say so."
         />
       </div>
 
@@ -499,10 +499,10 @@ function Market() {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div className="card" style={{ borderColor: "var(--own)", borderLeftWidth: 8 }}>
             <p className="h3" style={{ fontSize: 24 }}>
-              The revenue we refuse
+              The revenue I refuse
             </p>
             <p className="small" style={{ marginTop: 8 }}>
-              The obvious model is selling leads to contractors. We will not. The most valuable sentence this product says is
+              The obvious model is selling leads to contractors. I will not. The most valuable sentence this product says is
               &ldquo;do not pay for this yet&rdquo;, and it is worth nothing the moment anyone is paid when you do.
             </p>
           </div>
@@ -528,7 +528,7 @@ function Market() {
               One community partner running repair intake, and thirty minutes with DWSD.
             </p>
             <p className="small" style={{ marginTop: 12, color: "rgb(255 255 255 / 0.72)" }}>
-              The partner tells us whether this saves an intake worker time. DWSD tells us whether the reading is right, and whether
+              The partner tells me whether this saves an intake worker time. DWSD tells me whether the reading is right, and whether
               they would publish the alley list themselves. Either answer improves the tool.
             </p>
           </div>

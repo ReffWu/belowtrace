@@ -61,7 +61,7 @@ export default function SourcesPage() {
       <h1 className="mt-1 text-4xl font-extrabold tracking-tight">How BelowTrace works</h1>
       <p className="mt-4 text-lg text-ink-2">
         BelowTrace combines public records and published program rules for one Detroit address. It never guesses where a private sewer
-        line runs, and it labels every fact by how much we actually know.
+        line runs, and I label every fact by how much is actually known.
       </p>
 
       <h2 className="mt-12 text-2xl font-bold">Three kinds of facts</h2>
@@ -70,7 +70,7 @@ export default function SourcesPage() {
           <dt className="font-bold">
             <span className="rounded-md bg-ink px-1.5 py-0.5 text-sm text-white">Recorded</span>, straight from a public record
           </dt>
-          <dd className="mt-1 text-ink-2">A City, DWSD, FEMA or HUD dataset, or a published program document. We link the source and date.</dd>
+          <dd className="mt-1 text-ink-2">A City, DWSD, FEMA or HUD dataset, or a published program document. I link the source and date.</dd>
         </div>
         <div className="rounded-xl border border-line bg-surface p-4">
           <dt className="font-bold">
@@ -87,7 +87,7 @@ export default function SourcesPage() {
             public record
           </dt>
           <dd className="mt-1 text-ink-2">
-            Where your private line runs, its condition, DWSD&apos;s camera inspection results, and the alley repair schedule. We say who
+            Where your private line runs, its condition, DWSD&apos;s camera inspection results, and the alley repair schedule. I say who
             can answer.
           </dd>
         </div>
@@ -111,7 +111,7 @@ export default function SourcesPage() {
       <h2 className="mt-12 text-2xl font-bold">Program rules &amp; official guidance (checked {VERIFIED_ON})</h2>
       <p className="mt-2 text-ink-2">
         The PSRP screener applies the City&apos;s published rules. The program guide lists an income limit of 80% of area median income
-        on pages 3 to 4 and 50% on page 10; the 2026 policy repeats both. We show incomes between the two as “might qualify” rather than
+        on pages 3 to 4 and 50% on page 10; the 2026 policy repeats both. I show incomes between the two as “might qualify” rather than
         deciding for the City. Income limits are MSHDA&apos;s Wayne County limits effective May 1, 2026, for a household of four,{" "}
         {`$${INCOME_LIMITS.veryLow50[3].toLocaleString("en-US")}`} (50%) and {`$${INCOME_LIMITS.low80[3].toLocaleString("en-US")}`} (80%).
       </p>
@@ -160,10 +160,10 @@ export default function SourcesPage() {
 
       <h2 className="mt-12 text-2xl font-bold">Limits</h2>
       <ul className="mt-4 list-disc space-y-2 pl-5 text-ink-2">
-        <li>The public sewer-main data covers only part of Detroit. When a main isn&apos;t on record, we say so instead of drawing one.</li>
+        <li>The public sewer-main data covers only part of Detroit. When a main isn&apos;t on record, I say so instead of drawing one.</li>
         <li>BelowTrace is not a utility locate. MISS DIG 811 does not mark private sewer lines. Only a camera inspection shows your line.</li>
         <li>Eligibility screening is a guide. Only the program decides.</li>
-        <li>Program deadlines and statuses change. Each one shows the date we last checked it.</li>
+        <li>Program deadlines and statuses change. Each one shows the date I last checked it.</li>
       </ul>
 
       <h2 className="mt-12 text-2xl font-bold">Privacy</h2>

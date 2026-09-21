@@ -24,7 +24,7 @@ export default function MethodPage() {
 
       <h1 className="mt-5 text-[2.1rem] font-extrabold leading-[1.06] tracking-[-0.035em]">Method, and what it does not prove.</h1>
       <p className="mt-4 text-[1.1rem] leading-relaxed text-ink-2">
-        We do not predict DWSD&rsquo;s decisions. We measure the criteria DWSD publishes, using the data DWSD publishes, and report where an
+        I do not predict DWSD&rsquo;s decisions. I measure the criteria DWSD publishes, using the data DWSD publishes, and report where an
         address sits relative to the {calibration.selected.n} alleys already under contract.
       </p>
 
@@ -43,11 +43,11 @@ export default function MethodPage() {
 
       <Block title="What is actually public">
         <p>
-          We queried all 782 feature services on the City of Detroit&rsquo;s ArcGIS organization. For sewers, exactly two layers are public:
+          I queried all 782 feature services on the City of Detroit&rsquo;s ArcGIS organization. For sewers, exactly two layers are public:
           catch basins, and gravity mains with recent cleaning work orders. <strong className="text-ink">None of the 30,000+ failed-connection points are published.</strong>{" "}
           Neither is the list of selected alleys.
         </p>
-        <p>So we used the criteria that do have open data behind them:</p>
+        <p>So I used the criteria that do have open data behind them:</p>
         <ul className="ml-5 list-disc space-y-1.5">
           <li>Alley cave-ins and sinkholes, Improve Detroit 311, {DATA_SNAPSHOT} snapshot</li>
           <li>Water-in-basement reports, same source</li>
@@ -59,7 +59,7 @@ export default function MethodPage() {
 
       <Block title="The test">
         <p>
-          We took the {calibration.selected.n} alley projects in the current program ({calibration.selected.construction} in
+          I took the {calibration.selected.n} alley projects in the current program ({calibration.selected.construction} in
           construction, {calibration.selected.procurement} in procurement) and the {calibration.comparison.n} alley projects the City
           completed before it, and measured 311 density within {calibration.radiusM} m of each midpoint.
         </p>
@@ -86,7 +86,7 @@ export default function MethodPage() {
       <Block title="A third comparison: where households pay for it themselves">
         <p>
           BSEED trades permits record private sewer work by address: 2,722 permits since 2019, of which{" "}
-          <strong className="text-ink">1,288 are backwater valve installations</strong>, households paying to protect themselves. We
+          <strong className="text-ink">1,288 are backwater valve installations</strong>, households paying to protect themselves. I
           measured the same 500 m flooding density around those addresses.
         </p>
         <Table
@@ -115,7 +115,7 @@ export default function MethodPage() {
           record of maintenance activity being read as an asset map, and it is thin where it matters.
         </p>
         <p>
-          We sampled 1,500 of the basement-flooding reports at random and asked whether any city sewer main appears within 120 m in
+          I sampled 1,500 of the basement-flooding reports at random and asked whether any city sewer main appears within 120 m in
           the public data. <strong className="text-ink">432 did, 29%.</strong> For the other{" "}
           <strong className="text-ink">71%</strong>, a resident looking up their own block finds nothing at all.
         </p>
@@ -146,8 +146,8 @@ export default function MethodPage() {
             {ASRP.connections.toLocaleString("en-US")} connections planned over {ASRP.years} years. Field work starts {ASRP.fieldWorkStarts}.
           </li>
           <li>
-            <strong className="text-ink">The camera evidence is invisible to us.</strong> DWSD may have sound engineering reasons we
-            cannot see. Our report says so on every address.
+            <strong className="text-ink">The camera evidence is invisible to me.</strong> DWSD may have sound engineering reasons I
+            cannot see. My report says so on every address.
           </li>
           <li>
             <strong className="text-ink">311 records are requests.</strong> Not confirmed incidents, not unique households. They

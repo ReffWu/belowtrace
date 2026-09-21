@@ -40,11 +40,11 @@ async function settle<T>(p: Promise<T>): Promise<{ ok: true; value: T } | { ok: 
 
 async function buildCore(query: string, magicKey?: string): Promise<Core | ReportError> {
   if (!/^\s*\d+/.test(query)) {
-    return { error: "not-found", message: "Please include your house number, like “16776 Prevost St”. We need it to find your property." };
+    return { error: "not-found", message: "Please include your house number, like “16776 Prevost St”. I need it to find your property." };
   }
   const geo = await settle(geocode(query, magicKey));
   if (!geo.ok) return { error: "upstream", message: "The address service didn't respond. Please try again in a moment." };
-  if (!geo.value) return { error: "not-found", message: "We couldn't find that address. Check the house number and street name, like “16776 Prevost St”." };
+  if (!geo.value) return { error: "not-found", message: "I couldn't find that address. Check the house number and street name, like “16776 Prevost St”." };
   const g = geo.value;
 
   // Inside the city limits, or an exact match in Detroit's own parcel records, counts as Detroit.
@@ -69,7 +69,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
   const hood = findPsrpNeighborhood(at);
   const mainsNearby = mainsNear(at, MAP_MAIN_RADIUS_M);
   const nearestMain = mainsNearby.find((m) => m.distanceM <= MAIN_RADIUS_M) ?? null;
-  // Only meaningful when we know both the lot's center and the street it faces.
+  // Only meaningful when both the lot's center and the street it faces are known.
   const mainSide = nearestMain && exactParcel && g.streetLngLat ? sideOfLot(at, g.streetLngLat, nearestMain.nearestPoint) : null;
   const projects = projectsNear(at, PROJECT_RADIUS_M);
   const points = reportsNear(at, REPORT_RADIUS_M);
@@ -95,7 +95,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
   };
 
   if (!parcel.ok) warnings.push("City parcel records didn't respond, so property details are missing.");
-  else if (parcel.value?.match === "nearest") warnings.push(`We couldn't match this exact address in City parcel records, so we show the closest parcel: ${parcel.value.address}.`);
+  else if (parcel.value?.match === "nearest") warnings.push(`I couldn't match this exact address in City parcel records, so I show the closest parcel: ${parcel.value.address}.`);
   if (!flood.ok) warnings.push("FEMA's flood map service didn't respond; floodplain status is unknown.");
   if (!lmi.ok) warnings.push("HUD's income data service didn't respond; the Alley Sewer Repair income test is unknown.");
 
@@ -114,7 +114,7 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
   if (!nearestMain) {
     unknowns.push({
       what: "Details of the city sewer behind this home",
-      why: "The public DWSD data we use covers only part of Detroit's sewer system.",
+      why: "The public DWSD data I use covers only part of Detroit's sewer system.",
       whereToAsk: "DWSD Customer Service, 313-267-8000.",
     });
   }

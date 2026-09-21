@@ -1,4 +1,4 @@
-// A case is two facts the resident gives us and everything they learn afterwards.
+// A case is two facts the resident records and everything they learn afterwards.
 //
 // There are no stages. A backup is not a decision tree, safety, cleanup, the insurer and the
 // statutory notice all run at once, on different clocks, and the 45-day clock keeps running

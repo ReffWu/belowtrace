@@ -77,7 +77,7 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
     checks.push({ status: "pass", text: "Not in a FEMA floodplain.", cite: "Guide p.4" });
   } else {
     soft = true;
-    checks.push({ status: "warn", text: "We could not verify the FEMA flood-zone status. Ask PSRP staff to confirm it before relying on this screen.", cite: "Guide p.4" });
+    checks.push({ status: "warn", text: "I could not verify the FEMA flood-zone status. Ask PSRP staff to confirm it before relying on this screen.", cite: "Guide p.4" });
   }
 
   if (auto.residential === false) {
