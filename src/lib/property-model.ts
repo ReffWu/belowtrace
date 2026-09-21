@@ -43,12 +43,12 @@ export function nearestOnLine(point: Point2, parts: Point2[][]): Point2 | null {
   return nearest;
 }
 
-// All horizontal geometry is projected from geographic coordinates in metres.
+// All horizontal geometry is projected from geographic coordinates in meters.
 // No floor-area-to-footprint conversion: a multi-storey home's floor area is not its footprint.
 export function propertyModel(parcel: Parcel | null, site: PropertySite | undefined, main: SewerMain | null, origin: LngLat): PropertyModel | null {
   if (parcel?.match !== "exact" || !parcel.geometry) return null;
-  const metresLng = 111320 * Math.cos(origin[1] * Math.PI / 180);
-  const eastNorth = (p: number[]): Point2 => [(p[0] - origin[0]) * metresLng, (p[1] - origin[1]) * 111320];
+  const metersLng = 111320 * Math.cos(origin[1] * Math.PI / 180);
+  const eastNorth = (p: number[]): Point2 => [(p[0] - origin[0]) * metersLng, (p[1] - origin[1]) * 111320];
   const roadMatch = site?.roads.filter(r => r.name.toLowerCase().includes(site.streetName.toLowerCase()) && site.streetName.trim());
   const roadPoint = roadMatch?.length ? nearestOnLine([0, 0], roadMatch.flatMap(r => r.parts.map(p => p.map(eastNorth)))) : null;
   const toward = roadPoint ?? (site?.streetPoint ? eastNorth(site.streetPoint) : null);

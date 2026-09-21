@@ -20,6 +20,18 @@ const SNAPSHOT = [
   { name: "City sewer mains", source: SOURCES.dwsdMains.label, url: SOURCES.dwsdMains.url, use: "5,220 main segments with install year, material, size and depth. Partial coverage: only mains with DWSD cleaning work orders." },
   { name: "Sewer construction", source: SOURCES.dwsdCip.label, url: SOURCES.dwsdCip.url, use: "2,074 project segments with phase (construction, bidding, finished) and years." },
   { name: "PSRP neighborhoods", source: SOURCES.psrpMap.label, url: SOURCES.psrpMap.url, use: "The 97 neighborhoods where the Private Sewer Repair Program accepts applications." },
+  {
+    name: "Private sewer permits",
+    source: SOURCES.permits.label,
+    url: SOURCES.permits.url,
+    use: "2,722 plumbing permits for sewer, lateral, cleanout and backwater-valve work since 2019, by address. The closest public record of a private line's history — it never shows where the line runs.",
+  },
+  {
+    name: "Council districts",
+    source: SOURCES.districts.label,
+    url: SOURCES.districts.url,
+    use: "Which district an address sits in, and how many alleys in that district are in the first round of contracts.",
+  },
   { name: "311 reports", source: SOURCES.improveDetroit.label, url: SOURCES.improveDetroit.url, use: "Water-in-basement investigations and cave-ins since January 2023, counted within 200 m." },
 ];
 

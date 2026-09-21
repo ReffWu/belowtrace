@@ -1,98 +1,99 @@
 import Link from "next/link";
 import stats from "@/data/citywide-stats.json";
-import { ContinueCase } from "@/components/case/continue-case";
+import calibration from "@/data/asrp-calibration.json";
+import { ASRP } from "@/lib/asrp";
+import { StartSearch } from "@/components/start-search";
+import { SplitMap } from "@/components/split-map";
 
-const CHOICES = [
-  { href: "/backup", title: "Water or sewage is coming in", note: "Right now, or it just happened" },
-  { href: "/quote", title: "A plumber quoted a big repair", note: "Before you sign anything" },
-  { href: "/address?situation=checking", title: "I'm buying, or just curious", note: "See what's under a Detroit home" },
-];
-
+// Two things on the first screen: a box to type an address into, and the picture that shows
+// why it matters. Everything else on this site is downstream of one of those two.
 export default function Home() {
-  const outsidePct = Math.round((stats.outsidePsrp / stats.total) * 100);
   return (
     <>
-      <section className="mx-auto max-w-3xl px-5 pb-14 pt-12 sm:pt-20">
-        <ContinueCase />
-        <p className="rise text-sm font-bold uppercase tracking-[0.14em] text-own">Detroit · Free · No sign-up</p>
-        <h1 className="rise rise-1 mt-4 text-[2.7rem] font-extrabold leading-[1.02] tracking-[-0.04em] sm:text-[4.2rem]">
-          Sewage in the basement?
-          <span className="block text-ink-3">We&apos;ll take it one step at a time.</span>
+      <section className="mx-auto max-w-xl px-5 pb-12 pt-8 sm:pt-14">
+        <p className="rise text-[0.8rem] font-bold uppercase tracking-[0.14em] text-own">Detroit · Free · No sign-up</p>
+        <h1 className="rise rise-1 mt-4 text-[2.4rem] font-extrabold leading-[1.03] tracking-[-0.04em] sm:text-[3.1rem]">
+          Detroit is spending ${(ASRP.total / 1_000_000).toFixed(0)}M fixing sewer connections.
+          <span className="mt-2 block text-ink-3">It does not publish where.</span>
         </h1>
+        <p className="rise rise-2 mt-5 text-[1.15rem] leading-relaxed text-ink-2">
+          If a contract reaches your alley, the repair is free. If it never does, you pay $5,000–25,000 yourself. Nobody can apply,
+          there is no list, and nobody is told either way.
+        </p>
+        <div className="rise rise-3 mt-8">
+          <StartSearch />
+        </div>
+      </section>
 
-        <nav aria-label="What's happening" className="rise rise-2 mt-10 grid gap-3">
-          <p className="text-lg font-semibold text-ink-2">What&apos;s happening at home?</p>
-          {CHOICES.map((c, i) => (
-            <Link
-              key={c.href}
-              href={c.href}
-              className={`group flex min-h-20 items-center justify-between gap-4 rounded-2xl border-2 px-5 py-4 transition active:scale-[0.995] sm:px-6 ${
-                i === 0 ? "border-ink bg-ink text-white hover:bg-brand-ink" : "border-line-2 bg-surface hover:border-ink"
-              }`}
-            >
+      <section className="border-y border-line bg-deep text-white">
+        <div className="mx-auto max-w-4xl px-5 py-12">
+          <h2 className="text-[1.9rem] font-extrabold leading-tight tracking-[-0.03em] sm:text-[2.3rem]">
+            The money is not going where the basements flood.
+          </h2>
+          <p className="mt-3 max-w-2xl text-[1.08rem] leading-relaxed text-white/70">
+            Blue: every home that told the City it had water in the basement since 2023. Orange: the {calibration.selected.n} alleys in
+            the first round of contracts.
+          </p>
+
+          <div className="mt-7 overflow-hidden rounded-3xl border border-white/10">
+            <SplitMap />
+          </div>
+
+          <dl className="mt-8 grid gap-6 sm:grid-cols-3">
+            <Stat n="1.0%" t={`of the ${stats.total.toLocaleString("en-US")} basement-flooding reports are within 200 m of a contracted alley`} />
+            <Stat n="2.5×" t={`fewer flooding reports around the chosen alleys than around the City's earlier alley projects (p<0.0001)`} />
+            <Stat n="0" t="alleys chosen so far in Districts 2, 3, 4 and 5 — including District 4, which the City's own plan named a priority" />
+          </dl>
+
+          <Link href="/method" className="mt-8 inline-flex min-h-12 items-center rounded-xl border border-white/25 px-5 font-semibold text-white hover:bg-white/10">
+            How we worked this out ↗
+          </Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-xl px-5 py-12">
+        <h2 className="text-[1.5rem] font-extrabold tracking-[-0.025em]">What you get for an address</h2>
+        <ol className="mt-5 grid gap-4">
+          {[
+            ["A drawing of what is under your house", "Six segments, from the floor drain to the regional system."],
+            ["Who owns each one", "The $15,000 lands on you or on the City depending on which segment broke."],
+            ["Who might pay, and how likely", "Checked against every City program — and, for the alley connection, against the 138 alleys already chosen."],
+          ].map(([t, d], i) => (
+            <li key={t} className="flex gap-4">
+              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[0.85rem] font-bold text-white">{i + 1}</span>
               <span>
-                <span className="block text-[1.25rem] font-bold leading-snug">{c.title}</span>
-                <span className={`mt-0.5 block ${i === 0 ? "text-white/70" : "text-ink-3"}`}>{c.note}</span>
+                <span className="block font-bold">{t}</span>
+                <span className="mt-0.5 block text-ink-2">{d}</span>
               </span>
-              <span aria-hidden="true" className="text-2xl transition group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
+            </li>
           ))}
-        </nav>
-      </section>
-
-      <section className="mx-auto max-w-3xl px-5 pb-16">
-        <figure className="rise rise-3">
-          <HouseLine />
-          <figcaption className="mt-4 max-w-xl text-lg text-ink-2">
-            In Detroit, <strong className="text-own">the line from your house to the city sewer is yours</strong>. The City owns the sewer
-            under the alley. Knowing which side is broken decides who pays.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section className="bg-deep text-white">
-        <Link href="/map" className="group mx-auto grid max-w-3xl gap-6 px-5 py-14 sm:grid-cols-[auto_1fr] sm:items-end sm:gap-10">
-          <span className="text-[4.5rem] font-extrabold leading-none tracking-[-0.05em] tabular-nums sm:text-[6rem]">
-            {stats.total.toLocaleString("en-US")}
-          </span>
-          <span className="pb-2">
-            <span className="block text-xl font-semibold leading-snug">times Detroiters reported water in the basement to the City since 2023.</span>
-            <span className="mt-2 block text-white/65">
-              {outsidePct}% of those reports came from neighborhoods the $40,000 repair program doesn&apos;t cover.{" "}
-              <span className="whitespace-nowrap font-semibold text-glow group-hover:underline">See the map →</span>
-            </span>
-          </span>
-        </Link>
+        </ol>
+        <div className="mt-8 grid gap-2">
+          <Quiet href="/map" title="The citywide map" note="Both layers, full screen" />
+          <Quiet href="/method" title="Method and caveats" note="Every number on this page, and what it does not prove" />
+        </div>
       </section>
     </>
   );
 }
 
-// A schematic, not a record: it explains ownership, it doesn't locate anyone's pipe.
-function HouseLine() {
+function Stat({ n, t }: { n: string; t: string }) {
   return (
-    <svg viewBox="0 0 720 230" className="w-full" role="img" aria-label="Diagram: your sewer line runs from the house down to the city sewer under the alley.">
-      <rect x="0" y="96" width="720" height="134" fill="var(--sunk)" />
-      <rect x="560" y="90" width="160" height="8" fill="var(--line-2)" />
-      <line x1="0" y1="96" x2="720" y2="96" stroke="var(--line-2)" strokeWidth="2" />
-      <path d="M92 96V52l62-34 62 34v44" fill="var(--surface)" stroke="var(--ink)" strokeWidth="2.5" strokeLinejoin="round" />
-      <rect x="140" y="66" width="28" height="30" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" />
-      <path
-        className="trace"
-        style={{ "--len": 520 } as React.CSSProperties}
-        d="M184 96V132C184 140 190 146 198 146H598C611 146 622 157 622 170"
-        fill="none"
-        stroke="var(--own)"
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-      <circle cx="640" cy="186" r="24" fill="var(--brand-tint)" stroke="var(--brand)" strokeWidth="4" />
-      <circle cx="640" cy="186" r="12" fill="var(--brand)" opacity="0.2" />
-      <text x="300" y="134" fill="var(--own)" fontSize="15" fontWeight="700">Your line</text>
-      <text x="560" y="82" fill="var(--ink-3)" fontSize="13" fontWeight="600">Alley</text>
-      <text x="520" y="222" fill="var(--brand-ink)" fontSize="15" fontWeight="700">City sewer</text>
-    </svg>
+    <div>
+      <dt className="text-[2.6rem] font-extrabold leading-none tracking-[-0.04em] text-glow tabular-nums">{n}</dt>
+      <dd className="mt-2 text-[0.98rem] leading-snug text-white/65">{t}</dd>
+    </div>
+  );
+}
+
+function Quiet({ href, title, note }: { href: string; title: string; note: string }) {
+  return (
+    <Link href={href} className="group flex min-h-14 items-center justify-between gap-4 rounded-2xl border border-line bg-surface px-5 py-3 transition hover:border-ink">
+      <span>
+        <span className="block font-bold">{title}</span>
+        <span className="text-[0.95rem] text-ink-3">{note}</span>
+      </span>
+      <span aria-hidden="true" className="text-ink-3 transition group-hover:translate-x-0.5 group-hover:text-ink">→</span>
+    </Link>
   );
 }

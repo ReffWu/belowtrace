@@ -79,6 +79,14 @@ export const SOURCES = {
     url: "https://www.michigan.gov/mshda/rental/property-managers/compliance/income_rent_and_utility_limits",
   },
   parcels: { label: "City of Detroit — Parcels (current)", url: "https://data.detroitmi.gov/" },
+  permits: {
+    label: "BSEED trades permits (plumbing)",
+    url: "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/bseed_trades_permits/FeatureServer/0",
+  },
+  districts: {
+    label: "City of Detroit — Council districts 2026",
+    url: "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/city_council_districts_2026/FeatureServer/0",
+  },
   improveDetroit: { label: "Improve Detroit 311 requests", url: "https://data.detroitmi.gov/" },
   dwsdMains: {
     label: "DWSD sewer cleaning dashboard (gravity mains, partial coverage)",

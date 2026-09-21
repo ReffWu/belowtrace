@@ -27,6 +27,7 @@
 }
 
 @theme inline {
+  --breakpoint-xs: 23rem;
   --color-paper: var(--paper);
   --color-surface: var(--surface);
   --color-sunk: var(--sunk);

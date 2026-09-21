@@ -159,7 +159,7 @@ export function CitywideMap() {
           <span className="h-3 w-16 rounded-sm bg-gradient-to-r from-[#f7d7a6] via-[#ee9b45] to-[#7a1f0e]" aria-hidden="true" /> 311 reports (denser = more)
         </span>
         <span className="flex items-center gap-2">
-          <span className="h-3 w-4 rounded-sm border-2 border-go bg-go/15" aria-hidden="true" /> PSRP area (up to $40,000)
+          <span className="h-3 w-4 rounded-sm border-2 border-go bg-go/15" aria-hidden="true" /> PSRP area (up to $30,000)
         </span>
         <span className="flex items-center gap-2">
           <span className="h-1 w-5 rounded bg-[#7c3aed]" aria-hidden="true" /> DWSD sewer work under way or being bid

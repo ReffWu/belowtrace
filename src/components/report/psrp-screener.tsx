@@ -10,8 +10,6 @@ import {
   type PsrpAuto,
 } from "@/lib/psrp";
 import { PHONES, SOURCES } from "@/lib/facts";
-import { getCallProtocol } from "@/lib/call-protocols";
-import { CallScriptDrawer } from "./call-script-drawer";
 
 type Option = { value: string | number; label: string; hint?: string };
 const money = (n: number) => `$${n.toLocaleString("en-US")}`;
@@ -92,7 +90,7 @@ const VERDICT_STYLE = {
 const ICON = { pass: "✓", fail: "✕", warn: "!" };
 const ICON_STYLE = { pass: "bg-go text-white", fail: "bg-stop text-white", warn: "bg-warn text-white" };
 
-export function PsrpScreener({ auto, address }: { auto: PsrpAuto; address?: string }) {
+export function PsrpScreener({ auto }: { auto: PsrpAuto }) {
   const [started, setStarted] = useState(false);
   const [answers, setAnswers] = useState<PsrpAnswers>({});
   const [step, setStep] = useState(0);
@@ -194,10 +192,7 @@ export function PsrpScreener({ auto, address }: { auto: PsrpAuto; address?: stri
               </a>
               . Record any follow-up date, document request, or appeal information exactly as it appears in the official notice you receive.
             </p>
-            {getCallProtocol("psrp", { address, hood: auto.neighborhoodName ?? undefined }) && (
-              <CallScriptDrawer protocol={getCallProtocol("psrp", { address, hood: auto.neighborhoodName ?? undefined })!} />
-            )}
-          </div>
+                      </div>
         )}
 
         <div className="no-print flex flex-wrap gap-2">

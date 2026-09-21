@@ -124,6 +124,19 @@ export type Report = {
     evidence: Evidence;
   };
   programs: ProgramCard[];
+  permits: {
+    here: { on: string; kind: string; what: string; by: string | null; addr: string; distanceM: number }[];
+    nearby: number;
+    valvesNearby: number;
+    radiusM: number;
+    since: string;
+  };
+  asrp: {
+    district: number | null;
+    caveIns500: number;
+    water500: number;
+    nearestWorkM: number | null;
+  };
   unknowns: Unknown[];
   warnings: string[];
   cached?: boolean;

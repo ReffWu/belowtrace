@@ -1,0 +1,26 @@
+{
+  "generatedAt": "2026-09-21",
+  "radiusM": 500,
+  "selected": {
+    "n": 138,
+    "construction": 65,
+    "procurement": 73
+  },
+  "comparison": {
+    "n": 47,
+    "waterMedian": 45
+  },
+  "caveIns": {
+    "p25": 16,
+    "median": 26,
+    "p75": 32
+  },
+  "water": {
+    "median": 18
+  },
+  "districtCounts": {
+    "1": 55,
+    "6": 80,
+    "7": 3
+  }
+}

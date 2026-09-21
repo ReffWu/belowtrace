@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { boundsOf, clipSegment, insideLot, type Point2, type PropertyModel } from "@/lib/property-model";
+import { boundsOf, clipSegment, type Point2, type PropertyModel } from "@/lib/property-model";
 
 export type ModelView = "model" | "plan";
 export type SceneTheme = "light" | "dark";

@@ -1,7 +1,5 @@
 import type { ProgramCard as Card } from "@/lib/types";
 import { EvidenceBadge } from "@/components/evidence-badge";
-import { getCallProtocol } from "@/lib/call-protocols";
-import { CallScriptDrawer } from "./call-script-drawer";
 
 const STATUS: Record<Card["status"], string> = {
   open: "bg-go-tint text-go",
@@ -30,22 +28,10 @@ function fmtDeadline(iso: string) {
   });
 }
 
-export function ProgramCard({
-  card,
-  children,
-  address,
-  hood,
-}: {
-  card: Card;
-  children?: React.ReactNode;
-  address?: string;
-  hood?: string;
-}) {
+export function ProgramCard({ card, children }: { card: Card; children?: React.ReactNode }) {
   const verdict = VERDICT[card.verdict];
   // The PSRP screener renders inside the card, so its jump link would be redundant here.
   const actions = card.actions.filter((a) => a.kind !== "screener");
-  const hasPhone = actions.some((a) => a.kind === "phone");
-  const callProtocol = hasPhone ? getCallProtocol(card.id, { address, hood }) : null;
 
   return (
     <article id={`program-${card.id}`} className="print-break-avoid scroll-mt-4 rounded-2xl border border-line bg-surface p-5 sm:p-6">
@@ -99,7 +85,6 @@ export function ProgramCard({
           ))}
         </div>
       )}
-      {callProtocol && <CallScriptDrawer protocol={callProtocol} />}
       {actions.length > 0 && (
         <p className="only-print mt-2 text-sm font-semibold">
           {actions.map((a) => (a.kind === "phone" ? a.label : `${a.label}: ${a.href.replace(/^https?:\/\//, "")}`)).join("  ·  ")}

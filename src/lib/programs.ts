@@ -87,7 +87,7 @@ function psrp({ psrpNeighborhood, floodZone, parcel }: Inputs): ProgramCard {
     shortName: "Private Sewer Repair",
     status: "open",
     statusLabel: "Open · Apply online",
-    amount: "Up to $40,000 — grant for owners, forgivable loan for landlords",
+    amount: "Up to $30,000 — grant for owners, forgivable loan for landlords",
     verdict,
     headline,
     reasons,

@@ -1,114 +1,103 @@
-// A resident's case: what happened, what they've done, and what DWSD or a plumber told them.
-// It lives only in their browser. Everything here is pure so the journey logic can be tested.
-import type { BreakAt } from "./guide";
-import type { Parcel, Report } from "./types";
+// A case is two facts the resident gives us and everything they learn afterwards.
+//
+// There are no stages. A backup is not a decision tree — safety, cleanup, the insurer and the
+// statutory notice all run at once, on different clocks, and the 45-day clock keeps running
+// whether or not anyone ever decides whose pipe it was. So the model is a date plus a set of
+// recorded facts, and what to do today is derived from them (see agenda.ts).
+//
+// Every field is something a person could read off a phone screen to a clerk. Nothing here is
+// an inference, a score, or a prediction.
+import { detroitDay } from "./law";
 
-export type Verdict = "city" | "mine" | "unsure";
-export type TrackerStatus = "not-started" | "submitted" | "waiting" | "more-info" | "approved" | "scheduled" | "complete" | "not-approved";
-export type TrackerId = "claim" | "psrp" | "repair";
+/** What someone has been told so far. Never this app's conclusion. */
+export type Whose = "unknown" | "city" | "mine";
 
-export type CaseTracker = {
-  status: TrackerStatus;
-  reference?: string;
-  lastAction?: string;
-  due?: string;
-  note?: string;
-};
+/** The single most useful free signal, and the one the old build never asked for. */
+export type NeighborSignal = "same" | "only-me" | "unknown";
 
 export type Case = {
-  id?: string;
-  entry: "backup" | "quote";
-  startedAt: string; // YYYY-MM-DD
-  found: string; // YYYY-MM-DD, when the water was found
-  rain?: "yes" | "no" | "unsure"; // a fact to record; it does not decide a claim
-  sr: string; // DWSD service request number
+  id: string;
+  /** YYYY-MM-DD in Detroit. The one input everything else is derived from. */
+  foundOn: string;
+  startedOn: string;
   address?: string;
-  contactStatus?: "attempted" | "reported";
-  contactAttemptedAt?: string;
-  calledAt?: string; // ISO time the resident reported the issue to DWSD
-  safeAcknowledgedAt?: string;
-  dwsdVisit?: "visited" | "not-yet" | "unknown";
-  dwsdFinding?: string;
-  dwsdRecord?: "yes" | "no" | "unknown";
-  dwsdNextStep?: string;
-  dwsdFollowUpDue?: string;
-  verdict?: Verdict; // what DWSD found
-  breakAt?: BreakAt; // what the plumber's camera found
-  quote?: string;
-  kept: Record<string, boolean>; // claim evidence checklist
-  claimFiledAt?: string; // YYYY-MM-DD
-  trackers?: Partial<Record<TrackerId, CaseTracker>>;
-  closedAt?: string; // YYYY-MM-DD
+  parcelId?: string;
+
+  // --- identity, only ever asked once, only for the statutory notice ---
+  name?: string;
+  phone?: string;
+
+  // --- what they have been told ---
+  serviceRequest?: string;
+  whose?: Whose;
+  whoseBasis?: string;
+  neighbors?: NeighborSignal;
+
+  // --- what they have sent ---
+  /** recipient id -> YYYY-MM-DD it was mailed. */
+  noticeSentOn?: Record<string, string>;
+  insuranceClaim?: string;
+
+  // --- the damage, in their words ---
+  waterDepth?: string;
+  damageNote?: string;
+
+  /** actionId -> ISO timestamp. An action can also be satisfied by a fact; see agenda.ts. */
+  done: Record<string, string>;
+
+  closedOn?: string;
 };
 
-// 1 call DWSD · 2 DWSD checks · 3 whose pipe · 4 get it paid for · 5 closed
-export type Stage = 1 | 2 | 3 | 4 | 5;
+export const todayInDetroit = () => detroitDay(new Date());
 
-export function stageOf(c: Case): Stage {
-  if (c.closedAt) return 5;
-  if (c.entry === "backup") {
-    const reported = c.contactStatus === "reported" || (!c.contactStatus && Boolean(c.calledAt));
-    if (!reported) return 1;
-    if (!c.verdict) return 2;
-  }
-  if (c.verdict !== "city" && !c.breakAt) return 3;
-  return 4;
-}
-
-// Undo whatever finished the previous step, so a mistaken answer never traps anyone.
-export function stepBack(c: Case): Case {
-  const stage = stageOf(c);
-  if (stage === 5) return { ...c, closedAt: undefined };
-  if (stage === 4 && c.claimFiledAt) return { ...c, claimFiledAt: undefined };
-  if (stage === 4 && c.verdict !== "city") return { ...c, breakAt: undefined };
-  if (stage >= 3 && c.entry === "backup") return { ...c, verdict: undefined, breakAt: undefined };
-  if (stage === 2) return { ...c, calledAt: undefined, contactStatus: undefined };
-  return c;
-}
-
-export function newCase(entry: Case["entry"], today: string, patch: Partial<Case> = {}): Case {
+export function newCase(foundOn: string, patch: Partial<Case> = {}): Case {
+  const today = todayInDetroit();
   return {
-    id: `case-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
-    entry,
-    startedAt: today,
-    found: today,
-    sr: "",
-    kept: {},
-    ...(entry === "quote" ? { verdict: "mine" as const } : {}),
+    id: `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+    foundOn: foundOn || today,
+    startedOn: today,
+    done: {},
+    whose: "unknown",
     ...patch,
   };
 }
 
-// If DWSD hasn't come two days after the call, call back with the number.
-export function callbackDue(calledAt: string) {
-  const d = new Date(calledAt);
-  d.setDate(d.getDate() + 2);
-  d.setHours(10, 0, 0, 0);
-  return d;
+/** The notice needs a name and a phone; nothing else in the app does. */
+export function noticeReady(c: Case) {
+  return Boolean(c.name?.trim() && c.phone?.trim() && c.address?.trim());
 }
 
-export const EVIDENCE = [
-  { id: "photos", label: "Photos of the water line and anything damaged" },
-  { id: "receipts", label: "Receipts for cleanup, repairs and anything you replace" },
-  { id: "list", label: "A list of damaged items and what they cost" },
-];
+export function sentTo(c: Case, recipientId: string) {
+  return c.noticeSentOn?.[recipientId];
+}
 
-// Only what the case page needs from a report, so the browser doesn't download building outlines twice.
-export type CaseReport = Pick<Report, "query" | "address" | "psrpNeighborhood" | "floodZone" | "lmi" | "projects" | "warnings"> & {
-  parcel: Parcel | null; // without its geometry
-  waterInBasement: number;
-};
+export function markSent(c: Case, recipientId: string, day = todayInDetroit()): Case {
+  return { ...c, noticeSentOn: { ...c.noticeSentOn, [recipientId]: day } };
+}
 
-export function slimReport(r: Report): CaseReport {
-  return {
-    query: r.query,
-    address: r.address,
-    psrpNeighborhood: r.psrpNeighborhood,
-    floodZone: r.floodZone,
-    lmi: r.lmi,
-    projects: r.projects.map((p) => ({ ...p, parts: [] })),
-    warnings: r.warnings,
-    parcel: r.parcel && { ...r.parcel, geometry: undefined },
-    waterInBasement: r.reports311.waterInBasement,
-  };
+export function unmarkSent(c: Case, recipientId: string): Case {
+  const next = { ...(c.noticeSentOn ?? {}) };
+  delete next[recipientId];
+  return { ...c, noticeSentOn: next };
+}
+
+export function complete(c: Case, actionId: string): Case {
+  return { ...c, done: { ...c.done, [actionId]: new Date().toISOString() } };
+}
+
+export function uncomplete(c: Case, actionId: string): Case {
+  const done = { ...c.done };
+  delete done[actionId];
+  return { ...c, done };
+}
+
+/**
+ * What the neighbors said, turned into the only plain-language reading it supports.
+ * Deliberately not fed into any eligibility or claim logic: it points a person at the right
+ * next question, it does not answer it.
+ */
+export function neighborReading(n: NeighborSignal | undefined): string | null {
+  if (n === "same") return "Several homes backing up at once usually points at the public sewer, not your line. Say that to DWSD.";
+  if (n === "only-me") return "If it is only your home, the blockage is often in your own line. Your notice still goes in — a plumber's opinion is not the City's finding.";
+  return null;
 }

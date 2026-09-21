@@ -8,12 +8,12 @@ const publicSans = Public_Sans({ variable: "--font-public-sans", subsets: ["lati
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://belowtrace.vercel.app"),
-  title: { default: "BelowTrace Detroit — Sewage in your basement? Start here.", template: "%s · BelowTrace Detroit" },
+  title: { default: "BelowTrace Detroit — Will the City fix your sewer line?", template: "%s · BelowTrace Detroit" },
   description:
-    "Enter a Detroit address to see who's responsible for your sewer line, which City programs might pay for the repair, your deadlines, and what public records actually show.",
+    "Detroit is spending $184M fixing sewer connections and does not publish where. Enter an address to see what is under the house, who owns each segment, and who might pay.",
   openGraph: {
     title: "BelowTrace Detroit",
-    description: "Who's responsible for your sewer line, which City programs might pay, and what to do next.",
+    description: "What is under your house, who owns each segment, and whether the City's $184M is coming to your alley.",
     type: "website",
   },
 };
@@ -31,8 +31,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <header className="no-print border-b border-line bg-paper/90 backdrop-blur supports-[backdrop-filter]:bg-paper/75">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <Link href="/" className="flex items-center gap-2.5 rounded-md text-ink no-underline" aria-label="BelowTrace Detroit home">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
+            <Link href="/" className="flex min-w-0 items-center gap-2.5 rounded-md text-ink no-underline" aria-label="BelowTrace Detroit home">
               <Logo />
               <span className="flex flex-col whitespace-nowrap text-base font-bold leading-[0.9] tracking-tight sm:block sm:text-lg sm:leading-normal">
                 <span>BelowTrace</span>
@@ -40,15 +40,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </span>
             </Link>
             <nav className="flex items-center gap-0.5 text-[0.95rem]" aria-label="Main">
+              <Link href="/method" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
+                Method
+              </Link>
               <Link href="/map" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
                 Map
               </Link>
-              <Link href="/about" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
+              {/* On phones the footer's "See every source" link covers these. */}
+              <Link href="/about" className="hidden whitespace-nowrap rounded-md px-3 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:inline">
                 About
-              </Link>
-              {/* On phones the footer's "See every source" link covers this. */}
-              <Link href="/sources" className="hidden whitespace-nowrap rounded-md px-3 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:inline">
-                Data &amp; method
               </Link>
             </nav>
           </div>

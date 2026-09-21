@@ -7,6 +7,8 @@ import cityBoundaryData from "@/data/city-boundary.json";
 import mainsData from "@/data/sewer-mains.json";
 import projectsData from "@/data/sewer-projects.json";
 import reportsData from "@/data/reports-311.json";
+import districtsData from "@/data/council-districts.json";
+import permitsData from "@/data/sewer-permits.json";
 import { MATERIALS, SYSTEMS } from "./facts";
 import type { LngLat, Report311, SewerMain, SewerProject } from "./types";
 
@@ -47,7 +49,7 @@ const M_PER_DEG_LAT = 111_320;
 const M_PER_DEG_LNG = 111_320 * Math.cos((42.35 * Math.PI) / 180);
 const toXY = ([lng, lat]: number[]) => [lng * M_PER_DEG_LNG, lat * M_PER_DEG_LAT];
 
-// Distance in metres from p to segment ab, and the closest point on it.
+// Distance in meters from p to segment ab, and the closest point on it.
 function pointToSegment(p: number[], a: number[], b: number[]) {
   const [px, py] = toXY(p);
   const [ax, ay] = toXY(a);
@@ -194,3 +196,80 @@ export function reportsNear(p: LngLat, radiusM: number): Report311[] {
 }
 
 export const DATA_SNAPSHOT = "2026-09-18";
+
+// --- ASRP: which district, and how far to an alley already under contract ---
+
+type RawDistrict = { n: number; rings: number[][][] };
+const districts = (districtsData as RawDistrict[]).map((d) => ({
+  n: d.n,
+  shapes: d.rings.map((r) => turfPolygon([closeRing(r)])),
+}));
+
+function closeRing(r: number[][]) {
+  const first = r[0];
+  const last = r[r.length - 1];
+  return first[0] === last[0] && first[1] === last[1] ? r : [...r, first];
+}
+
+export function councilDistrict(p: LngLat): number | null {
+  return districts.find((d) => d.shapes.some((s) => booleanPointInPolygon(p, s)))?.n ?? null;
+}
+
+/** Alleys already under construction or out to bid — the 138 DWSD has actually chosen. */
+const SELECTED_PHASES = new Set(["Construction", "Procurement"]);
+const selectedAlleys = projects.filter((pr) => SELECTED_PHASES.has(pr.phase) && /\balley\b/i.test(pr.name));
+
+export function metersToSelectedAlley(p: LngLat, maxM = 2000): number | null {
+  let best = Infinity;
+  for (const pr of selectedAlleys) {
+    const d = pointToPartsM(p, pr.parts);
+    if (d < best) best = d;
+  }
+  return best <= maxM ? Math.round(best) : null;
+}
+
+/** 311 counts by kind inside a radius: w = water in basement, s/c = cave-ins. */
+export function reportCounts(p: LngLat, radiusM: number) {
+  const near = reportsNear(p, radiusM);
+  return {
+    water: near.filter((r) => r.type === "w").length,
+    caveIns: near.filter((r) => r.type === "s" || r.type === "c").length,
+  };
+}
+
+// --- private sewer work: BSEED trades permits, the closest thing to a lateral's history ---
+
+export type SewerPermit = {
+  at: LngLat;
+  on: string;
+  kind: "lateral" | "valve" | "cleanout" | "sewer";
+  what: string;
+  by: string | null;
+  parcel: string | null;
+  addr: string;
+};
+
+const permits = permitsData as SewerPermit[];
+const permitIndex = new Flatbush(Math.max(permits.length, 1));
+for (const p of permits) permitIndex.add(p.at[0], p.at[1], p.at[0], p.at[1]);
+if (!permits.length) permitIndex.add(0, 0, 0, 0);
+permitIndex.finish();
+
+export function permitsNear(p: LngLat, radiusM: number): (SewerPermit & { distanceM: number })[] {
+  return permitIndex
+    .search(...around(p, radiusM))
+    .map((i) => ({ ...permits[i], distanceM: Math.round(distanceM(p, permits[i].at)) }))
+    .filter((r) => r.distanceM <= radiusM)
+    .sort((a, b) => a.distanceM - b.distanceM || b.on.localeCompare(a.on));
+}
+
+/** Work permitted at this parcel itself — the only per-house record of the private line there is. */
+export function permitsAtParcel(parcelId: string | null | undefined, p: LngLat) {
+  const here = permitsNear(p, 40);
+  if (!parcelId) return here;
+  const byId = permits.filter((x) => x.parcel && x.parcel === parcelId).map((x) => ({ ...x, distanceM: 0 }));
+  const seen = new Set(byId.map((x) => `${x.on}${x.what}`));
+  return [...byId, ...here.filter((x) => !seen.has(`${x.on}${x.what}`))].sort((a, b) => b.on.localeCompare(a.on));
+}
+
+export const PERMIT_WINDOW = { from: permits.at(-1)?.on.slice(0, 4) ?? "2019", to: permits[0]?.on.slice(0, 4) ?? "2026", total: permits.length };

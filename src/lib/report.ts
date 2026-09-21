@@ -1,4 +1,4 @@
-import { DATA_SNAPSHOT, findPsrpNeighborhood, inDetroit, mainsNear, projectsNear, reportsNear, sideOfLot } from "./geo";
+import { DATA_SNAPSHOT, councilDistrict, findPsrpNeighborhood, inDetroit, mainsNear, metersToSelectedAlley, permitsAtParcel, permitsNear, projectsNear, reportCounts, reportsNear, sideOfLot, PERMIT_WINDOW } from "./geo";
 import { SOURCES } from "./facts";
 import { buildPrograms } from "./programs";
 import { centroid, findParcel, floodZone, geocode, lowModIncome } from "./sources";
@@ -10,6 +10,8 @@ const MAIN_RADIUS_M = 120; // alley behind a typical Detroit lot is 20–60 m fr
 const MAP_MAIN_RADIUS_M = 250;
 const PROJECT_RADIUS_M = 400;
 const REPORT_RADIUS_M = 200;
+const ASRP_RADIUS_M = 500; // matches scripts/calibrate-asrp.mjs
+const PERMIT_RADIUS_M = 300;
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 type Core = Omit<Report, "programs">;
@@ -71,6 +73,26 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
   const mainSide = nearestMain && exactParcel && g.streetLngLat ? sideOfLot(at, g.streetLngLat, nearestMain.nearestPoint) : null;
   const projects = projectsNear(at, PROJECT_RADIUS_M);
   const points = reportsNear(at, REPORT_RADIUS_M);
+  // The ASRP reading uses a 500 m radius because that is what the calibration against the
+  // 138 already-contracted alleys was measured at.
+  const asrpCounts = reportCounts(at, ASRP_RADIUS_M);
+  // No public record maps a private lateral. A permit is the nearest thing: proof the line was
+  // opened up, when, and by whom.
+  const permitsHere = permitsAtParcel(parcel.ok ? parcel.value?.id : null, at).slice(0, 4);
+  const permitsRound = permitsNear(at, PERMIT_RADIUS_M);
+  const permits = {
+    here: permitsHere.map(({ on, kind, what, by, addr, distanceM }) => ({ on, kind, what, by, addr, distanceM })),
+    nearby: permitsRound.length,
+    valvesNearby: permitsRound.filter((p) => p.kind === "valve").length,
+    radiusM: PERMIT_RADIUS_M,
+    since: PERMIT_WINDOW.from,
+  };
+  const asrp = {
+    district: councilDistrict(at),
+    caveIns500: asrpCounts.caveIns,
+    water500: asrpCounts.water,
+    nearestWorkM: metersToSelectedAlley(at),
+  };
 
   if (!parcel.ok) warnings.push("City parcel records didn't respond, so property details are missing.");
   else if (parcel.value?.match === "nearest") warnings.push(`We couldn't match this exact address in City parcel records, so we show the closest parcel: ${parcel.value.address}.`);
@@ -135,6 +157,8 @@ async function buildCore(query: string, magicKey?: string): Promise<Core | Repor
       points,
       evidence: snapshot(SOURCES.improveDetroit),
     },
+    permits,
+    asrp,
     unknowns,
     warnings,
   };
