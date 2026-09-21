@@ -20,9 +20,42 @@ export default function Home() {
           If a contract reaches your alley, the repair is free. If it never does, you pay $5,000–25,000 yourself. Nobody can apply,
           there is no list, and nobody is told either way.
         </p>
+
+        <p className="rise rise-2 mt-5 text-[1.15rem] font-semibold leading-relaxed text-ink">
+          So we rebuilt the City&rsquo;s selection logic from the City&rsquo;s own open data, and scored every Detroit address against
+          the {calibration.selected.n} alleys it has already contracted.
+        </p>
+
         <div className="rise rise-3 mt-8">
           <StartSearch />
         </div>
+
+        <ol className="rise rise-3 mt-10 grid gap-4">
+          {[
+            {
+              t: "A likelihood, not a maybe",
+              d: `Alley cave-ins, block-group income, council district and distance to contracted work — the four criteria DWSD publishes — measured at your address and compared against the ${calibration.selected.n} alleys it actually chose. Validated at p < 0.0001.`,
+            },
+            {
+              t: "Then the call, scripted",
+              d: "There is no list to look up, so the answer always ends in a phone call. Every number here comes with what to say, the three things to ask, and what to have written down before you hang up.",
+            },
+            {
+              t: "And everything else that reaches you",
+              d: "Six segments of pipe, who owns each, and every City program checked against this one address — plus the 45-day damage claim, which is a different pot of money and a deadline most people miss.",
+            },
+          ].map((s, i) => (
+            <li key={s.t} className="flex gap-4">
+              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-ink text-[0.9rem] font-extrabold text-white">
+                {i + 1}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[1.1rem] font-extrabold tracking-[-0.015em]">{s.t}</span>
+                <span className="mt-1 block leading-relaxed text-ink-2">{s.d}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="border-y border-line bg-deep text-white">
@@ -52,22 +85,13 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-xl px-5 py-12">
-        <h2 className="text-[1.5rem] font-extrabold tracking-[-0.025em]">What you get for an address</h2>
-        <ol className="mt-5 grid gap-4">
-          {[
-            ["A drawing of what is under your house", "Six segments, from the floor drain to the regional system."],
-            ["Who owns each one", "The $15,000 lands on you or on the City depending on which segment broke."],
-            ["Who might pay, and how likely", "Checked against every City program — and, for the alley connection, against the 138 alleys already chosen."],
-          ].map(([t, d], i) => (
-            <li key={t} className="flex gap-4">
-              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[0.85rem] font-bold text-white">{i + 1}</span>
-              <span>
-                <span className="block font-bold">{t}</span>
-                <span className="mt-0.5 block text-ink-2">{d}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
+        <h2 className="text-[1.5rem] font-extrabold tracking-[-0.025em]">Nobody else can answer this</h2>
+        <p className="mt-3 leading-relaxed text-ink-2">
+          The City publishes the criteria but not the list, and the {ASRP.knownDefectPoints.toLocaleString("en-US")}+ failed-connection
+          data points behind it are in none of its open datasets — we checked all 782. Reconstructing it from what <em>is</em> public is
+          the only way a household can see anything at all.
+        </p>
+
         <div className="mt-8 grid gap-2">
           <Quiet href="/now" title="Already flooded?" note="Repairing the pipe and paying for the damage are two different things" />
           <Quiet href="/map" title="The citywide map" note="Both layers, full screen" />

@@ -59,23 +59,29 @@ export function AnatomyReport({
         </p>
       </header>
 
-      {/* The verdict, at the size of the decision it carries. */}
+      {/* The verdict, at the size of the decision it carries. The mark and the label share one
+          row so the headline gets the full width — on a 320px screen that is the difference
+          between four lines and seven. */}
       <section className={`mt-6 overflow-hidden rounded-3xl text-white ${tone.bar}`}>
-        <div className="flex items-start gap-4 p-6 sm:gap-5 sm:p-7">
-          <span
-            aria-hidden="true"
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/20 text-[1.7rem] font-black leading-none sm:h-14 sm:w-14 sm:text-[2rem]"
-          >
-            {tone.mark}
-          </span>
-          <div className="min-w-0">
-            <p className="text-[0.75rem] font-bold uppercase tracking-[0.14em] text-white/70">
-              ${(ASRP.total / 1_000_000).toFixed(0)}M alley program · {tone.word}
+        <div className="p-5 sm:p-7">
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden="true"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/20 text-[1.25rem] font-black leading-none sm:h-11 sm:w-11 sm:text-[1.5rem]"
+            >
+              {tone.mark}
+            </span>
+            <p className="min-w-0 text-[0.72rem] font-bold uppercase leading-tight tracking-[0.12em] text-white/75 sm:text-[0.78rem]">
+              ${(ASRP.total / 1_000_000).toFixed(0)}M alley program
+              <span className="block sm:inline">
+                <span className="hidden sm:inline"> · </span>
+                {tone.word}
+              </span>
             </p>
-            <h2 className="mt-1.5 text-[1.7rem] font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-[2.1rem]">{verdict.headline}</h2>
           </div>
+          <h2 className="mt-4 text-[1.75rem] font-extrabold leading-[1.08] tracking-[-0.035em] sm:text-[2.2rem]">{verdict.headline}</h2>
         </div>
-        <div className="bg-black/15 px-6 py-5 sm:px-7">
+        <div className="bg-black/15 px-5 py-5 sm:px-7">
           <p className="text-[1.05rem] leading-relaxed text-white/85">{verdict.sub}</p>
           <div className="mt-4">
             <CallCard contact={CONTACTS.dwsd} tone="onDark" />
