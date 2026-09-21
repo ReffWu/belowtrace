@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { contactFor, windowLabel, type ActionState } from "@/lib/agenda";
 import type { NoticeClock } from "@/lib/law";
-import { CallButton } from "./call";
+import { CallCard } from "./call-card";
 
 const URGENCY = {
   danger: { label: "Safety", dot: "bg-stop", ring: "border-stop/40 bg-stop-tint" },
@@ -84,7 +84,7 @@ export function ActionCard({
             </div>
           )}
 
-          {contact && <CallButton contact={contact} tone={action.urgency === "danger" ? "quiet" : "primary"} />}
+          {contact && <CallCard contact={contact} tone={action.urgency === "danger" ? "quiet" : "primary"} defaultOpen />}
 
           {action.points && (
             <ul className="grid gap-2.5">

@@ -11,6 +11,12 @@ export type Contact = {
   hours?: string;
   /** The sentence to open with. Written to be read aloud under stress. */
   say?: string;
+  /** What to ask once they answer. Three at most — nobody holds more than three. */
+  ask?: string[];
+  /** What to have written down before you hang up. */
+  write?: string[];
+  /** The thing people get wrong on this call. */
+  watch?: string;
   url?: string;
   note?: string;
 };
@@ -31,6 +37,12 @@ export const CONTACTS = {
     tel: "8004774747",
     hours: "24 hours",
     say: "Water has reached the electrical panel in my basement. Nobody has touched the breakers.",
+    ask: [
+      "Is it safe for me to go back into the basement?",
+      "Do you need to shut off power or gas at the meter?",
+    ],
+    write: ["The time you called", "Whether they are sending someone, and when"],
+    watch: "Do not go and pull the breaker yourself first. That is the call.",
     note: "If you smell gas, leave the house first and call from outside.",
   },
 
@@ -41,6 +53,14 @@ export const CONTACTS = {
     tel: "3132678000",
     hours: "24 hours",
     say: "Sewage is backing up into my basement. Please send a crew to check the city sewer.",
+    ask: [
+      "What is my service request number?",
+      "Is my alley in the Alley Sewer Repair Program, now or in an upcoming contract?",
+      "Has DWSD run a camera on the sewer behind my address, and what did it find?",
+    ],
+    write: ["The service request number", "The name of whoever answered", "What they said happens next, and by when"],
+    watch:
+      "They may not know about the alley program at the front desk. Ask anyway, and ask them to note the question on the service request.",
     url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-customer-service/water-and-sewer-maintenanceemergencies",
   },
 
@@ -50,6 +70,12 @@ export const CONTACTS = {
     phone: "844-455-4592",
     tel: "8444554592",
     say: "I am filing a sewage backup claim and need to confirm where to send my written notice.",
+    ask: [
+      "What address should my written notice go to?",
+      "Do you have a claim number for me yet?",
+    ],
+    write: ["The mailing address they give you", "The date you called"],
+    watch: "GLWA is a separate agency from the City. A notice sent to Detroit does not reach them.",
     url: "https://www.glwater.org/contact/",
     note: "GLWA runs the regional system Detroit's sewers drain into. It is a separate agency with its own 45-day clock.",
   },
@@ -60,6 +86,8 @@ export const CONTACTS = {
     phone: "313-876-0004",
     tel: "3138760004",
     say: "I have flood-damaged items from a sewer backup that need a special bulk pickup.",
+    ask: ["Which day will the truck come?", "What do I need to keep separate at the curb?"],
+    write: ["The pickup date", "The request number"],
     note: "Also available through the Improve Detroit app.",
   },
 
@@ -69,6 +97,11 @@ export const CONTACTS = {
     phone: "734-727-7400",
     tel: "7347277400",
     say: "I need guidance on cleaning up after raw sewage in my home.",
+    ask: [
+      "What has to be thrown out, and what can be cleaned?",
+      "Is it safe for children or anyone with asthma to be in the house?",
+    ],
+    write: ["Anything they tell you to discard — insurers ask for this"],
   },
 
   mi211: {
@@ -86,6 +119,14 @@ export const CONTACTS = {
     phone: "313-224-6380",
     tel: "3132246380",
     say: "I want to ask about the Private Sewer Repair Program for my home.",
+    ask: [
+      "Am I eligible, and what proof of 2021 flood damage do you accept?",
+      "If I already had emergency work done, does that disqualify me?",
+      "Can someone help me upload the documents?",
+    ],
+    write: ["Your application number", "The list of documents they ask for", "The date they say you will hear back"],
+    watch:
+      "Ask before you sign any repair contract. The program cannot pay for work that started before its review — that is the single most expensive mistake on this list.",
   },
 
   wayneMetro: {
@@ -94,6 +135,11 @@ export const CONTACTS = {
     phone: "866-313-2520",
     tel: "8663132520",
     say: "I need help with a water bill, or with the HOPE property tax exemption.",
+    ask: [
+      "Is there any emergency help for a sewer repair I cannot afford?",
+      "Can you book me an appointment with a housing counselor?",
+    ],
+    write: ["The appointment date", "What to bring"],
   },
 
   missDig: {

@@ -6,7 +6,9 @@ import type { AsrpAssessment } from "@/lib/asrp";
 import { ASRP, CALIBRATION, VERDICT_TONE } from "@/lib/asrp";
 import { OWNER_LABEL, type Payer, type Segment } from "@/lib/anatomy";
 import type { Report } from "@/lib/types";
-import { PHONES, SOURCES } from "@/lib/facts";
+import { SOURCES } from "@/lib/facts";
+import { CONTACTS, type ContactId } from "@/lib/contacts";
+import { CallCard } from "@/components/now/call-card";
 import { OwnershipDiagram } from "./ownership-diagram";
 import { RecordsMap } from "./records-map";
 import { PsrpScreener } from "./psrp-screener";
@@ -63,12 +65,9 @@ export function AnatomyReport({
         <div className="p-6 sm:p-7">
           <h2 className="text-[1.75rem] font-extrabold leading-[1.12] tracking-[-0.03em] sm:text-[2rem]">{verdict.headline}</h2>
           <p className="mt-3 text-[1.08rem] leading-relaxed text-ink-2">{verdict.sub}</p>
-          <a
-            href={`tel:${PHONES.dwsd.number.replace(/\D/g, "")}`}
-            className="mt-5 flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-ink text-[1.1rem] font-bold text-white hover:bg-brand-ink"
-          >
-            Call DWSD {PHONES.dwsd.number}
-          </a>
+          <div className="mt-5">
+            <CallCard contact={CONTACTS.dwsd} defaultOpen />
+          </div>
         </div>
       </section>
 
@@ -130,10 +129,19 @@ export function AnatomyReport({
         </ul>
       </section>
 
-      <div className="mt-8 grid gap-2">
-        <Link href="/notice" className="flex min-h-14 items-center justify-between rounded-2xl border-2 border-line-2 bg-surface px-5 font-bold hover:border-ink">
-          It already flooded — the 45-day letter <span aria-hidden="true">→</span>
+      <section className="mt-12 rounded-3xl border-2 border-own/35 bg-surface p-5 sm:p-6">
+        <p className="text-[0.75rem] font-bold uppercase tracking-[0.12em] text-own">Second track</p>
+        <h2 className="mt-1.5 text-[1.35rem] font-extrabold leading-tight tracking-[-0.02em]">Has it already flooded?</h2>
+        <p className="mt-2 leading-relaxed text-ink-2">
+          Everything above is about who repairs the pipe. None of it pays for a ruined basement — that is a separate claim, with a
+          45-day deadline from the day you found the water, to the City <em>and</em> to GLWA.
+        </p>
+        <Link href="/now" className="mt-4 flex min-h-14 items-center justify-between rounded-2xl bg-ink px-5 font-bold text-white hover:bg-brand-ink">
+          Start the 45-day clock <span aria-hidden="true">→</span>
         </Link>
+      </section>
+
+      <div className="mt-8 grid gap-2">
         <Link href="/method" className="flex min-h-14 items-center justify-between rounded-2xl border-2 border-line-2 bg-surface px-5 font-bold hover:border-ink">
           How the likelihood was worked out <span aria-hidden="true">→</span>
         </Link>
@@ -194,12 +202,12 @@ function SegmentCard({
                   <span className={`mt-2 inline-block rounded-full px-2.5 py-1 text-[0.78rem] font-bold ${STATUS[p.status].cls}`}>{STATUS[p.status].label}</span>
                 )}
                 <p className="mt-2 leading-relaxed text-ink-2">{p.detail}</p>
+                {p.phone && (
+                  <div className="mt-3">
+                    <CallCard contact={contactByPhone(p.phone)} tone="quiet" />
+                  </div>
+                )}
                 <div className="mt-2 flex flex-wrap gap-3">
-                  {p.phone && (
-                    <a href={`tel:${p.phone.replace(/\D/g, "")}`} className="min-h-11 font-semibold text-brand underline decoration-brand/30 underline-offset-4">
-                      Call {p.phone}
-                    </a>
-                  )}
                   {p.href && (
                     <a href={p.href} target={p.href.startsWith("/") ? undefined : "_blank"} rel="noreferrer" className="min-h-11 font-semibold text-brand underline decoration-brand/30 underline-offset-4">
                       {p.href.startsWith("/") ? "Open" : "Official page ↗"}
@@ -228,6 +236,12 @@ function SegmentCard({
       )}
     </li>
   );
+}
+
+/** Payers carry a number; the script lives with the contact it belongs to. */
+function contactByPhone(phone: string) {
+  const id = (Object.keys(CONTACTS) as ContactId[]).find((k) => CONTACTS[k].phone === phone);
+  return id ? CONTACTS[id] : { id: "other", name: "Call", phone, tel: phone.replace(/\D/g, "") };
 }
 
 const KIND_LABEL: Record<string, string> = {

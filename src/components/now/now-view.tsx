@@ -220,17 +220,28 @@ function Field({ label, value, placeholder, hint, onChange }: { label: string; v
 function NoCase() {
   return (
     <div className="mx-auto max-w-xl px-5 pb-20 pt-10">
-      <h1 className="text-[2.2rem] font-extrabold leading-[1.06] tracking-[-0.03em]">Start a case.</h1>
-      <p className="mt-3 text-[1.1rem] leading-relaxed text-ink-2">
-        Two facts — the address and the day you found the water — and this page will tell you what is due, every day, until it is
-        finished.
+      <p className="text-[0.8rem] font-bold uppercase tracking-[0.14em] text-own">Second track · it already flooded</p>
+      <h1 className="mt-3 text-[2.1rem] font-extrabold leading-[1.06] tracking-[-0.03em]">
+        Fixing the pipe and paying for the damage are two different things.
+      </h1>
+      <p className="mt-4 text-[1.1rem] leading-relaxed text-ink-2">
+        The $184M program repairs sewer connections. It never pays for a ruined basement. That is a separate claim, with its own
+        45-day deadline, to two separate agencies — and it starts the day you found the water.
       </p>
       <div className="mt-7">
         <Start />
       </div>
-      <Link href="/" className="mt-6 inline-block min-h-11 font-semibold text-brand underline">
-        ← Check an address instead
-      </Link>
+      <p className="mt-4 text-center text-[0.95rem] text-ink-3">Free. No sign-up. It stays on this phone.</p>
+
+      <div className="mt-10 rounded-2xl border border-line bg-surface p-5">
+        <p className="font-bold">Looking for who fixes the pipe instead?</p>
+        <p className="mt-1 leading-relaxed text-ink-2">
+          That is the other track: six segments, who owns each, and whether the City&rsquo;s money is coming to your alley.
+        </p>
+        <Link href="/" className="mt-3 inline-flex min-h-12 items-center rounded-xl bg-ink px-5 font-bold text-white hover:bg-brand-ink">
+          Check an address →
+        </Link>
+      </div>
     </div>
   );
 }

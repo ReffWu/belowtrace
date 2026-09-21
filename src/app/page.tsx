@@ -69,6 +69,7 @@ export default function Home() {
           ))}
         </ol>
         <div className="mt-8 grid gap-2">
+          <Quiet href="/now" title="Already flooded?" note="Repairing the pipe and paying for the damage are two different things" />
           <Quiet href="/map" title="The citywide map" note="Both layers, full screen" />
           <Quiet href="/method" title="Method and caveats" note="Every number on this page, and what it does not prove" />
         </div>

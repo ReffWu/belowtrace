@@ -113,13 +113,13 @@ export function SplitMap({ height = "clamp(20rem, 58vw, 30rem)" }: { height?: st
 
   return (
     <div className="relative">
-      <div ref={ref} style={{ height }} className="w-full bg-deep-2" aria-label="Map of Detroit: basement flooding reports and contracted alley sewer repairs" role="img" />
-      <div className="pointer-events-none absolute left-3 top-3 flex flex-col gap-1.5 rounded-xl bg-deep/88 px-3 py-2.5 text-[0.82rem] shadow-lg backdrop-blur">
-        <span className="flex items-center gap-2 text-white/85">
-          <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-glow" /> Water in a basement · 14,115 reports
+      <div ref={ref} style={{ height }} data-map className="w-full bg-deep-2" aria-label="Map of Detroit: basement flooding reports and contracted alley sewer repairs" role="img" />
+      <div className="pointer-events-none absolute left-3 top-3 right-3 flex max-w-[16rem] flex-col gap-1.5 rounded-xl bg-deep/88 px-3 py-2.5 text-[0.78rem] leading-snug shadow-lg backdrop-blur sm:right-auto sm:text-[0.82rem]">
+        <span className="flex min-w-0 items-start gap-2 text-white/85">
+          <span aria-hidden="true" className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-glow" /> Water in a basement · 14,115 reports
         </span>
-        <span className="flex items-center gap-2 text-white/85">
-          <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#ff7a1f] ring-2 ring-white/70" /> Alleys contracted · 138
+        <span className="flex min-w-0 items-start gap-2 text-white/85">
+          <span aria-hidden="true" className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#ff7a1f] ring-2 ring-white/70" /> Alleys contracted · 138
         </span>
       </div>
     </div>

@@ -28,10 +28,10 @@ export function StartSearch() {
               <button
                 type="button"
                 onClick={() => go(e.a)}
-                className="flex min-h-11 w-full items-baseline justify-between gap-3 rounded-lg px-1 text-left hover:bg-sunk/60"
+                className="flex min-h-11 w-full flex-col items-start gap-0.5 rounded-lg px-1 py-1.5 text-left hover:bg-sunk/60 xs:flex-row xs:items-baseline xs:justify-between xs:gap-3 xs:py-0"
               >
                 <span className="font-semibold text-brand underline decoration-brand/30 underline-offset-4">{e.a}</span>
-                <span className="shrink-0 text-right text-[0.88rem] text-ink-3">{e.n}</span>
+                <span className="min-w-0 text-[0.88rem] leading-snug text-ink-3 xs:shrink-0 xs:text-right">{e.n}</span>
               </button>
             </li>
           ))}

@@ -34,22 +34,25 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
             <Link href="/" className="flex min-w-0 items-center gap-2.5 rounded-md text-ink no-underline" aria-label="BelowTrace Detroit home">
               <Logo />
-              <span className="flex flex-col whitespace-nowrap text-base font-bold leading-[0.9] tracking-tight sm:block sm:text-lg sm:leading-normal">
+              <span className="flex flex-col whitespace-nowrap text-[0.95rem] font-bold leading-[0.9] tracking-tight xs:text-base sm:block sm:text-lg sm:leading-normal">
                 <span>BelowTrace</span>
-                <span className="font-medium text-ink-3 sm:ml-1 sm:inline">Detroit</span>
+                <span className="hidden font-medium text-ink-3 xs:block sm:ml-1 sm:inline">Detroit</span>
               </span>
             </Link>
-            <nav className="flex items-center gap-0.5 text-[0.95rem]" aria-label="Main">
-              <Link href="/method" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
-                Method
-              </Link>
-              <Link href="/map" className="whitespace-nowrap rounded-md px-2.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3">
-                Map
-              </Link>
-              {/* On phones the footer's "See every source" link covers these. */}
-              <Link href="/about" className="hidden whitespace-nowrap rounded-md px-3 py-2 text-ink-2 hover:bg-sunk hover:text-ink sm:inline">
-                About
-              </Link>
+            <nav className="flex shrink-0 items-center gap-0 text-[0.86rem] xs:text-[0.92rem] sm:gap-0.5 sm:text-[0.95rem]" aria-label="Main">
+              {[
+                { href: "/method", label: "Method" },
+                { href: "/map", label: "Map" },
+                { href: "/about", label: "About" },
+              ].map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="whitespace-nowrap rounded-md px-1.5 py-2 text-ink-2 hover:bg-sunk hover:text-ink xs:px-2 sm:px-3"
+                >
+                  {l.label}
+                </Link>
+              ))}
             </nav>
           </div>
         </header>

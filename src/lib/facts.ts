@@ -1,7 +1,7 @@
 // Every rule, phone number and date shown to residents lives here, with its source.
 // Update VERIFIED_ON whenever these are re-checked.
 
-export const VERIFIED_ON = "2026-09-20";
+export const VERIFIED_ON = "2026-09-21";
 
 export const PHONES = {
   dwsd: { label: "DWSD Customer Service", number: "313-267-8000" },
