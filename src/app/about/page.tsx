@@ -28,8 +28,8 @@ export default function AboutPage() {
         Detroit is spending $184M on sewer connections, and does not publish where.
       </h1>
       <p className="mt-5 text-lg text-ink-2">
-        If a contract reaches your alley, the repair is free. If it never does, you pay $5,000–25,000 yourself. Nobody can apply,
-        there is no list, and nobody is told either way — so a household staring at a quote cannot answer the only question that
+        If a contract reaches your alley, the repair is free. If it never does, you pay $5,000 to 25,000 yourself. Nobody can apply,
+        there is no list, and nobody is told either way, so a household staring at a quote cannot answer the only question that
         matters: wait, or pay? BelowTrace answers it from one address.
       </p>
 
@@ -47,12 +47,12 @@ export default function AboutPage() {
       <Block eyebrow="Who this is for" title="The household with a $15,000 quote and no way to decide">
         <p>
           Not &ldquo;Detroit residents.&rdquo; A specific person: a homeowner whose basement has backed up, holding a plumber&rsquo;s
-          quote for $5,000–25,000, who has been told the City has a program but cannot find out whether it applies to their alley.
+          quote for $5,000 to 25,000, who has been told the City has a program but cannot find out whether it applies to their alley.
         </p>
         <p>
           By DWSD&rsquo;s own director, about <strong className="text-ink">one in three Detroit homes</strong> has a failing sewer
           connection. Detroit 311 has taken <strong className="text-ink">336 water-in-basement reports a month</strong> for 42 straight
-          months. The City&rsquo;s three repair programs can reach roughly <strong className="text-ink">11,500 homes</strong> — which
+          months. The City&rsquo;s three repair programs can reach roughly <strong className="text-ink">11,500 homes</strong>, which
           leaves about <strong className="text-ink">68,000</strong> that no program will reach, and no way for any of them to know
           which group they are in.
         </p>
@@ -85,7 +85,7 @@ export default function AboutPage() {
           Detroiters asked the City to investigate water in their basements{" "}
           <strong className="text-ink">{stats.total.toLocaleString("en-US")} times</strong> between January 2023 and {stats.snapshot}.
           DWSD says about one in three private sewer connections is clogged, offset, or has fallen off the City&apos;s sewer. When the
-          problem is on the homeowner&apos;s side, a repair runs $5,000–$20,000.
+          problem is on the homeowner&apos;s side, a repair runs $5,000 to $20,000.
         </p>
         <p>
           The help is real but scattered: a $184M Alley Sewer Repair Program with no application and no address lookup; a Private Sewer
@@ -109,19 +109,19 @@ export default function AboutPage() {
 
       <Block eyebrow="What it does" title="One address, six segments">
         <p>
-          Detroit&rsquo;s money is not organised by what happened to you. It is organised by <em>which part of the pipe broke</em> — and
+          Detroit&rsquo;s money is not organised by what happened to you. It is organised by <em>which part of the pipe broke</em>, and
           each segment has a different owner, a different symptom and an entirely different funding source. No page anywhere lays them
           side by side, so that is what the report is.
         </p>
         <p>
           The segment that matters is the fourth: the connection between your lateral and the main under the alley. Legally it is
           yours, physically it sits under public ground, and it is what the ${(ASRP.total / 1_000_000).toFixed(0)}M program repairs
-          for free — if it reaches you.
+          for free, if it reaches you.
         </p>
         <p>Two real Detroit addresses, three miles apart, both with a city main on record:</p>
         <VerdictPair />
         <p className="text-[0.95rem] text-ink-3">
-          Same question, opposite answers — and today there is nowhere either household could find that out.
+          Same question, opposite answers, and today there is nowhere either household could find that out.
         </p>
       </Block>
 
@@ -142,7 +142,7 @@ export default function AboutPage() {
           So we measured the criteria that do have open data, against the {calibration.selected.n} alleys already under contract and
           the {calibration.comparison.n} the City completed before this program. Median basement-flooding reports within{" "}
           {calibration.radiusM} m: <strong className="text-ink">{calibration.water.median}</strong> around the chosen alleys, versus{" "}
-          <strong className="text-ink">{calibration.comparison.waterMedian}</strong> around the earlier ones — p &lt; 0.0001. Cave-ins
+          <strong className="text-ink">{calibration.comparison.waterMedian}</strong> around the earlier ones, p &lt; 0.0001. Cave-ins
           run the other way.
         </p>
         <p>
@@ -171,8 +171,8 @@ export default function AboutPage() {
         <p>
           The $184M Alley Sewer Repair Program is <strong className="text-ink">supply-driven</strong>: the City picks, nobody applies,
           nobody is notified. The Private Sewer Repair Program is <strong className="text-ink">demand-driven</strong>: you apply, and
-          you must prove the June 2021 flood damaged your home — five years later. They sit in different departments, on different
-          pages, and the City&rsquo;s own guide states two different income limits for the same program on pages 3–4 and page 10.
+          you must prove the June 2021 flood damaged your home, five years later. They sit in different departments, on different
+          pages, and the City&rsquo;s own guide states two different income limits for the same program on pages 3 to 4 and page 10.
         </p>
         <p>
           The cruelest rule is the sequencing one: <strong className="text-ink">PSRP cannot pay for work that has already started.</strong>{" "}
@@ -205,10 +205,10 @@ export default function AboutPage() {
         <p>
           A backup is not a single event. It returns with every heavy storm, the alley programme rolls out over four years in phases
           nobody publishes, and program rounds open and close. The same household checks again after the next storm, after a
-          neighbour&rsquo;s alley is dug up, before signing a contract, and before a sale. Each check is a decision worth $15,000–30,000.
+          neighbour&rsquo;s alley is dug up, before signing a contract, and before a sale. Each check is a decision worth $15,000 to 30,000.
         </p>
         <p>
-          The people who touch the most households are not homeowners at all — they are the plumbers, waterproofers, block clubs and
+          The people who touch the most households are not homeowners at all, they are the plumbers, waterproofers, block clubs and
           district staff who stand in these basements weekly. One page that answers &ldquo;wait or pay&rdquo; from an address is a tool
           they can use on every visit.
         </p>
@@ -217,7 +217,7 @@ export default function AboutPage() {
       <Block eyebrow="Impact, if adopted" title="What actually changes, and for whom">
         <ul className="list-disc space-y-2 pl-5">
           <li>
-            <strong className="text-ink">For the ~11,500 households the City will reach:</strong> they stop paying $5,000–25,000 for a
+            <strong className="text-ink">For the ~11,500 households the City will reach:</strong> they stop paying $5,000 to 25,000 for a
             repair that was already contracted. The City budgets about $20,400 per connection; paying for one privately a month before
             the contractor arrives is money that never comes back.
           </li>
@@ -231,7 +231,7 @@ export default function AboutPage() {
           </li>
           <li>
             <strong className="text-ink">Beyond Detroit:</strong> homeowners own their sewer laterals in most American cities, and the
-            same three public datasets — 311 requests, capital project phases, and census income — exist almost everywhere. The
+            same three public datasets, 311 requests, capital project phases, and census income, exist almost everywhere. The
             selection criteria and the neighborhood rules are configuration; the method travels. What does not travel is Detroit&rsquo;s
             particular program mix, which is why we say &ldquo;City of Detroit only&rdquo; rather than pretending otherwise.
           </li>
@@ -241,14 +241,14 @@ export default function AboutPage() {
       <Block eyebrow="How it sustains itself" title="It costs almost nothing to keep running">
         <p>
           Every input is public open data, the app runs as static pages with no AI at runtime, and there are no accounts to
-          administer. The honest answer to &ldquo;how does this make money&rdquo; is that it does not need to in order to survive —
+          administer. The honest answer to &ldquo;how does this make money&rdquo; is that it does not need to in order to survive ,
           which for a civic tool is a feature.
         </p>
         <p>
           Where revenue could come from, in order of how much evidence there is: the City&rsquo;s PSRP policy already contracts
           community organizations, for a fee, to do outreach and application intake, so a pre-screening tool has a buyer-shaped hole
-          to fill. <strong className="text-ink">Nobody has agreed to buy it.</strong> We deliberately refuse the obvious one — selling
-          leads to contractors — because the advice &ldquo;do not pay for this yet&rdquo; is only worth anything if nobody is paid when
+          to fill. <strong className="text-ink">Nobody has agreed to buy it.</strong> We deliberately refuse the obvious one, selling
+          leads to contractors, because the advice &ldquo;do not pay for this yet&rdquo; is only worth anything if nobody is paid when
           you do.
         </p>
       </Block>
@@ -257,7 +257,7 @@ export default function AboutPage() {
         <ul className="list-disc space-y-2 pl-5">
           <li>It never draws a guessed pipe. No public record locates a private sewer line; only a camera inspection does.</li>
           <li>
-            It never predicts DWSD&rsquo;s decision. The deciding evidence — a camera inspection of your connection — is not public,
+            It never predicts DWSD&rsquo;s decision. The deciding evidence, a camera inspection of your connection, is not public,
             and the report says so on every address. A missing lookup stays unknown, never a no.
           </li>
           <li>

@@ -1,7 +1,7 @@
 "use client";
 
 // A phone number is not an instruction. Under stress people dial, get an answer, and forget
-// what they meant to ask — so every number on this site carries the same four lines: what to
+// what they meant to ask, so every number on this site carries the same four lines: what to
 // say, what to ask, what to write down, and the thing people get wrong on that call.
 import { useState } from "react";
 import type { Contact } from "@/lib/contacts";
@@ -44,7 +44,7 @@ export function CallCard({ contact, tone = "primary" }: { contact: Contact; tone
             aria-expanded={open}
             className={`min-h-11 rounded-lg px-1 text-left text-[0.95rem] font-bold underline underline-offset-4 ${tone === "onDark" ? "text-white/90 decoration-white/40" : "text-brand decoration-brand/30"}`}
           >
-            {open ? "Hide the call" : "Before you dial — what to say and ask"}
+            {open ? "Hide the call" : "Before you dial, what to say and ask"}
           </button>
 
           {open && (

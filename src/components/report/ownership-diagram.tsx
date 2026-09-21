@@ -27,7 +27,7 @@ export function OwnershipDiagram({ parcel, main, side, site, center }: Props) {
       <PropertyScene key={`${parcel?.id}-${main?.id}-${site?.fetchedAt}`} model={model} />
       <dl className={styles.siteFacts}>
         <div><dt>Street-facing direction</dt><dd>{model?.facing ? <>{model.facing}<small> {Math.round(model.bearing!)}°</small></> : "Unconfirmed"}</dd><span>Inferred from street & parcel</span></div>
-        <div><dt>{model?.bearing === null ? "House footprint · E–W × N–S" : "House footprint · W × D"}</dt><dd>{model?.widthFt && model.depthFt ? <>{model.widthFt.toFixed(1)} × {model.depthFt.toFixed(1)}<small> ft</small></> : "Not recorded"}</dd><span>Measured from mapped outline</span></div>
+        <div><dt>{model?.bearing === null ? "House footprint · E to W × N to S" : "House footprint · W × D"}</dt><dd>{model?.widthFt && model.depthFt ? <>{model.widthFt.toFixed(1)} × {model.depthFt.toFixed(1)}<small> ft</small></> : "Not recorded"}</dd><span>Measured from mapped outline</span></div>
         <div><dt>Lot · frontage × depth</dt><dd>{parcel?.match === "exact" && parcel.frontageFt && data.lotDepth ? <>{parcel.frontageFt} × {data.lotDepth}<small> ft</small></> : "Not recorded"}</dd><span>City parcel record</span></div>
         <div><dt>Total floor area</dt><dd>{parcel?.match === "exact" && parcel.floorArea ? <>{parcel.floorArea.toLocaleString("en-US")}<small> sq ft</small></> : "Not recorded"}</dd><span>All floors, not the footprint</span></div>
       </dl>

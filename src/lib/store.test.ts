@@ -19,7 +19,7 @@ const KEY = "belowtrace:v2";
 const read = () => JSON.parse(storage.getItem(KEY) ?? "null");
 
 // The store keeps an in-memory copy so a private-mode browser does not lose the case, and that
-// copy outlives a cleared localStorage — so reset by writing an empty store, not by clearing.
+// copy outlives a cleared localStorage, so reset by writing an empty store, not by clearing.
 const EMPTY = JSON.stringify({ v: 2, activeId: null, cases: {} });
 beforeEach(() => {
   storage.clear();

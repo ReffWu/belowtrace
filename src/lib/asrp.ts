@@ -3,12 +3,12 @@
 // DWSD selects alleys for the Alley Sewer Repair Program using CCTV-confirmed lateral defects,
 // recorded cave-ins, and federal low/moderate-income rules, then rolls them out in phases. It
 // publishes the criteria. It does not publish the list, and the 30,000+ failed-lateral data
-// points behind it are not in any open dataset — we checked all 782 services on the City's
+// points behind it are not in any open dataset, we checked all 782 services on the City's
 // ArcGIS org; only catch basins and gravity mains are public.
 //
 // So this does not predict DWSD's decision. It measures the criteria that ARE public at one
 // address and says where that address sits relative to the 138 alleys already under contract.
-// The unobservable criterion — the CCTV evidence — is stated as unobservable, every time.
+// The unobservable criterion, the CCTV evidence, is stated as unobservable, every time.
 import calibration from "@/data/asrp-calibration.json";
 
 export const ASRP = {
@@ -49,7 +49,7 @@ export type AsrpInputs = {
   water500: number;
   /** Meters to the nearest alley already under contract, null when none is near. */
   nearestWorkM: number | null;
-  /** HUD low/mod income share for the block group, 0–1. null when the lookup failed. */
+  /** HUD low/mod income share for the block group, 0 to 1. null when the lookup failed. */
   lowModPct: number | null;
 };
 
@@ -81,7 +81,7 @@ export function assessAsrp(i: AsrpInputs): AsrpAssessment {
       value: `${i.water500} within ${CALIBRATION.radiusM} m`,
       note:
         i.water500 > CALIBRATION.water.median * 1.5
-          ? `Well above the alleys already chosen (median ${CALIBRATION.water.median}). The selection does not track this number — cave-ins are what it follows.`
+          ? `Well above the alleys already chosen (median ${CALIBRATION.water.median}). The selection does not track this number, cave-ins are what it follows.`
           : `The alleys already chosen have a median of ${CALIBRATION.water.median}. This is not a criterion DWSD selects on.`,
       met: null,
     },
@@ -132,7 +132,7 @@ export function assessAsrp(i: AsrpInputs): AsrpAssessment {
       verdict: "no-work-yet",
       headline: i.district ? `Nothing in District ${i.district} yet.` : "No contracted work near this address.",
       advice:
-        "The first round of contracts skipped this district entirely. There are three more years of the program, so this can change — but nothing is scheduled today, and nobody will tell you when it is. Do not plan around it.",
+        "The first round of contracts skipped this district entirely. There are three more years of the program, so this can change, but nothing is scheduled today, and nobody will tell you when it is. Do not plan around it.",
       signals,
       district: i.district,
       districtSelected,
@@ -145,7 +145,7 @@ export function assessAsrp(i: AsrpInputs): AsrpAssessment {
     verdict: strong ? "possible" : "unlikely",
     headline: strong ? "This address matches what DWSD has been choosing." : "This address does not look like what DWSD has been choosing.",
     advice: strong
-      ? "Worth one phone call before you spend anything. Ask whether your alley is in a current or upcoming contract — there is no list you can look up."
+      ? "Worth one phone call before you spend anything. Ask whether your alley is in a current or upcoming contract, there is no list you can look up."
       : "Call anyway, because DWSD holds camera evidence nobody else can see. But do not wait on it: on the public criteria, this address is not where the first round went.",
     signals,
     district: i.district,

@@ -36,10 +36,10 @@ describe("evaluatePsrp", () => {
     expect(r.checks.filter((c) => c.status === "warn")).toHaveLength(2);
   });
 
-  it("treats the 50–80% band as possible because the guide contradicts itself", () => {
+  it("treats the 50 to 80% band as possible because the guide contradicts itself", () => {
     const r = evaluatePsrp({ ...strong, income: "50to80" }, inArea);
     expect(r.verdict).toBe("possible");
-    expect(r.checks.some((c) => c.cite === "Guide p.3–4 vs p.10")).toBe(true);
+    expect(r.checks.some((c) => c.cite === "Guide p.3 to 4 vs p.10")).toBe(true);
   });
 
   it("rules out incomes above 80% AMI", () => {

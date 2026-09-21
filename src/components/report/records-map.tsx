@@ -69,7 +69,7 @@ export function RecordsMap({ center, parcel, mains, projects, points }: Props) {
           });
           map.addSource("projects", {
             type: "geojson",
-            data: lines(projects, (p) => ({ name: p.name, phase: p.phase, years: [p.startYear, p.endYear].filter(Boolean).join("–"), desc: p.description })),
+            data: lines(projects, (p) => ({ name: p.name, phase: p.phase, years: [p.startYear, p.endYear].filter(Boolean).join(" to "), desc: p.description })),
           });
           map.addSource("reports", {
             type: "geojson",
@@ -109,7 +109,7 @@ export function RecordsMap({ center, parcel, mains, projects, points }: Props) {
           const popup = new maplibregl.Popup({ closeButton: true, maxWidth: "260px" });
           const show = (html: string) => (e: import("maplibre-gl").MapLayerMouseEvent) => {
             const p = e.features?.[0]?.properties ?? {};
-            popup.setLngLat(e.lngLat).setHTML(html.replace(/\{(\w+)\}/g, (_, k) => escape(p[k]) || "—")).addTo(map!);
+            popup.setLngLat(e.lngLat).setHTML(html.replace(/\{(\w+)\}/g, (_, k) => escape(p[k]) || ",")).addTo(map!);
           };
           map.on("click", "mains", show("<strong>City sewer</strong><br>Laid {year} · {size}-inch {material}<br>{system}<br>About {depth} ft deep · {street}<br><em>DWSD record</em>"));
           map.on("click", "projects", show("<strong>{name}</strong><br>{desc}<br>{phase} · {years}<br><em>DWSD capital project</em>"));
@@ -179,7 +179,7 @@ function MapLegend() {
       <span className={item}>
         <span className="h-2.5 w-2.5 rounded-full bg-[#e0892b]" aria-hidden="true" /> other cave-in
       </span>
-      <span className="w-full text-xs text-ink-3">Private sewer lines are not shown — no public record locates them.</span>
+      <span className="w-full text-xs text-ink-3">Private sewer lines are not shown, no public record locates them.</span>
     </div>
   );
 }

@@ -6,7 +6,7 @@
 //
 // Order is by what cannot be undone, not by what comes first in a story:
 //   danger        someone can be hurt in the next minute
-//   irreversible  a door closes for good — evidence thrown out, a statutory deadline passed
+//   irreversible  a door closes for good, evidence thrown out, a statutory deadline passed
 //   window        a fixed period after which the cost multiplies (mould, mainly)
 //   steady        important, recoverable, do it when you can
 //
@@ -53,7 +53,7 @@ export const ACTIONS: Action[] = [
     standing: true,
     points: [
       "If the fuse box, outlets, appliances or wiring are in the water, stay out of it. Do not reach in to pull the breaker.",
-      "Stop using water upstairs — no toilets, showers, laundry or dishwasher until it stops rising. Every flush adds to what is down there.",
+      "Stop using water upstairs, no toilets, showers, laundry or dishwasher until it stops rising. Every flush adds to what is down there.",
       "Leave the cleanout cap alone. On a blocked line it is holding pressure, and opening it sprays sewage and sewer gas.",
       "When you do go down: rubber boots, rubber or nitrile gloves, an N95, sealed goggles. Keep children and pets out entirely.",
     ],
@@ -67,10 +67,10 @@ export const ACTIONS: Action[] = [
     from: 0,
     to: 4,
     points: [
-      "Mark the water line on the wall and photograph it next to a tape measure. Write down the inches — both claim forms ask for the depth.",
+      "Mark the water line on the wall and photograph it next to a tape measure. Write down the inches, both claim forms ask for the depth.",
       "Photograph every damaged item on its own, then walk the room on video saying today's date out loud.",
       "Photograph outside too: water at the curb, the storm, the manhole if it is lifting.",
-      "Keep every receipt from today onward — pump rental, dehumidifier, plumber, hotel, dump runs.",
+      "Keep every receipt from today onward, pump rental, dehumidifier, plumber, hotel, dump runs.",
     ],
   },
   {
@@ -115,7 +115,7 @@ export const ACTIONS: Action[] = [
     to: 10,
     points: [
       "Ask three things: does my policy have the Water Backup and Sump Overflow endorsement, what is its limit, and is there a separate limit for mould.",
-      "Standard homeowners policies exclude backups. The endorsement is usually $5,000–$10,000 unless you raised it.",
+      "Standard homeowners policies exclude backups. The endorsement is usually $5,000 to $10,000 unless you raised it.",
       "Open the claim even if you think you are not covered. A denial letter is one of the documents the City's own claim form asks for.",
       "Do not throw out anything expensive before the adjuster has seen the photographs.",
     ],
@@ -124,7 +124,7 @@ export const ACTIONS: Action[] = [
   {
     id: "notice",
     title: "Send your written notice",
-    why: `Michigan gives you ${NOTICE_DAYS} days from the day you found the water, and asks for six facts. It does not ask for estimates — that is what people are waiting for when the deadline passes.`,
+    why: `Michigan gives you ${NOTICE_DAYS} days from the day you found the water, and asks for six facts. It does not ask for estimates, that is what people are waiting for when the deadline passes.`,
     urgency: "irreversible",
     from: 0,
     to: NOTICE_DAYS,
@@ -209,7 +209,7 @@ export const ACTIONS: Action[] = [
     from: 30,
     contact: "dwsd",
     points: [
-      "A backwater valve is the single most effective fix. Ask DWSD whether your address is in the Basement Backup Protection Program before paying $2,000–4,000 for one.",
+      "A backwater valve is the single most effective fix. Ask DWSD whether your address is in the Basement Backup Protection Program before paying $2,000 to 4,000 for one.",
       "Raise the limit on your Water Backup endorsement. $5,000 does not finish a basement.",
       "Disconnect the downspouts and run them three feet from the foundation. Clear the catch basin at your curb before the next storm.",
     ],
@@ -295,7 +295,7 @@ function allNoticesSent(c: Case) {
 export function windowLabel(s: ActionState, clock: NoticeClock): string | null {
   const { action } = s;
   if (action.id === "notice") {
-    if (clock.state === "passed") return "Deadline passed — send it anyway";
+    if (clock.state === "passed") return "Deadline passed, send it anyway";
     if (clock.daysLeft === 0) return "Today is the last day";
     return `${clock.daysLeft} days left`;
   }

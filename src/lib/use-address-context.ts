@@ -1,7 +1,7 @@
 "use client";
 
-// The timeline renders from the phone alone. This adds the one thing it cannot know offline —
-// whether the address sits inside a repair program's boundary — and never blocks on it.
+// The timeline renders from the phone alone. This adds the one thing it cannot know offline ,
+// whether the address sits inside a repair program's boundary, and never blocks on it.
 import { useEffect, useState } from "react";
 
 export type AddressContext = {

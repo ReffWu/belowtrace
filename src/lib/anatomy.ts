@@ -1,7 +1,7 @@
 // Your home's drain, from the floor drain to the regional system, as six segments.
 //
 // This is the spine of the product. Detroit's money is not organised by "what happened to you"
-// — it is organised by WHICH PART OF THE PIPE broke. Different segments have different owners,
+//, it is organised by WHICH PART OF THE PIPE broke. Different segments have different owners,
 // different symptoms, and entirely different funding, and no page anywhere lays them side by
 // side. So: six segments, and for each one, who owns it, how you'd know it is that one, and who
 // might pay.
@@ -37,7 +37,7 @@ export type Segment = {
 
 export const OWNER_LABEL: Record<Owner, string> = {
   you: "Yours",
-  "you-in-row": "Yours — but under public ground",
+  "you-in-row": "Yours, but under public ground",
   city: "The City's",
   regional: "Regional",
 };
@@ -79,11 +79,11 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
           amount: "Backwater valve + sump pump",
           status: "unknown",
           detail:
-            "Free in 11 flood-prone neighborhoods. Confirm the current round with DWSD — a valve will not help until the line beyond it is sound, which is what stalled the first phase.",
+            "Free in 11 flood-prone neighborhoods. Confirm the current round with DWSD, a valve will not help until the line beyond it is sound, which is what stalled the first phase.",
           href: SOURCES.bbpp.url,
           phone: PHONES.dwsd.number,
         },
-        { name: "You", amount: "$2,000–4,000", status: "info", detail: "A backwater valve installed privately." },
+        { name: "You", amount: "$2,000 to 4,000", status: "info", detail: "A backwater valve installed privately." },
       ],
     },
     {
@@ -99,7 +99,7 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
           amount: "Up to $30,000",
           status: inPsrp ? "maybe" : "no",
           detail: inPsrp
-            ? `This address is inside ${r.psrpNeighborhood.name}. Four more conditions decide it, including proof the June 2021 flood damaged this home. Apply before signing anything — it cannot pay for work already started.`
+            ? `This address is inside ${r.psrpNeighborhood.name}. Four more conditions decide it, including proof the June 2021 flood damaged this home. Apply before signing anything, it cannot pay for work already started.`
             : !r.psrpNeighborhood.inProgram
               ? "This address is outside the 97 neighborhoods the program serves."
               : "Homes in a FEMA floodplain cannot apply, and this one is in one.",
@@ -120,7 +120,7 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
       payers: [
         {
           name: "Alley Sewer Repair Program",
-          amount: "Free — the City pays",
+          amount: "Free, the City pays",
           status: asrp.verdict === "underway" ? "yes" : asrp.verdict === "possible" ? "maybe" : "no",
           detail: asrp.advice,
           href: SOURCES.asrp.url,
@@ -128,7 +128,7 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
         },
         {
           name: "You",
-          amount: `$5,000–25,000`,
+          amount: `$5,000 to 25,000`,
           status: "info",
           detail: `The City budgets about $${ASRP.perConnection.toLocaleString("en-US")} per connection. Paying for one yourself, in the month before a contract reaches your alley, is the most expensive mistake on this page.`,
         },
@@ -138,7 +138,7 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
       id: "main",
       n: 5,
       name: "The public sewer main",
-      where: main ? `Under the alley — ${main.installYear ? `laid ${main.installYear}, ` : ""}${main.materialLabel ?? "material not recorded"}` : "Under the alley or street",
+      where: main ? `Under the alley, ${main.installYear ? `laid ${main.installYear}, ` : ""}${main.materialLabel ?? "material not recorded"}` : "Under the alley or street",
       owner: "city",
       symptom: "The whole block backs up at the same time, wet weather or dry.",
       payers: [
@@ -146,7 +146,7 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
           name: "DWSD",
           amount: "No cost to you",
           status: "yes",
-          detail: "The City maintains the public main. Report it and get a service request number — that number is also what a damage claim needs.",
+          detail: "The City maintains the public main. Report it and get a service request number, that number is also what a damage claim needs.",
           phone: PHONES.dwsd.number,
           href: SOURCES.maintenance.url,
         },
@@ -165,12 +165,12 @@ export function anatomy(r: Report, asrp: AsrpAssessment): Segment[] {
           amount: "Your losses, not the pipe",
           status: "info",
           detail:
-            "Michigan gives you 45 days from discovery to put a claim in writing — to the City and separately to GLWA. It compensates damage; it never pays to fix the pipe. GLWA denied all 24,000 claims from the 2021 flood.",
+            "Michigan gives you 45 days from discovery to put a claim in writing, to the City and separately to GLWA. It compensates damage; it never pays to fix the pipe. GLWA denied all 24,000 claims from the 2021 flood.",
           href: "/notice",
         },
         {
           name: "Nobody, for the cause",
-          amount: "—",
+          amount: ",",
           status: "info",
           detail: "The Alley Sewer Repair Program does not add capacity. When rain exceeds what the system was built for, a sound connection still backs up.",
         },
@@ -194,10 +194,10 @@ export function verdictLine(asrp: AsrpAssessment, inPsrp: boolean): { headline: 
   if (inPsrp)
     return {
       headline: "Do not wait for the alley program. Apply to the other one.",
-      sub: "Nothing near this address is contracted, and on the public criteria it is not where the first round went. But this address is inside the Private Sewer Repair Program's area — and that one you can apply to.",
+      sub: "Nothing near this address is contracted, and on the public criteria it is not where the first round went. But this address is inside the Private Sewer Repair Program's area, and that one you can apply to.",
     };
   return {
     headline: "Nothing is coming to this address. Plan as if you are on your own.",
-    sub: "No contracted work nearby, and outside the repair program's neighborhoods. That can change over three more years — but nobody will tell you if it does, so do not build a plan around it.",
+    sub: "No contracted work nearby, and outside the repair program's neighborhoods. That can change over three more years, but nobody will tell you if it does, so do not build a plan around it.",
   };
 }

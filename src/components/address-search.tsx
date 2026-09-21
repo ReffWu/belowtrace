@@ -1,7 +1,7 @@
 "use client";
 
 // One job: hand back a Detroit street address the resident confirmed.
-// It no longer decides where to navigate or what "situation" someone is in — the caller does.
+// It no longer decides where to navigate or what "situation" someone is in, the caller does.
 import { useEffect, useId, useRef, useState } from "react";
 
 type Suggestion = { text: string; magicKey: string };

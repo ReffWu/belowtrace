@@ -27,7 +27,7 @@ export function CaseFacts({ c, update, ctx }: { c: Case; update: (c: Case) => vo
     ["Notice deadline", day(noticeDeadline(c.foundOn))],
     ["Notice to DWSD", day(sent.dwsd)],
     ["Notice to GLWA", day(sent.glwa)],
-    ["Who owns the pipe", c.whose === "city" ? `The City's — ${c.whoseBasis || "as told to me"}` : c.whose === "mine" ? `The owner's — ${c.whoseBasis || "as told to me"}` : null],
+    ["Who owns the pipe", c.whose === "city" ? `The City's, ${c.whoseBasis || "as told to me"}` : c.whose === "mine" ? `The owner's, ${c.whoseBasis || "as told to me"}` : null],
   ];
 
   return (

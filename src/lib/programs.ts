@@ -21,7 +21,7 @@ function asrp({ lmi, projects }: Inputs): ProgramCard {
       reasons.push({ text: `${pct}% of residents in your census block group are low or moderate income. The City prioritizes areas above 50%.`, evidence: hud });
     } else {
       verdict = "unlikely";
-      headline = "Your area is below the income test the City uses to prioritize alleys — but DWSD makes the final call.";
+      headline = "Your area is below the income test the City uses to prioritize alleys, but DWSD makes the final call.";
       reasons.push({ text: `${pct}% of residents in your census block group are low or moderate income; the City prioritizes areas above 50%.`, evidence: hud });
     }
   }
@@ -30,7 +30,7 @@ function asrp({ lmi, projects }: Inputs): ProgramCard {
   if (active.length) {
     const p = active[0];
     reasons.push({
-      text: `DWSD has alley sewer work ${p.phase === "Construction" ? "under construction" : "in procurement"} ${p.distanceM} m from you: “${p.name}” (${[p.startYear, p.endYear].filter(Boolean).join("–")}).`,
+      text: `DWSD has alley sewer work ${p.phase === "Construction" ? "under construction" : "in procurement"} ${p.distanceM} m from you: “${p.name}” (${[p.startYear, p.endYear].filter(Boolean).join(" to ")}).`,
       evidence: cip,
     });
   }
@@ -45,7 +45,7 @@ function asrp({ lmi, projects }: Inputs): ProgramCard {
     shortName: "Alley Sewer Repair",
     status: "upcoming",
     statusLabel: `Starts ${new Date(`${ASRP_STARTS}-01T12:00:00`).toLocaleString("en-US", { month: "short", year: "numeric" })} · No application`,
-    amount: "Free — about 9,000 connections by 2030 ($184M)",
+    amount: "Free, about 9,000 connections by 2030 ($184M)",
     verdict,
     headline,
     reasons,
@@ -74,10 +74,10 @@ function psrp({ psrpNeighborhood, floodZone, parcel }: Inputs): ProgramCard {
     reasons.push({ text: `FEMA maps this property in flood zone ${floodZone.zone}. Homes in a floodplain are excluded.`, evidence: floodZone.evidence });
   }
   if (parcel?.propertyClass && !/RESIDENTIAL/i.test(parcel.propertyClass)) {
-    reasons.push({ text: `City records list this parcel as “${parcel.propertyClass}”. Only 1–4 unit homes qualify.`, evidence: parcel.evidence });
+    reasons.push({ text: `City records list this parcel as “${parcel.propertyClass}”. Only 1 to 4 unit homes qualify.`, evidence: parcel.evidence });
   }
   reasons.push({
-    text: "You must also show the June 25–26, 2021 flood affected your home and meet income limits.",
+    text: "You must also show the June 25 to 26, 2021 flood affected your home and meet income limits.",
     evidence: rule(SOURCES.psrpGuide),
   });
 
@@ -87,7 +87,7 @@ function psrp({ psrpNeighborhood, floodZone, parcel }: Inputs): ProgramCard {
     shortName: "Private Sewer Repair",
     status: "open",
     statusLabel: "Open · Apply online",
-    amount: "Up to $30,000 — grant for owners, forgivable loan for landlords",
+    amount: "Up to $30,000, grant for owners, forgivable loan for landlords",
     verdict,
     headline,
     reasons,
@@ -141,7 +141,7 @@ function claim(): ProgramCard {
     statusLabel: "Within 45 days of the backup",
     amount: "Reimbursement for damage, if DWSD is found responsible",
     verdict: "info",
-    headline: "If sewage backed up into your home, file a claim within 45 days. Call DWSD first — you need a Service Request number to file.",
+    headline: "If sewage backed up into your home, file a claim within 45 days. Call DWSD first, you need a Service Request number to file.",
     reasons: [{ text: "Claims must be filed within 45 days of discovering the backup, with a DWSD Service Request number.", evidence: rule(SOURCES.claims) }],
     actions: [
       { label: `Call DWSD ${PHONES.dwsd.number}`, href: tel(PHONES.dwsd.number), kind: "phone" },
@@ -194,7 +194,7 @@ function unavailable(): ProgramCard[] {
     {
       ...base,
       id: "habitat",
-      name: "Habitat for Humanity Detroit — Critical Home Repair",
+      name: "Habitat for Humanity Detroit, Critical Home Repair",
       shortName: "Habitat Critical Home Repair",
       status: "paused",
       statusLabel: "Not taking new applications",

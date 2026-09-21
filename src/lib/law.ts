@@ -1,6 +1,6 @@
 // Michigan's sewage-backup statute, modelled instead of paraphrased.
 //
-// PA 222 of 2001, MCL 691.1416–691.1419, is the ONLY route to compensation from a
+// PA 222 of 2001, MCL 691.1416 to 691.1419, is the ONLY route to compensation from a
 // governmental agency for a backup. It abrogates every common-law theory (691.1417(2)).
 // Residents lose money in three specific ways, and each one is encoded below:
 //
@@ -8,7 +8,7 @@
 //      the notice never required. NOTICE_CONTENT is the complete legal minimum.
 //   2. They notify the city and not the regional authority. Both owned or discharged into
 //      the system, so both are "appropriate governmental agencies" (691.1416(b)).
-//   3. They are told the problem is their own lateral, so they never file at all — without
+//   3. They are told the problem is their own lateral, so they never file at all, without
 //      being told that a plumber's opinion is not the agency's finding, and that notice
 //      costs nothing.
 //
@@ -28,11 +28,11 @@ export const NOTICE_DAYS = 45;
 /** 691.1419(6). No civil action until 45 days after the agency received the notice. */
 export const WAIT_DAYS_BEFORE_SUIT = 45;
 
-/** MCL 600.5805 — three years for injury to property. The notice deadline is not the whole clock. */
+/** MCL 600.5805, three years for injury to property. The notice deadline is not the whole clock. */
 export const LIMITATION_YEARS = 3;
 
 /**
- * 691.1419(2)(c) — the exhaustive list. An agency may ask for more; the statute does not.
+ * 691.1419(2)(c), the exhaustive list. An agency may ask for more; the statute does not.
  * Estimates, receipts and photographs belong to the claim packet, which has no 45-day clock.
  */
 export const NOTICE_CONTENT = [
@@ -44,7 +44,7 @@ export const NOTICE_CONTENT = [
   { id: "description", label: "A brief description of the claim" },
 ] as const;
 
-/** 691.1417(3) — all five must be shown. The agency, not the resident, holds most of the proof. */
+/** 691.1417(3), all five must be shown. The agency, not the resident, holds most of the proof. */
 export const ELEMENTS = [
   { id: "agency", text: "The agency owned, operated, or discharged into that part of the system", who: "record" },
   { id: "defect", text: "The system had a construction, design, maintenance, operation or repair defect", who: "agency" },
@@ -54,18 +54,18 @@ export const ELEMENTS = [
 ] as const;
 
 /**
- * 691.1416(k)(i)–(iii) — when an overflow is not a "sewage disposal system event" at all.
+ * 691.1416(k)(i) to (iii), when an overflow is not a "sewage disposal system event" at all.
  * This is the difference between a weak claim and no claim. It is also why a plumber saying
  * "it's your line" does not by itself end the matter: the statute turns on what substantially
  * caused the overflow, which is the agency's finding to make, not the plumber's.
  */
 export const EXCLUSIONS = [
   { id: "lateral", text: "A blockage in your own service lead that the agency did not cause" },
-  { id: "onsite", text: "Something connected on your property — a sump system, building drain, surface drain, gutter or downspout" },
+  { id: "onsite", text: "Something connected on your property, a sump system, building drain, surface drain, gutter or downspout" },
   { id: "war", text: "An act of war or terrorism" },
 ] as const;
 
-/** 691.1418(1)–(2). Money for what the backup cost you; nothing for what it did to you. */
+/** 691.1418(1) to (2). Money for what the backup cost you; nothing for what it did to you. */
 export const DAMAGES = {
   economic: "Repair, replacement, cleanup and other out-of-pocket losses.",
   noneconomic:
@@ -73,7 +73,7 @@ export const DAMAGES = {
 } as const;
 
 /**
- * 691.1419(3) — the one way a late notice survives.
+ * 691.1419(3), the one way a late notice survives.
  * If a resident told a contacting agency inside the 45 days, that agency owed them the notice
  * rules in writing (691.1419(2)); if it never sent them and that is why the notice was late,
  * the claim is not barred. Asking for it on the first call is free and costs one sentence,
@@ -125,7 +125,7 @@ export function noticeClock(foundOn: string, today: string): NoticeClock {
 }
 
 /**
- * What to tell someone whose 45 days have run out. Not "you have no claim" — that is a legal
+ * What to tell someone whose 45 days have run out. Not "you have no claim", that is a legal
  * conclusion this app has no standing to reach, and 691.1419(3) plus the three-year limitation
  * period both survive a missed notice.
  */

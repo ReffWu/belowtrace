@@ -64,7 +64,7 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
   let soft = false;
 
   if (auto.inNeighborhood) {
-    checks.push({ status: "pass", text: `Your address is in ${auto.neighborhoodName ?? "a"} — one of the 97 program neighborhoods.`, cite: "Guide p.4" });
+    checks.push({ status: "pass", text: `Your address is in ${auto.neighborhoodName ?? "a"}, one of the 97 program neighborhoods.`, cite: "Guide p.4" });
   } else {
     hardFail = true;
     checks.push({ status: "fail", text: "Your address is not in one of the 97 program neighborhoods.", cite: "Guide p.4, p.8" });
@@ -82,12 +82,12 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
 
   if (auto.residential === false) {
     soft = true;
-    checks.push({ status: "warn", text: "City records don't list this parcel as a 1–4 unit residential home. Only 1–4 unit homes qualify.", cite: "Guide p.4, p.7" });
+    checks.push({ status: "warn", text: "City records don't list this parcel as a 1 to 4 unit residential home. Only 1 to 4 unit homes qualify.", cite: "Guide p.4, p.7" });
   } else if (auto.residential === true) {
     checks.push({ status: "pass", text: "City records list this as a residential parcel.", cite: "Guide p.4, p.7" });
   } else {
     soft = true;
-    checks.push({ status: "warn", text: "City records do not confirm whether this is a 1–4 unit residential property. Ask PSRP staff to confirm it.", cite: "Guide p.4, p.7" });
+    checks.push({ status: "warn", text: "City records do not confirm whether this is a 1 to 4 unit residential property. Ask PSRP staff to confirm it.", cite: "Guide p.4, p.7" });
   }
 
   if (a.ownership === "renter") {
@@ -101,7 +101,7 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
         {
           status: "warn",
           text: "Ask PSRP staff whether an owner-consent application path is available and what the owner must provide.",
-          cite: "Guide p.5–6",
+          cite: "Guide p.5 to 6",
         },
       ],
       documents: ["A signed lease", "Written consent or contact information from the property owner"],
@@ -110,7 +110,7 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
   }
 
   if (a.ownership === "landlord") {
-    checks.push({ status: "warn", text: "As a landlord, help comes as a 5-year forgivable loan. Your tenants must be at or below 80% of area median income and the rental must be registered with BSEED.", cite: "Guide p.5–7" });
+    checks.push({ status: "warn", text: "As a landlord, help comes as a 5-year forgivable loan. Your tenants must be at or below 80% of area median income and the rental must be registered with BSEED.", cite: "Guide p.5 to 7" });
   }
 
   if (a.ownedSixMonths === "no") {
@@ -124,29 +124,29 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
     const { veryLow50, low80 } = incomeLimitsFor(a.householdSize);
     const fmt = (n: number) => `$${n.toLocaleString("en-US")}`;
     if (a.income === "under50") {
-      checks.push({ status: "pass", text: `Income under ${fmt(veryLow50)} for ${a.householdSize} — meets both income limits the City lists.`, cite: "Guide p.3–4, p.10" });
+      checks.push({ status: "pass", text: `Income under ${fmt(veryLow50)} for ${a.householdSize}, meets both income limits the City lists.`, cite: "Guide p.3 to 4, p.10" });
     } else if (a.income === "50to80") {
       soft = true;
       checks.push({
         status: "warn",
-        text: `Income between ${fmt(veryLow50)} and ${fmt(low80)}. The City's own guide lists 80% of area median income on p.3–4 but 50% on p.10. Ask the program which applies — don't rule yourself out.`,
-        cite: "Guide p.3–4 vs p.10",
+        text: `Income between ${fmt(veryLow50)} and ${fmt(low80)}. The City's own guide lists 80% of area median income on p.3 to 4 but 50% on p.10. Ask the program which applies, don't rule yourself out.`,
+        cite: "Guide p.3 to 4 vs p.10",
       });
     } else {
       hardFail = true;
-      checks.push({ status: "fail", text: `Income over ${fmt(low80)} for ${a.householdSize} — above the program's highest listed limit.`, cite: "Guide p.3–4" });
+      checks.push({ status: "fail", text: `Income over ${fmt(low80)} for ${a.householdSize}, above the program's highest listed limit.`, cite: "Guide p.3 to 4" });
     }
   }
 
   if (a.flooded2021 === "no") {
     hardFail = true;
-    checks.push({ status: "fail", text: "The program is federal disaster money: you must show the June 25–26, 2021 flood affected your home.", cite: "Guide p.4, p.12" });
+    checks.push({ status: "fail", text: "The program is federal disaster money: you must show the June 25 to 26, 2021 flood affected your home.", cite: "Guide p.4, p.12" });
   } else if (a.flooded2021 === "unsure") {
     soft = true;
     checks.push({ status: "warn", text: "Not sure about the June 2021 flood? Staff can review other proof, and you may be able to sign an affidavit.", cite: "Guide p.5" });
   } else if (a.flooded2021 === "yes") {
     if (a.floodProof && a.floodProof.length > 0) {
-      checks.push({ status: "pass", text: "You have proof from June–September 2021.", cite: "Guide p.4–5" });
+      checks.push({ status: "pass", text: "You have proof from June to September 2021.", cite: "Guide p.4 to 5" });
     } else if (a.floodProof) {
       soft = true;
       checks.push({ status: "warn", text: "No 2021 claim or invoice? Other proof can be reviewed, and you may be asked to sign an affidavit.", cite: "Guide p.5" });
@@ -157,7 +157,7 @@ export function evaluatePsrp(a: PsrpAnswers, auto: PsrpAuto): PsrpResult {
     soft = true;
     checks.push({
       status: "warn",
-      text: "You need current property taxes or a payment plan / HOPE exemption. Behind? Apply for HOPE first — it can wipe out this year's taxes for low-income homeowners.",
+      text: "You need current property taxes or a payment plan / HOPE exemption. Behind? Apply for HOPE first, it can wipe out this year's taxes for low-income homeowners.",
       cite: "Guide p.12",
     });
   } else if (a.taxesCurrent === "yes") {
@@ -185,7 +185,7 @@ export function documentsFor(a: PsrpAnswers): string[] {
   const docs = [
     "Photo ID for every household member 18+ (driver's license, State ID or Detroit ID)",
     "Proof you've owned the home 6+ months (recorded deed or land contract)",
-    "Current paid property tax bill — or proof of a payment plan or HOPE application",
+    "Current paid property tax bill, or proof of a payment plan or HOPE application",
     "A utility bill or other mail from the last 2 weeks",
     "Current homeowner's / fire insurance policy (or a waiver)",
     "Income proof for every adult: latest signed tax return (1040) or IRS transcript",
@@ -198,12 +198,12 @@ export function documentsFor(a: PsrpAnswers): string[] {
     fema: "your 2021 FEMA claim",
     sba: "your 2021 SBA claim",
     "dwsd-claim": "your 2021 DWSD water-in-basement claim",
-    "contractor-invoice": "a licensed contractor's invoice from June–Sept 2021",
+    "contractor-invoice": "a licensed contractor's invoice from June to Sept 2021",
   };
   docs.push(
     proof.length
       ? `Proof of the June 2021 flood: ${proof.map((p) => labels[p]).join(", ")}`
-      : "Proof of the June 2021 flood (claim or invoice dated June–Sept 2021), or ask about signing an affidavit",
+      : "Proof of the June 2021 flood (claim or invoice dated June to Sept 2021), or ask about signing an affidavit",
   );
   if (a.ownership === "landlord") {
     docs.push("Signed lease and your tenants' income documents", "BSEED rental registration");

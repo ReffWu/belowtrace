@@ -2,7 +2,7 @@
 //
 // No press photographs and no screenshots of other people's forums: those belong to whoever made
 // them. Instead these render the actual product surfaces and the actual measurements, so what a
-// reader sees on this page is the same thing the app computes — and quotes appear as attributed
+// reader sees on this page is the same thing the app computes, and quotes appear as attributed
 // text with a link to the source, the way a newspaper prints them.
 import calibration from "@/data/asrp-calibration.json";
 
@@ -92,14 +92,14 @@ export function ComparisonChart() {
               <span className="shrink-0 text-[1.1rem] font-extrabold tabular-nums">{r.n}</span>
             </div>
             <div className="mt-1.5 h-3 overflow-hidden rounded-full bg-sunk">
-              <div className={`h-full rounded-full ${r.hot ? "bg-stop" : "bg-ink-3/45"}`} style={{ width: `${(r.n / max) * 100}%` }} />
+              <div className={`h-full rounded-full ${r.hot ? "bg-stop" : "bg-ink-3/45"}`} style={{ width: `${((r.n / max) * 100).toFixed(1)}%` }} />
             </div>
             <span className="mt-1 block text-[0.8rem] text-ink-3">{r.note}</span>
           </div>
         ))}
       </div>
       <p className="mt-4 border-t border-line pt-3 text-[0.9rem] leading-relaxed text-ink-2">
-        Two independent comparison groups sit at 38–45. The new program sits at {calibration.water.median}. Permutation test on the
+        Two independent comparison groups sit at 38 and 45. The new program sits at {calibration.water.median}. Permutation test on the
         gap: p &lt; 0.0001.
       </p>
     </figure>
@@ -107,15 +107,15 @@ export function ComparisonChart() {
 }
 
 /** Where the first round of contracts actually went. Four districts have nothing. */
-export function DistrictChart() {
+export function DistrictChart({ compact = false }: { compact?: boolean } = {}) {
   const counts = calibration.districtCounts as Record<string, number>;
   const max = Math.max(...DISTRICTS.map((d) => counts[String(d)] ?? 0));
   return (
-    <figure className="rounded-2xl border border-line bg-surface p-5">
+    <figure className={`rounded-2xl border border-line bg-surface ${compact ? "p-4" : "p-5"}`}>
       <figcaption className="text-[0.8rem] font-bold uppercase tracking-[0.12em] text-ink-3">
         Alleys in the first round of contracts, by council district
       </figcaption>
-      <div className="mt-5 flex items-end justify-between gap-2" style={{ height: "9rem" }}>
+      <div className={`flex items-end justify-between gap-2 ${compact ? "mt-3" : "mt-5"}`} style={{ height: compact ? 88 : 144 }}>
         {DISTRICTS.map((d) => {
           const n = counts[String(d)] ?? 0;
           return (
@@ -123,14 +123,14 @@ export function DistrictChart() {
               <span className={`text-[0.85rem] font-extrabold tabular-nums ${n === 0 ? "text-stop" : "text-ink"}`}>{n}</span>
               <div
                 className={`w-full rounded-t ${n === 0 ? "bg-stop/25" : "bg-own"}`}
-                style={{ height: n === 0 ? "3px" : `${Math.max((n / max) * 100, 6)}%` }}
+                style={{ height: n === 0 ? 3 : Math.max(Math.round((n / max) * (compact ? 62 : 104)), 6) }}
               />
               <span className="text-[0.8rem] text-ink-3">D{d}</span>
             </div>
           );
         })}
       </div>
-      <p className="mt-4 border-t border-line pt-3 text-[0.9rem] leading-relaxed text-ink-2">
+      <p className={`border-t border-line text-[0.88rem] leading-snug text-ink-2 ${compact ? "mt-3 pt-2.5" : "mt-4 pt-3"}`}>
         The City&rsquo;s CDBG-DR Action Plan named Districts 4, 6 and 7 as priorities. District 4 has none.
       </p>
     </figure>

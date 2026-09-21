@@ -102,7 +102,7 @@ export function insideLot(point: Point2, lot: Point2[][][]): boolean {
   return lot.some(coordinates => booleanPointInPolygon(point, { type: "Polygon", coordinates }));
 }
 
-// Liang–Barsky clipping keeps road and pipe geometry inside the model's display bounds.
+// Liang to Barsky clipping keeps road and pipe geometry inside the model's display bounds.
 export function clipSegment(a: Point2, b: Point2, bounds: PropertyModel["bounds"]): [Point2, Point2] | null {
   const dx = b[0] - a[0], dz = b[1] - a[1];
   let start = 0, end = 1;

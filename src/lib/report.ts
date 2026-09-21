@@ -6,7 +6,7 @@ import type { Evidence, Report, ReportError, Situation, Unknown } from "./types"
 import golden from "@/data/golden.json";
 import { propertySite } from "./property-site-source";
 
-const MAIN_RADIUS_M = 120; // alley behind a typical Detroit lot is 20–60 m from the front door, wide lots 80-110m
+const MAIN_RADIUS_M = 120; // alley behind a typical Detroit lot is 20 to 60 m from the front door, wide lots 80-110m
 const MAP_MAIN_RADIUS_M = 250;
 const PROJECT_RADIUS_M = 400;
 const REPORT_RADIUS_M = 200;

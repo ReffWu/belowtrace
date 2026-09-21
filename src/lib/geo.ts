@@ -215,7 +215,7 @@ export function councilDistrict(p: LngLat): number | null {
   return districts.find((d) => d.shapes.some((s) => booleanPointInPolygon(p, s)))?.n ?? null;
 }
 
-/** Alleys already under construction or out to bid — the 138 DWSD has actually chosen. */
+/** Alleys already under construction or out to bid, the 138 DWSD has actually chosen. */
 const SELECTED_PHASES = new Set(["Construction", "Procurement"]);
 const selectedAlleys = projects.filter((pr) => SELECTED_PHASES.has(pr.phase) && /\balley\b/i.test(pr.name));
 
@@ -263,7 +263,7 @@ export function permitsNear(p: LngLat, radiusM: number): (SewerPermit & { distan
     .sort((a, b) => a.distanceM - b.distanceM || b.on.localeCompare(a.on));
 }
 
-/** Work permitted at this parcel itself — the only per-house record of the private line there is. */
+/** Work permitted at this parcel itself, the only per-house record of the private line there is. */
 export function permitsAtParcel(parcelId: string | null | undefined, p: LngLat) {
   const here = permitsNear(p, 40);
   if (!parcelId) return here;

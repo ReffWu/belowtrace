@@ -13,15 +13,15 @@ export const PHONES = {
 
 export const SOURCES = {
   asrp: {
-    label: "DWSD — Alley Sewer Repair Program",
+    label: "DWSD, Alley Sewer Repair Program",
     url: "https://detroitmi.gov/departments/detroit-water-and-sewerage-department/dwsd-resources/alley-sewer-repair-program",
   },
   asrpNews: {
-    label: "City of Detroit — $184M ASRP announcement",
+    label: "City of Detroit, $184M ASRP announcement",
     url: "https://detroitmi.gov/news/mayor-sheffield-dwsd-announce-184m-alley-sewer-repair-program-fix-9000-private-residential-sewer",
   },
   psrp: {
-    label: "HRD — CDBG-DR Private Sewer Repair Program",
+    label: "HRD, CDBG-DR Private Sewer Repair Program",
     url: "https://detroitmi.gov/departments/housing-and-revitalization-department/hud-programming-and-information/cdbg-disaster-recovery/cdbg-dr-private-sewer-repair-program",
   },
   psrpGuide: {
@@ -37,54 +37,54 @@ export const SOURCES = {
     url: "https://portal.neighborlysoftware.com/cityofdetroitmi/participant",
   },
   chr: {
-    label: "HRD — Critical Home Repair Program",
+    label: "HRD, Critical Home Repair Program",
     url: "https://detroitmi.gov/departments/housing-and-revitalization-department/homeowners/critical-home-repair-program",
   },
   claims: {
-    label: "DWSD — Damage Claims & Sewage Backups",
+    label: "DWSD, Damage Claims & Sewage Backups",
     url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-customer-service/dwsd-damage-claims-sewage-backups",
   },
   bbpp: {
-    label: "DWSD — Basement Backup and Flood Protection",
+    label: "DWSD, Basement Backup and Flood Protection",
     url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/basement-backup-and-flood-protection",
   },
-  habitat: { label: "Habitat Detroit — Critical Home Repair", url: "https://habitatdetroit.org/critical-home-repair/" },
+  habitat: { label: "Habitat Detroit, Critical Home Repair", url: "https://habitatdetroit.org/critical-home-repair/" },
   handbook: {
     label: "DWSD Basement Backup & Flooding Handbook (2023)",
     url: "https://detroitmi.gov/sites/detroitmi.localhost/files/2023-07/DWSD%20Basement%20Backup%20&%20Flooding%20Handbook%20-%20Version%202023-1.pdf",
   },
   floodSafety: {
-    label: "DWSD — Flood Safety and Reduction Tips",
+    label: "DWSD, Flood Safety and Reduction Tips",
     url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-resources/dwsd-flood-safety-and-reduction-tips",
   },
   glwaClaims: {
-    label: "Planet Detroit — GLWA denies all 2021 flood claims (July 2022)",
+    label: "Planet Detroit, GLWA denies all 2021 flood claims (July 2022)",
     url: "https://planetdetroit.org/2022/07/glwa-denies-all-flood-claims-from-2021-lawsuits-will-continue/",
   },
   hope: {
-    label: "City of Detroit — HOPE property tax exemption",
+    label: "City of Detroit, HOPE property tax exemption",
     url: "https://detroitmi.gov/government/mayors-office/chief-financial-officer/homeowners-property-exemption-hope",
   },
   zeroLoan: { label: "Detroit 0% Interest Home Repair Loans", url: "https://www.detroithomeloans.org/" },
   maintenance: {
-    label: "DWSD — Water and Sewer Maintenance/Emergencies",
+    label: "DWSD, Water and Sewer Maintenance/Emergencies",
     url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-customer-service/water-and-sewer-maintenanceemergencies",
   },
   beasley: {
-    label: "WDIV — Detroit couple battles basement flooding; city has no record of sewer line (Apr 2026)",
+    label: "WDIV, Detroit couple battles basement flooding; city has no record of sewer line (Apr 2026)",
     url: "https://www.clickondetroit.com/news/local/2026/04/27/detroit-couple-battles-basement-flooding-for-decades-city-says-they-have-no-record-of-sewer-line/",
   },
   incomeLimits: {
     label: "MSHDA Income Limits, effective May 1, 2026 (Wayne County)",
     url: "https://www.michigan.gov/mshda/rental/property-managers/compliance/income_rent_and_utility_limits",
   },
-  parcels: { label: "City of Detroit — Parcels (current)", url: "https://data.detroitmi.gov/" },
+  parcels: { label: "City of Detroit, Parcels (current)", url: "https://data.detroitmi.gov/" },
   permits: {
     label: "BSEED trades permits (plumbing)",
     url: "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/bseed_trades_permits/FeatureServer/0",
   },
   districts: {
-    label: "City of Detroit — Council districts 2026",
+    label: "City of Detroit, Council districts 2026",
     url: "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/city_council_districts_2026/FeatureServer/0",
   },
   improveDetroit: { label: "Improve Detroit 311 requests", url: "https://data.detroitmi.gov/" },
@@ -97,19 +97,19 @@ export const SOURCES = {
     url: "https://utility.arcgis.com/usrsvcs/servers/afe480be72214d84b1ac283f4c3681b3/rest/services/DWSD_Capital_Improvement_Projects_Public_View/FeatureServer",
   },
   psrpMap: {
-    label: "City of Detroit — PSRP neighborhoods",
+    label: "City of Detroit, PSRP neighborhoods",
     url: "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Neighborhoods_CDBG_DR_Private_Sewer_Repair_Program/FeatureServer/0",
   },
   fema: { label: "FEMA National Flood Hazard Layer", url: "https://www.fema.gov/flood-maps/national-flood-hazard-layer" },
   hudLmi: {
-    label: "HUD Low/Mod Income by Block Group (ACS 2016–2020)",
+    label: "HUD Low/Mod Income by Block Group (ACS 2016 to 2020)",
     url: "https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/LOW_MOD_INCOME_BY_BG/FeatureServer",
   },
 } as const;
 
 // What things cost, from the DWSD Basement Backup & Flooding Handbook (2023): p. 16 for snaking and
 // lateral repair; p. 26 for the most DWSD's own backup program paid for a camera inspection.
-export const COSTS = { snaking: "$75–$150", lateral: "$5,000–$20,000", camera: "~$400" };
+export const COSTS = { snaking: "$75 to $150", lateral: "$5,000 to $20,000", camera: "~$400" };
 
 // Wayne County, MSHDA income limits effective May 1, 2026. Index 0 = 1 person … index 7 = 8 people.
 export const INCOME_LIMITS = {

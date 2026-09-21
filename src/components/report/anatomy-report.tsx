@@ -60,7 +60,7 @@ export function AnatomyReport({
       </header>
 
       {/* The verdict, at the size of the decision it carries. The mark and the label share one
-          row so the headline gets the full width — on a 320px screen that is the difference
+          row so the headline gets the full width, on a 320px screen that is the difference
           between four lines and seven. */}
       <section className={`mt-6 overflow-hidden rounded-3xl text-white ${tone.bar}`}>
         <div className="p-5 sm:p-7">
@@ -101,7 +101,7 @@ export function AnatomyReport({
       <section className="mt-10">
         <h2 className="text-[1.35rem] font-extrabold tracking-[-0.025em]">What is under this house</h2>
         <p className="mt-2 leading-relaxed text-ink-2">
-          Six segments. The $15,000 lands on you or on the City depending entirely on which one broke — and the private line is never
+          Six segments. The $15,000 lands on you or on the City depending entirely on which one broke, and the private line is never
           drawn here, because no public record locates it.
         </p>
         <div className="mt-5">
@@ -151,7 +151,7 @@ export function AnatomyReport({
         <p className="text-[0.75rem] font-bold uppercase tracking-[0.12em] text-own">Second track</p>
         <h2 className="mt-1.5 text-[1.35rem] font-extrabold leading-tight tracking-[-0.02em]">Has it already flooded?</h2>
         <p className="mt-2 leading-relaxed text-ink-2">
-          Everything above is about who repairs the pipe. None of it pays for a ruined basement — that is a separate claim, with a
+          Everything above is about who repairs the pipe. None of it pays for a ruined basement, that is a separate claim, with a
           45-day deadline from the day you found the water, to the City <em>and</em> to GLWA.
         </p>
         <Link href="/now" className="mt-4 flex min-h-14 items-center justify-between rounded-2xl bg-ink px-5 font-bold text-white hover:bg-brand-ink">
@@ -298,7 +298,7 @@ function PermitHistory({ report: r, showHere }: { report: Report; showHere: bool
         ) : (
           <p className="mt-2 leading-relaxed text-ink-2">
             <strong className="text-ink">No permit on record at this property since {since}.</strong> That does not mean the line is
-            sound — most of these lines have never been opened. It means nothing has been done to it that the City wrote down.
+            sound, most of these lines have never been opened. It means nothing has been done to it that the City wrote down.
           </p>
         ))}
       <p className={`${showHere ? "mt-3 border-t border-line pt-3 " : "mt-2 "}leading-relaxed text-ink-2`}>
@@ -306,7 +306,7 @@ function PermitHistory({ report: r, showHere }: { report: Report; showHere: bool
         been pulled since {since}
         {valvesNearby > 0 ? (
           <>
-            , <strong className="text-ink">{valvesNearby}</strong> of them backwater valves — neighbors paying to protect themselves
+            , <strong className="text-ink">{valvesNearby}</strong> of them backwater valves, neighbors paying to protect themselves
           </>
         ) : null}
         .
@@ -333,7 +333,7 @@ function AsrpPanel({ asrp }: { asrp: AsrpAssessment }) {
               <dd className="flex items-center gap-2 text-[0.95rem] font-bold tabular-nums">
                 {sig.value}
                 <span aria-hidden="true" className={`grid h-5 w-5 place-items-center rounded-full text-[0.7rem] font-bold text-white ${sig.met === true ? "bg-go" : sig.met === false ? "bg-line-2" : "bg-warn"}`}>
-                  {sig.met === true ? "✓" : sig.met === false ? "–" : "?"}
+                  {sig.met === true ? "✓" : sig.met === false ? " to " : "?"}
                 </span>
               </dd>
             </div>

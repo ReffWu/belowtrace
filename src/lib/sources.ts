@@ -158,7 +158,7 @@ function toParcel(f: ParcelFeature, match: Parcel["match"]): Parcel {
   };
 }
 
-// Vertex average of the outer ring (closing vertex excluded) — fine for small, convex-ish lots.
+// Vertex average of the outer ring (closing vertex excluded), fine for small, convex-ish lots.
 export function centroid(g: GeoJSON.Polygon | GeoJSON.MultiPolygon | null): LngLat | null {
   const ring = g ? (g.type === "Polygon" ? g.coordinates[0] : g.coordinates[0][0]) : null;
   if (!ring || ring.length < 2) return null;

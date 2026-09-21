@@ -1,0 +1,240 @@
+/* Seven slides at 16:9, built from the same tokens as the site.
+   Screen: stacked and centred. Print: one slide per landscape page, no chrome. */
+
+.deck {
+  --w: 1600px;
+  --h: 900px;
+  background: var(--sunk);
+  padding: 2rem 1rem 4rem;
+}
+
+.slide {
+  width: var(--w);
+  height: var(--h);
+  margin: 0 auto 2rem;
+  background: var(--paper);
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px -30px rgb(21 33 43 / 0.5);
+  transform-origin: top center;
+}
+
+.slide--dark {
+  background: var(--deep);
+  color: #fff;
+}
+
+.slide__body {
+  flex: 1;
+  padding: 54px 78px 80px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.slide__rule {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 10px;
+}
+
+.slide__foot {
+  position: absolute;
+  left: 78px;
+  right: 78px;
+  bottom: 26px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+.slide--dark .slide__foot {
+  color: rgb(255 255 255 / 0.45);
+}
+
+.eyebrow {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--own);
+}
+
+.slide--dark .eyebrow {
+  color: var(--glow);
+}
+
+.h1 {
+  font-size: 92px;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+}
+
+.h2 {
+  font-size: 56px;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+
+.h3 {
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+.lede {
+  font-size: 24px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.slide--dark .lede {
+  color: rgb(255 255 255 / 0.72);
+}
+
+.small {
+  font-size: 19px;
+  line-height: 1.38;
+  color: var(--ink-2);
+}
+
+.tiny {
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+
+.stat {
+  font-size: 84px;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.card {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 22px;
+  padding: 24px 26px;
+}
+
+.shot {
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--sunk);
+  border: 2px solid var(--line);
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.credit {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+}
+
+.slide--dark .credit {
+  color: rgb(255 255 255 / 0.4);
+}
+
+@media screen and (max-width: 1700px) {
+  .slide {
+    transform: scale(calc((100vw - 3rem) / 1600));
+    margin-bottom: calc(2rem - 900px + (100vw - 3rem) * 900 / 1600);
+  }
+}
+
+@media print {
+  /* globals.css has a print stylesheet for the report pages: it shrinks the root to 9.5pt and
+     forces section h2 to 14pt. Slides are sections, so those rules land on every headline.
+     Re-assert the deck's own scale here. */
+  .deck {
+    font-size: 17px;
+  }
+  .slide .h1 {
+    font-size: 92px !important;
+  }
+  .slide .h2 {
+    font-size: 56px !important;
+  }
+  .slide .h3 {
+    font-size: 30px !important;
+  }
+  .slide .stat {
+    font-size: 84px !important;
+  }
+  .slide .lede {
+    font-size: 24px !important;
+  }
+  .slide .small {
+    font-size: 19px !important;
+  }
+  .slide .tiny {
+    font-size: 16px !important;
+  }
+  .slide .eyebrow {
+    font-size: 16px !important;
+  }
+  .slide .slide__body,
+  .slide section,
+  .slide article {
+    padding: 54px 78px 80px !important;
+  }
+  .slide .slide__body > *,
+  .slide figure,
+  .slide .card {
+    break-inside: avoid;
+  }
+  .slide h1,
+  .slide h2,
+  .slide h3 {
+    break-after: auto !important;
+  }
+
+  @page {
+    size: 1600px 900px;
+    margin: 0;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  .no-print,
+  header,
+  footer {
+    display: none !important;
+  }
+  .deck {
+    padding: 0;
+    background: #fff;
+  }
+  .slide {
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    break-after: page;
+    break-inside: avoid;
+  }
+  .slide:last-child {
+    break-after: auto;
+  }
+}

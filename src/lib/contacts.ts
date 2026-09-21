@@ -13,7 +13,7 @@ export type Contact = {
   hours?: string;
   /** The sentence to open with. Written to be read aloud under stress. */
   say?: string;
-  /** What to ask once they answer. Three at most — nobody holds more than three. */
+  /** What to ask once they answer. Three at most, nobody holds more than three. */
   ask?: string[];
   /** What to have written down before you hang up. */
   write?: string[];
@@ -35,7 +35,7 @@ export const CONTACTS = {
 
   dte: {
     id: "dte",
-    name: "DTE Energy — gas leak or electrical emergency",
+    name: "DTE Energy, gas leak or electrical emergency",
     short: "DTE · gas & electrical",
     phone: "800-477-4747",
     tel: "8004774747",
@@ -71,7 +71,7 @@ export const CONTACTS = {
 
   glwa: {
     id: "glwa",
-    name: "Great Lakes Water Authority — Office of the General Counsel",
+    name: "Great Lakes Water Authority, Office of the General Counsel",
     short: "GLWA legal office",
     phone: "844-455-4592",
     tel: "8444554592",
@@ -88,7 +88,7 @@ export const CONTACTS = {
 
   dpw: {
     id: "dpw",
-    name: "Detroit Public Works — flood debris pickup",
+    name: "Detroit Public Works, flood debris pickup",
     short: "Detroit Public Works",
     phone: "313-876-0004",
     tel: "3138760004",
@@ -109,7 +109,7 @@ export const CONTACTS = {
       "What has to be thrown out, and what can be cleaned?",
       "Is it safe for children or anyone with asthma to be in the house?",
     ],
-    write: ["Anything they tell you to discard — insurers ask for this"],
+    write: ["Anything they tell you to discard, insurers ask for this"],
   },
 
   mi211: {
@@ -136,7 +136,7 @@ export const CONTACTS = {
     ],
     write: ["Your application number", "The list of documents they ask for", "The date they say you will hear back"],
     watch:
-      "Ask before you sign any repair contract. The program cannot pay for work that started before its review — that is the single most expensive mistake on this list.",
+      "Ask before you sign any repair contract. The program cannot pay for work that started before its review, that is the single most expensive mistake on this list.",
   },
 
   wayneMetro: {
@@ -179,7 +179,7 @@ export const NOTICE_RECIPIENTS = [
       url: "https://detroitmi.gov/departments/water-and-sewerage-department/dwsd-customer-service/dwsd-damage-claims-sewage-backups",
     },
     why: "Detroit owns the sewer your home connects to.",
-    confirm: `Confirm the mailing address when you call ${CONTACTS.dwsd.phone} — the City has moved claims intake before.`,
+    confirm: `Confirm the mailing address when you call ${CONTACTS.dwsd.phone}, the City has moved claims intake before.`,
     needsServiceRequest: true,
   },
   {

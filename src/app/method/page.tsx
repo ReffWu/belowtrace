@@ -49,11 +49,11 @@ export default function MethodPage() {
         </p>
         <p>So we used the criteria that do have open data behind them:</p>
         <ul className="ml-5 list-disc space-y-1.5">
-          <li>Alley cave-ins and sinkholes — Improve Detroit 311, {DATA_SNAPSHOT} snapshot</li>
-          <li>Water-in-basement reports — same source</li>
-          <li>Low/moderate income share — HUD by block group, live</li>
-          <li>Council district — City of Detroit 2026 boundaries</li>
-          <li>Alleys already contracted — DWSD Capital Improvement Projects, phases Construction and Procurement</li>
+          <li>Alley cave-ins and sinkholes, Improve Detroit 311, {DATA_SNAPSHOT} snapshot</li>
+          <li>Water-in-basement reports, same source</li>
+          <li>Low/moderate income share, HUD by block group, live</li>
+          <li>Council district, City of Detroit 2026 boundaries</li>
+          <li>Alleys already contracted, DWSD Capital Improvement Projects, phases Construction and Procurement</li>
         </ul>
       </Block>
 
@@ -86,7 +86,7 @@ export default function MethodPage() {
       <Block title="A third comparison: where households pay for it themselves">
         <p>
           BSEED trades permits record private sewer work by address: 2,722 permits since 2019, of which{" "}
-          <strong className="text-ink">1,288 are backwater valve installations</strong> — households paying to protect themselves. We
+          <strong className="text-ink">1,288 are backwater valve installations</strong>, households paying to protect themselves. We
           measured the same 500 m flooding density around those addresses.
         </p>
         <Table
@@ -99,7 +99,7 @@ export default function MethodPage() {
           note="Same radius and method as the calibration above."
         />
         <p>
-          Two independent comparison groups — private spending and the City&rsquo;s own earlier alley work — both sit at 38–45. The new
+          Two independent comparison groups, private spending and the City&rsquo;s own earlier alley work, both sit at 38 to 45. The new
           program sits at {calibration.water.median}. That makes the gap harder to explain as noise in 311 reporting: the same data,
           measured the same way, puts everything else roughly twice as high.
         </p>
@@ -111,18 +111,18 @@ export default function MethodPage() {
 
       <Block title="A third gap: the map itself">
         <p>
-          The public sewer dataset is DWSD&rsquo;s Sewer Cleaning Dashboard — mains that carry a recent cleaning work order. It is a
+          The public sewer dataset is DWSD&rsquo;s Sewer Cleaning Dashboard, mains that carry a recent cleaning work order. It is a
           record of maintenance activity being read as an asset map, and it is thin where it matters.
         </p>
         <p>
           We sampled 1,500 of the basement-flooding reports at random and asked whether any city sewer main appears within 120 m in
-          the public data. <strong className="text-ink">432 did — 29%.</strong> For the other{" "}
+          the public data. <strong className="text-ink">432 did, 29%.</strong> For the other{" "}
           <strong className="text-ink">71%</strong>, a resident looking up their own block finds nothing at all.
         </p>
         <p>
           In May 2026 a Detroit couple told a TV station about fifty years of basement flooding. DWSD&rsquo;s deputy director said on
           camera: &ldquo;This sewer is not on our records, it&rsquo;s not on our maps.&rdquo; The city cleared the line within days of the
-          broadcast. A gap in the published record is not proof that DWSD lacks the data internally — but it is why a household cannot
+          broadcast. A gap in the published record is not proof that DWSD lacks the data internally, but it is why a household cannot
           check anything for itself, and it is why this report says &ldquo;no record&rdquo; rather than inventing a pipe.
         </p>
       </Block>
@@ -135,7 +135,7 @@ export default function MethodPage() {
         />
         <p>
           Four of seven districts have nothing in the first round, including District 4. There are three more years of the program,
-          so this can change — and that is the reason to publish it now rather than afterwards.
+          so this can change, and that is the reason to publish it now rather than afterwards.
         </p>
       </Block>
 
@@ -154,7 +154,7 @@ export default function MethodPage() {
             reflect who calls the City, which is itself unequal.
           </li>
           <li>
-            <strong className="text-ink">The comparison group is small</strong> — {calibration.comparison.n} earlier alley projects.
+            <strong className="text-ink">The comparison group is small</strong>, {calibration.comparison.n} earlier alley projects.
           </li>
           <li>
             <strong className="text-ink">This is correlation, not an audit.</strong> It is a reading of public data, offered so that
@@ -165,7 +165,7 @@ export default function MethodPage() {
 
       <Block title="Reproduce it">
         <p>
-          The calibration is one script — <code className="rounded bg-sunk px-1.5 py-0.5 text-[0.9em]">scripts/calibrate-asrp.mjs</code> —
+          The calibration is one script, <code className="rounded bg-sunk px-1.5 py-0.5 text-[0.9em]">scripts/calibrate-asrp.mjs</code> ,
           run against the bundled snapshots, and it writes the numbers this page displays. The repository is open source.
         </p>
         <p>

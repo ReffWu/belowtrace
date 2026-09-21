@@ -3,8 +3,8 @@
 // The 45-day notice, written for them.
 //
 // The statute asks for six facts (MCL 691.1419(2)(c)). The case already holds four. So this
-// asks for a name and a phone number and then produces two finished letters — one for the City,
-// one for the regional authority — because the system has two owners and neither forwards.
+// asks for a name and a phone number and then produces two finished letters, one for the City,
+// one for the regional authority, because the system has two owners and neither forwards.
 import Link from "next/link";
 import { useState } from "react";
 import { markSent, noticeReady, todayInDetroit, unmarkSent, type Case } from "@/lib/case";
@@ -50,7 +50,7 @@ export function NoticeView() {
       </h1>
       <p className="mt-3 text-[1.1rem] leading-relaxed text-ink-2">
         Not estimates. Not receipts. Not a dollar figure. Six facts, in writing, within {NOTICE_DAYS} days of the day you found the
-        water — and then the rest can follow at your own pace.{" "}
+        water, and then the rest can follow at your own pace.{" "}
         <a href={CITATION.notice.url} target="_blank" rel="noreferrer" className="font-semibold text-brand underline">
           {CITATION.notice.label} ↗
         </a>
@@ -149,8 +149,8 @@ function Letter({
       <div className="px-5 py-5 sm:px-6">
         {needsSr && (
           <p className="no-print mb-4 rounded-2xl bg-warn-tint p-4 leading-relaxed text-[#6b3d00]">
-            DWSD asks for a service request number. You can send this without one — do not let a missing number push you past the
-            deadline — but call {to.phone} and add it when you have it.
+            DWSD asks for a service request number. You can send this without one, do not let a missing number push you past the
+            deadline, but call {to.phone} and add it when you have it.
           </p>
         )}
 

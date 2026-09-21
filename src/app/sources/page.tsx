@@ -25,7 +25,7 @@ const SNAPSHOT = [
     name: "Private sewer permits", fetched: "2026-09-21",
     source: SOURCES.permits.label,
     url: SOURCES.permits.url,
-    use: "2,722 plumbing permits for sewer, lateral, cleanout and backwater-valve work since 2019, by address. The closest public record of a private line's history — it never shows where the line runs.",
+    use: "2,722 plumbing permits for sewer, lateral, cleanout and backwater-valve work since 2019, by address. The closest public record of a private line's history, it never shows where the line runs.",
   },
   {
     name: "Council districts", fetched: "2026-09-21",
@@ -68,13 +68,13 @@ export default function SourcesPage() {
       <dl className="mt-4 space-y-4">
         <div className="rounded-xl border border-line bg-surface p-4">
           <dt className="font-bold">
-            <span className="rounded-md bg-ink px-1.5 py-0.5 text-sm text-white">Recorded</span> — straight from a public record
+            <span className="rounded-md bg-ink px-1.5 py-0.5 text-sm text-white">Recorded</span>, straight from a public record
           </dt>
           <dd className="mt-1 text-ink-2">A City, DWSD, FEMA or HUD dataset, or a published program document. We link the source and date.</dd>
         </div>
         <div className="rounded-xl border border-line bg-surface p-4">
           <dt className="font-bold">
-            <span className="rounded-md border border-warn px-1.5 py-0.5 text-sm text-warn">Estimated</span> — worked out from records
+            <span className="rounded-md border border-warn px-1.5 py-0.5 text-sm text-warn">Estimated</span>, worked out from records
           </dt>
           <dd className="mt-1 text-ink-2">
             For example: your census block group&apos;s income share compared with the test the City uses to choose alleys. Only the
@@ -83,7 +83,7 @@ export default function SourcesPage() {
         </div>
         <div className="rounded-xl border border-line bg-surface p-4">
           <dt className="font-bold">
-            <span className="rounded-md border border-dashed border-ink-3 px-1.5 py-0.5 text-sm text-ink-3">Unknown</span> — not in any
+            <span className="rounded-md border border-dashed border-ink-3 px-1.5 py-0.5 text-sm text-ink-3">Unknown</span>, not in any
             public record
           </dt>
           <dd className="mt-1 text-ink-2">
@@ -103,7 +103,7 @@ export default function SourcesPage() {
           source receipt
         </a>
         {" "}for this snapshot: each public query, record count and raw-file SHA-256. The large raw downloads can be recreated from those public services.
-        Each dataset carries the day it was pulled — the sewer and 311 snapshots are from {DATA_SNAPSHOT}, and the permit, district and
+        Each dataset carries the day it was pulled, the sewer and 311 snapshots are from {DATA_SNAPSHOT}, and the permit, district and
         calibration data were added on 2026-09-21.
       </p>
       <SourceTable rows={SNAPSHOT} />
@@ -111,8 +111,8 @@ export default function SourcesPage() {
       <h2 className="mt-12 text-2xl font-bold">Program rules &amp; official guidance (checked {VERIFIED_ON})</h2>
       <p className="mt-2 text-ink-2">
         The PSRP screener applies the City&apos;s published rules. The program guide lists an income limit of 80% of area median income
-        on pages 3–4 and 50% on page 10; the 2026 policy repeats both. We show incomes between the two as “might qualify” rather than
-        deciding for the City. Income limits are MSHDA&apos;s Wayne County limits effective May 1, 2026 — for a household of four,{" "}
+        on pages 3 to 4 and 50% on page 10; the 2026 policy repeats both. We show incomes between the two as “might qualify” rather than
+        deciding for the City. Income limits are MSHDA&apos;s Wayne County limits effective May 1, 2026, for a household of four,{" "}
         {`$${INCOME_LIMITS.veryLow50[3].toLocaleString("en-US")}`} (50%) and {`$${INCOME_LIMITS.low80[3].toLocaleString("en-US")}`} (80%).
       </p>
       <ul className="mt-4 space-y-2">
@@ -144,7 +144,7 @@ export default function SourcesPage() {
           ],
           [
             "Private repair permits",
-            `${PERMIT_WINDOW.total.toLocaleString("en-US")} permits, ${PERMIT_WINDOW.from}–${PERMIT_WINDOW.to}, of which 1,288 are backwater valves. Median basement-flooding reports within 500 m of a permitted address: 38.`,
+            `${PERMIT_WINDOW.total.toLocaleString("en-US")} permits, ${PERMIT_WINDOW.from} to ${PERMIT_WINDOW.to}, of which 1,288 are backwater valves. Median basement-flooding reports within 500 m of a permitted address: 38.`,
           ],
           [
             "Public record coverage",

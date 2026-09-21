@@ -8,7 +8,7 @@ const publicSans = Public_Sans({ variable: "--font-public-sans", subsets: ["lati
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://belowtrace.vercel.app"),
-  title: { default: "BelowTrace Detroit — Will the City fix your sewer line?", template: "%s · BelowTrace Detroit" },
+  title: { default: "BelowTrace Detroit, Will the City fix your sewer line?", template: "%s · BelowTrace Detroit" },
   description:
     "Detroit is spending $184M fixing sewer connections and does not publish where. Enter an address to see what is under the house, who owns each segment, and who might pay.",
   openGraph: {
@@ -63,7 +63,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="mx-auto grid max-w-5xl gap-3 px-4 py-8 sm:px-6">
             <p className="max-w-3xl">
               <strong className="text-ink">BelowTrace is not a utility locate, an inspection, or legal advice.</strong> Private sewer lines
-              are not marked by MISS DIG 811. Program rules change — confirm with the City before you rely on anything here.
+              are not marked by MISS DIG 811. Program rules change, so confirm with the City before you rely on anything here.
             </p>
             <p>
               Free and open source. Built for the Venture 313 Buildathon 2026 with public data from the City of Detroit, DWSD, HUD and

@@ -54,7 +54,7 @@ function question(key: keyof PsrpAnswers, a: PsrpAnswers): { title: string; hint
     }
     case "flooded2021":
       return {
-        title: "Did water or sewage get into this home during the June 25–26, 2021 flood?",
+        title: "Did water or sewage get into this home during the June 25 to 26, 2021 flood?",
         options: [
           { value: "yes", label: "Yes" },
           { value: "no", label: "No" },
@@ -62,10 +62,10 @@ function question(key: keyof PsrpAnswers, a: PsrpAnswers): { title: string; hint
         ],
       };
     case "floodProof":
-      return { title: "Do you have any of these from June–September 2021?", hint: "Pick all that apply. It's fine if you have none." };
+      return { title: "Do you have any of these from June to September 2021?", hint: "Pick all that apply. It's fine if you have none." };
     case "taxesCurrent":
       return {
-        title: "Are your property taxes paid — or are you on a payment plan or HOPE exemption?",
+        title: "Are your property taxes paid, or are you on a payment plan or HOPE exemption?",
         options: [
           { value: "yes", label: "Yes" },
           { value: "no", label: "No, I'm behind" },
@@ -123,7 +123,7 @@ export function PsrpScreener({ auto }: { auto: PsrpAuto }) {
   if (!started) {
     return (
       <div id="psrp-screener" className="no-print mt-5 scroll-mt-4 rounded-xl border-2 border-brand/30 bg-brand-tint/50 p-4 sm:p-5">
-        <p className="font-semibold text-brand-ink">See if you qualify — 8 questions, about 2 minutes.</p>
+        <p className="font-semibold text-brand-ink">See if you qualify, 8 questions, about 2 minutes.</p>
         <p className="mt-1 text-sm text-ink-2">Your answers stay in this browser. Nothing is sent or saved.</p>
         <button
           type="button"

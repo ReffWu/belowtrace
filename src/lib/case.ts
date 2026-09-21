@@ -1,6 +1,6 @@
 // A case is two facts the resident gives us and everything they learn afterwards.
 //
-// There are no stages. A backup is not a decision tree — safety, cleanup, the insurer and the
+// There are no stages. A backup is not a decision tree, safety, cleanup, the insurer and the
 // statutory notice all run at once, on different clocks, and the 45-day clock keeps running
 // whether or not anyone ever decides whose pipe it was. So the model is a date plus a set of
 // recorded facts, and what to do today is derived from them (see agenda.ts).
@@ -98,6 +98,6 @@ export function uncomplete(c: Case, actionId: string): Case {
  */
 export function neighborReading(n: NeighborSignal | undefined): string | null {
   if (n === "same") return "Several homes backing up at once usually points at the public sewer, not your line. Say that to DWSD.";
-  if (n === "only-me") return "If it is only your home, the blockage is often in your own line. Your notice still goes in — a plumber's opinion is not the City's finding.";
+  if (n === "only-me") return "If it is only your home, the blockage is often in your own line. Your notice still goes in, a plumber's opinion is not the City's finding.";
   return null;
 }

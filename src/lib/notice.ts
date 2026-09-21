@@ -2,7 +2,7 @@
 //
 // This is the whole product in one file. The statute asks for six facts and gives 45 days.
 // People miss it because they believe they must first assemble estimates, receipts and a
-// valuation — none of which the notice requires. So this builds a letter that is complete
+// valuation, none of which the notice requires. So this builds a letter that is complete
 // under the statute today, and says plainly that the packet can follow.
 import type { Case } from "./case";
 import { NOTICE_RECIPIENTS, type NoticeRecipient } from "./contacts";
@@ -40,7 +40,7 @@ export function fieldsFrom(c: Case): NoticeFields {
 }
 
 /**
- * The "brief description of the claim" the statute asks for. Written from recorded facts only —
+ * The "brief description of the claim" the statute asks for. Written from recorded facts only ,
  * it never asserts a cause, because the resident does not know it and a wrong guess in writing
  * is worse than no guess.
  */
@@ -70,7 +70,7 @@ export function compose(f: NoticeFields, to: NoticeRecipient, today: string): st
     "",
     ...to.lines,
     "",
-    `RE: Notice of claim under MCL 691.1419 — ${f.property}`,
+    `RE: Notice of claim under MCL 691.1419, ${f.property}`,
     "",
     "To whom it may concern:",
     "",

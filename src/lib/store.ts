@@ -4,7 +4,7 @@
 //
 // The address belongs to the case, and /now never takes an address from the URL. That is a
 // structural fix, not a warning: in the old build, opening a link for a different house
-// silently repainted an open case — and printed the wrong property onto a case file that still
+// silently repainted an open case, and printed the wrong property onto a case file that still
 // carried the first home's service request number.
 import { useSyncExternalStore } from "react";
 import type { Case } from "./case";

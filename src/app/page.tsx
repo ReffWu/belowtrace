@@ -17,8 +17,8 @@ export default function Home() {
           <span className="mt-2 block text-ink-3">It won&rsquo;t say where.</span>
         </h1>
         <p className="rise rise-2 mt-5 text-[1.12rem] leading-relaxed text-ink-2">
-          Free if a contract reaches your alley. <strong className="text-ink">$5,000–25,000 if it never does.</strong> No application,
-          no list, nobody is told either way — so we{" "}
+          Free if a contract reaches your alley. <strong className="text-ink">$5,000 to 25,000 if it never does.</strong> No application,
+          no list, nobody is told either way, so we{" "}
           <strong className="text-ink">reverse-engineered the City&rsquo;s selection model</strong> from its own open data and scored
           every address in Detroit.
         </p>
@@ -31,7 +31,7 @@ export default function Home() {
           {[
             {
               t: "A likelihood, not a maybe",
-              d: `Alley cave-ins, block-group income, council district and distance to contracted work — the four criteria DWSD publishes — measured at your address and compared against the ${calibration.selected.n} alleys it actually chose. Validated at p < 0.0001.`,
+              d: `Alley cave-ins, block-group income, council district and distance to contracted work, the four criteria DWSD publishes, measured at your address and compared against the ${calibration.selected.n} alleys it actually chose. Validated at p < 0.0001.`,
             },
             {
               t: "Then the call, scripted",
@@ -39,7 +39,7 @@ export default function Home() {
             },
             {
               t: "And everything else that reaches you",
-              d: "Six segments of pipe, who owns each, and every City program checked against this one address — plus the 45-day damage claim, which is a different pot of money and a deadline most people miss.",
+              d: "Six segments of pipe, who owns each, and every City program checked against this one address, plus the 45-day damage claim, which is a different pot of money and a deadline most people miss.",
             },
           ].map((s, i) => (
             <li key={s.t} className="flex gap-4">
@@ -72,7 +72,7 @@ export default function Home() {
           <dl className="mt-8 grid gap-6 sm:grid-cols-3">
             <Stat n="1.0%" t={`of the ${stats.total.toLocaleString("en-US")} basement-flooding reports are within 200 m of a contracted alley`} />
             <Stat n="2.5×" t={`fewer flooding reports around the chosen alleys than around the City's earlier alley projects (p<0.0001)`} />
-            <Stat n="0" t="alleys chosen so far in Districts 2, 3, 4 and 5 — including District 4, which the City's own plan named a priority" />
+            <Stat n="0" t="alleys chosen so far in Districts 2, 3, 4 and 5, including District 4, which the City's own plan named a priority" />
           </dl>
 
           <Link href="/method" className="mt-8 inline-flex min-h-12 items-center rounded-xl border border-white/25 px-5 font-semibold text-white hover:bg-white/10">
@@ -85,7 +85,7 @@ export default function Home() {
         <h2 className="text-[1.5rem] font-extrabold tracking-[-0.025em]">Nobody else can answer this</h2>
         <p className="mt-3 leading-relaxed text-ink-2">
           The City publishes the criteria but not the list, and the {ASRP.knownDefectPoints.toLocaleString("en-US")}+ failed-connection
-          data points behind it are in none of its open datasets — we checked all 782. Reconstructing it from what <em>is</em> public is
+          data points behind it are in none of its open datasets, we checked all 782. Reconstructing it from what <em>is</em> public is
           the only way a household can see anything at all.
         </p>
 

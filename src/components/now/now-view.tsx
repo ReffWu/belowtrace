@@ -226,7 +226,7 @@ function NoCase() {
       </h1>
       <p className="mt-4 text-[1.1rem] leading-relaxed text-ink-2">
         The $184M program repairs sewer connections. It never pays for a ruined basement. That is a separate claim, with its own
-        45-day deadline, to two separate agencies — and it starts the day you found the water.
+        45-day deadline, to two separate agencies, and it starts the day you found the water.
       </p>
       <div className="mt-7">
         <Start />
